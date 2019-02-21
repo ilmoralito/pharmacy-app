@@ -4,33 +4,31 @@ import org.grails.databinding.BindUsing
 
 class Client implements Serializable {
   @BindUsing({ obj, source ->
-    source["fullName"]?.toLowerCase()?.tokenize(" ")*.capitalize().join(" ")
+    source['fullName']?.toLowerCase()?.tokenize(' ')*.capitalize().join(' ')
   })
   String fullName
-	String address
+  String address
   @BindUsing({ obj, source ->
-    source["identificationCard"]?.toUpperCase()
+    source['identificationCard']?.toUpperCase()
   })
   String identificationCard
-  SortedSet phones 
+  String phones
   Boolean status = true
 
-	Date dateCreated
-	Date lastUpdated
+  Date dateCreated
+  Date lastUpdated
 
   static constraints = {
     fullName blank:false
     address blank:false
     identificationCard blank:false, unique:true, maxSize:16, minSize: 16
-    phones nullable:true
+    phones nullable: true
   }
 
   static mapping = {
-  	version false
-    sort dateCreated: "desc"
+    version false
+    sort dateCreated: 'desc'
   }
-
-  static hasMany = [phones:String]
 
   String toString() { fullName }
 }

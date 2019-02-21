@@ -180,9 +180,14 @@ class BootStrap {
         //|||||||||||||||||||||||||||||||||||||||||||||||||||
 
         //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        //CLIENT
+        //CLIENTS
         //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        def client1 = new Client(fullName:"juan perez", address:"Address1", identificationCard:"291-290160-0001w", phones:["23114455", "88554477"])
+        def client1 = new Client(
+          fullName: 'juan perez',
+          address: 'Lorem ipsum dolor sit amet, consectetur.',
+          identificationCard: '291-290160-0001w',
+          phones: '23114455, 88554477'
+        )
 
         if (!client1.save()) {
           client1.errors.allErrors.each { error ->
@@ -190,7 +195,12 @@ class BootStrap {
           }
         }
 
-        def client2 = new Client(fullName:"fulano mengano", address:"Address2", identificationCard:"291-290160-0001x", phones:["23118855", "88559977"])
+        def client2 = new Client(
+          fullName: 'fulano mengano',
+          address: 'Lorem ipsum dolor sit amet, consectetur adipisicing.',
+          identificationCard: '291-290160-0001x',
+          phones: '23118855, 88559977'
+        )
 
         if (!client2.save()) {
           client2.errors.allErrors.each { error ->
@@ -198,7 +208,20 @@ class BootStrap {
           }
         }
 
-        assert Client.count() == 2
+        def client3 = new Client(
+          fullName: 'Diego Mengano',
+          address: 'Lorem ipsum dolor sit amet.',
+          identificationCard: '291-290160-0001T',
+          phones: '(C) 88559977, (M)8787 8989'
+        )
+
+        if (!client3.save()) {
+          client3.errors.allErrors.each { error ->
+            log.error "[$error.field: $error.defaultMessage]"
+          }
+        }
+
+        assert Client.count() == 3
         //+++++++++++++++++++++++++++++++++++++++++++++++++++
         //CLIENT
         //+++++++++++++++++++++++++++++++++++++++++++++++++++

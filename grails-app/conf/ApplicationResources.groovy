@@ -30,6 +30,13 @@ modules = {
     resource url: 'css/toddler.css'
   }
 
+  client {
+    dependsOn 'app'
+    resource url: 'js/clientFilter.js'
+    resource url: 'js/createClient.js'
+    resource url: 'css/toddler.css'
+  }
+
   chosenLib {
     dependsOn "app"
     dependsOn "chosen"

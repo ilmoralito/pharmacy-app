@@ -63,3 +63,7 @@ body#background {
 	font-size: 20px;
 }
 
+textarea {
+	resize: vertical;
+}
+

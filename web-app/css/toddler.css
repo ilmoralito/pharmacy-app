@@ -10,3 +10,12 @@
     z-index: 1000000;
     transition: left .4s;
 }
+
+#notification {
+    margin-top: 10px;
+}
+
+textarea {
+    min-height: 100px;
+    max-height: 200px;
+}

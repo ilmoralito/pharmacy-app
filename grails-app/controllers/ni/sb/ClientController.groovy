@@ -1,92 +1,50 @@
 package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.converters.JSON
 
-@Secured(["ROLE_ADMIN"])
+@Secured(['ROLE_ADMIN'])
 class ClientController {
-	static defaultAction = "list"
-	static allowedMethods = [
-		list:"GET",
-		save:"POST",
-    show:"GET",
-    addTelephone:"POST",
-    deletePhone:"GET"
-	]
+  static defaultAction = 'list'
+  static allowedMethods = [
+    save: 'POST',
+    update: 'POST'
+  ]
 
   def list() {
-    def status = params?.status ?: true
-  	[clients:Client.findAllByStatus(status, [sort:"fullName", order:"asc"])]
+    [clients: Client.list(sort: 'fullName')]
   }
 
   def save() {
-  	def client = new Client(params)
+    Client client = new Client(params)
 
-  	if (!client.save()) {
-      chain action:"list", model:[client:client]
-    } else {
-      flash.message = "Cliente creado!"
-      redirect action:"list"
+    if (client.save()) {
+      render(contentType: 'application/json') {
+        [status: 'ok', client: client]
+      }
+
+      return
+    }
+
+    render(contentType: 'application/json') {
+      [status: 'fail', errors: client.errors]
     }
   }
 
-  def show(Integer id) {
-    def client = Client.get id
-
-    if (!client) { response.sendError 404 }
-
+  def show(Client client) {
     [client:client]
   }
 
-  def update(Integer id) {
-    def client = Client.get id
-
-    if (!client) { response.sendError 404 }
-
+  def update(Client client) {
     client.properties = params
 
     if (!client.save()) {
-      chain action:"show", params:[id:id], model:[client:client]
-    } else {
-      flash.message = "Actualizado"
-      redirect action:"show", id:id
+      render view: 'show', model: [client: client]
+
+      return
     }
-  }
 
-  def addTelephone(Integer id, AddTelephoneCommand cmd) {
-    def client = Client.get id
-
-    if (!client) { response.sendError 404 }
-
-    if (cmd.hasErrors()) {
-      chain action:"show", params:[id:id], model:[cmd:cmd]
-    } else {
-      client.addToPhones cmd.phone
-
-      client.save()
-
-      redirect action:"show", id:id
-    }
-  }
-
-  def deletePhone(Integer id, String phone) {
-    def client = Client.get id
-
-    if (!client) { response.sendError 404 }
-
-    client.removeFromPhones phone
-
-    redirect action:"show", id:id
-  }
-}
-
-class AddTelephoneCommand {
-  String phone
-
-  static constraints = {
-    phone blank:false, maxSize:8, minSize: 8, validator: { phone ->
-      if (!phone.isNumber()) {
-        "notMatch"
-      }
-    }
+    flash.message = 'Datos del cliente actualizado'
+    redirect action: 'show', id: client.id
   }
 }
