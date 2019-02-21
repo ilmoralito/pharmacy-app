@@ -1,0 +1,12 @@
+.toddler {
+    background: #FFF;
+    border-right: 1px solid #EEE;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: -400px;
+    width: 400px;
+    min-height: 100%;
+    z-index: 1000000;
+    transition: left .4s;
+}

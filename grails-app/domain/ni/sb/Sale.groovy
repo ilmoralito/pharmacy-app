@@ -19,7 +19,7 @@ class Sale implements Serializable {
   }
 
   static namedQueries = {
-    fromTo { from, to ->
+    fromTo { from = new Date(), to = new Date() +1 ->
       ge "dateCreated", from.clearTime()
       le "dateCreated", to.clearTime()
     }

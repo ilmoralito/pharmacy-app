@@ -16,89 +16,15 @@ class SaleController {
     pay:["GET", "POST"],
     getItemsByProduct:"GET",
     filterMedicinesByGenericName:"GET",
-    addClient:"GET"
+    addClient:"GET",
+    filter: 'POST',
 	]
 
   def list() {
-  	def today = new Date()
-    def users = User.list()
-    def clients = Client.findAllByStatus(true)
-    def sales = []
-
-    if (request.method == "POST") {
-      def criteria = Sale.createCriteria()
-      sales = criteria {
-        //filter between dates
-        if (params?.from && params?.to) {
-          ge "dateCreated", params.date("from", "yyyy-MM-dd").clearTime()
-          le "dateCreated", params.date("to", "yyyy-MM-dd").clearTime() + 1
-        }
-
-        //filter by client(s)
-        if (params?.clients) {
-          def clientsInstance = Client.getAll params.list("clients")
-
-          "in" "client", clientsInstance
-        }
-
-        //filter by typeofpurchase
-        if (params?.cash && params?.credit) {
-          or {
-            eq "typeOfPurchase", params.cash
-            eq "typeOfPurchase", params.credit
-          }
-        }
-
-        if (params?.cash && !params?.credit || params?.credit && !params?.cash) {
-          def typeOfPurchase = params?.cash ?: params?.credit
-
-          eq "typeOfPurchase", typeOfPurchase
-        }
-
-        //filter by status
-        if (params?.isPending && params?.isCanceled) {
-          or {
-            eq "status", params.isPending
-            eq "status", params.isCanceled
-          }
-        }
-
-        if (params?.isPending && !params?.isCanceled || params?.isCanceled && !params?.isPending) {
-          def status = params?.isPending ?: params?.isCanceled
-
-          eq "status", status
-        }
-
-        //filter by canceled
-        if (params?.canceled) {
-          eq "canceled", true
-        }
-
-        //filter by users(sellers)
-        if (params?.users) {
-          def usersInstance = User.getAll params.list("users")
-
-          "in" "user", usersInstance
-        }
-
-        order "id", "desc"
-      }
-    } else {
-      sales = Sale.fromTo(today, today + 1).list(sort:"id", order:"desc")
-    }
-
-    def todaySaleAmount = Sale.fromTo(today, today + 1).findAllByCanceled(false).balance.sum() ?: 0
-    def amountOfDailyExpenses = Daily.fromTo(today, today + 1).get().expenses.quantity.sum() ?: 0
-    def inBox = todaySaleAmount - amountOfDailyExpenses
-
-  	[
-      sales: sales,
-      users:users,
-      clients:clients,
-      todaySaleAmount:todaySaleAmount,
-      amountOfDailyExpenses:amountOfDailyExpenses,
-      inBox:inBox,
-      amount:sales.findAll{ !it.canceled }.balance.sum()
+    [
+      dailyBox: createDailyBox(),
+      filterBox: createFilterBox(),
+      sales: Sale.fromTo().list(sort:'id', order:'desc'),
     ]
   }
 
@@ -466,6 +392,80 @@ class SaleController {
       results
     }
   }
+
+  def filter() {
+    def clients = params.clients.tokenize(',')
+    def paymentType = params.paymentType.tokenize(',')
+    def status = params.status.tokenize(',')
+    def users = params.users.tokenize(',')
+
+    def criteria = Sale.createCriteria()
+    def today = new Date()
+    def sales = criteria {
+      ge 'dateCreated', today.clearTime()
+      le 'dateCreated', today.clearTime() + 1
+
+      if (clients) {
+        'in' 'client', Client.getAll(clients)
+      }
+
+      if (paymentType) {
+        or {
+          'in' 'typeOfPurchase', paymentType
+          // eq 'class', 'ni.sb.Sale'
+        }
+      }
+
+      if (status) {
+        'in' 'status', status
+      }
+
+      if (users) {
+        'in' 'user', User.getAll(users)
+      }
+
+      if (params.boolean('canceled')) {
+        eq 'canceled', true
+      }
+
+      order 'id', 'desc'
+    }
+
+    render(contentType: 'application/json') {
+      sales
+    }
+  }
+
+  private DailyBox createDailyBox() {
+    Date today = new Date()
+
+    BigDecimal amountSold = Sale.fromTo(today, today + 1).findAllByCanceled(false).balance.sum() ?: 0
+    BigDecimal dailyExpenseAmount = Daily.fromTo(today, today + 1).get().expenses.quantity.sum() ?: 0
+
+    new DailyBox(
+      amountSold: amountSold,
+      dailyExpenseAmount: dailyExpenseAmount,
+      totalAmount: amountSold - dailyExpenseAmount
+    )
+  }
+
+  private FilterBox createFilterBox() {
+    new FilterBox(
+      users: User.findAllByEnabled(true),
+      clients: Client.findAllByStatus(true),
+    )
+  }
+}
+
+class DailyBox {
+  BigDecimal amountSold
+  BigDecimal dailyExpenseAmount
+  BigDecimal totalAmount
+}
+
+class FilterBox {
+  List<User> users
+  List<Client> clients
 }
 
 class SelectCustomer implements Serializable {

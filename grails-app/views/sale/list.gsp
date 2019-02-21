@@ -1,173 +1,141 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="layout" content="main">
-	<title>Ventas</title>
-	<r:require modules="bootstrap-css, bootstrap-js, bootstrap-collapse, saleFilter, jquery-ui"/>
+    <meta charset="UTF-8">
+    <meta name="layout" content="main">
+    <title>Ventas</title>
+    <r:require modules="bootstrap-css, bootstrap-js, bootstrap-collapse, bootstrap-modal, saleFilter, jquery-ui"/>
 </head>
 <body>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="pull-right">
-				<g:link action="createSaleToClient" class="btn btn-primary">Vender</g:link>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <g:link action="createSaleToClient" class="btn btn-primary">Vender</g:link>
+                <a href="#" id="filterButton" class="btn btn-default">Filtrar</a>
+            </div>
+        </div>
+    </div>
 
-	<div class="row">
-		<div class="col-md-9">
-			<g:if test="${sales}">
-				<h4>Ventas</h4>
-				<table class="table table-hover">
-					<thead>
-						<th width="1">#</th>
-						<th>
-							<g:if test="${request.method == 'GET' || (!params?.from && !params?.to)}">
-								Hora
-							</g:if>
-							<g:else>
-								Fecha de venta
-							</g:else>
-						</th>
-						<th>Cliente</th>
-						<th>Total de compra</th>
-						<th>Tipo de compra</th>
-						<th>Vendedor</th>
-					</thead>
-					<tbody>
-						<g:each in="${sales}" var="sale" status="index">
-							<tr class="${sale.canceled ? 'active' : ''}">
-								<td>
-									<g:link action="show" id="${sale.id}">
-										${index + 1}
-									</g:link>
-								</td>
-								<td>
-									<g:if test="${request.method == 'GET' || (!params?.from && !params?.to)}">
-										<g:formatDate date="${sale.dateCreated}" formatName="hour.date.format"/>
-									</g:if>
-									<g:else>
-										<g:formatDate date="${sale.dateCreated}" formatName="custom.date.format"/>
-									</g:else>
-								</td>
-								<td>
-									<g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
-										${sale.client}
-									</g:if>
-								</td>
-								<td>${sale.balance}</td>
-								<td>
-									<g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
-										${sale.typeOfPurchase}
-									</g:if>
-									<g:else>
-										Contado
-									</g:else>
-								</td>
-								<td>${sale.user.fullName}</td>
-							</tr>
-						</g:each>
-						<g:if test="${request.method == 'POST'}">
-							<tr>
-								<td colspan="3">MONTO</td>
-								<td colspan="3">${amount}</td>
-							</tr>
-						</g:if>
-					</tbody>
-				</table>
-			</g:if>
-			<g:else>
-				<h4>Sin ventas que mostrar</h4>
-			</g:else>
-		</div>
+    <div id="toddler" class=" toddler">
+        <div class="panel-body">
+            <form name="form">
+                <div class="form-group">
+                    <label for="clients">Clientes</label>
+                    <g:select name="clients" from="${filterBox.clients}" optionKey="id" multiple="true" class="form-control"/>
+                </div>
 
-		<div class="col-md-3">
-			<h4>Diario</h4>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td>Monto vendido</td>
-						<td>
-							${todaySaleAmount}
-						</td>
-					</tr>
-					<tr>
-						<td>Monto gasto diario</td>
-						<td>${amountOfDailyExpenses}</td>
-					</tr>
-					<tr>
-						<td>Monto en caja</td>
-						<td>${inBox}</td>
-					</tr>
-				</tbody>
-			</table>
+                <div class="form-group">
+                    <label for="paymentType">Tipo de pago</label>
+                    <g:select name="paymentType" from="['Contado', 'Credito']" multiple="true" class="form-control" />
+                </div>
 
-			<h4>Filtrar</h4>
-			<g:form action="list">
-				
-				<h5>Fechas</h5>
-				<div class="form-group">
-					<label for="from" class="sr-only">Desde</label>
-					<g:textField name="from" value="${params?.from}" class="form-control" placeholder="Desde"/>
-				</div>
-				<div class="form-group">
-					<label for="to" class="sr-only">Hasta</label>
-					<g:textField name="to" value="${params?.to}" class="form-control" placeholder="Hasta"/>
-				</div>
-				
-				<h5>Clientes</h5>
-				<g:select name="clients" from="${clients}" optionKey="id" multiple="true" class="form-control"/>
+                <div class="form-group">
+                    <label for="status">Estado</label>
+                    <g:select name="status" from="['Pendiente', 'Anulados']" multiple="true" class="form-control" />
+                </div>
 
-				<h5>Tipo de pago</h5>
-				<div class="checkbox">
-					<label>
-						<g:checkBox name="cash" value="Contado" checked="${params?.cash ? true : false}"/>
-						Contado
-					</label>
-				</div>
-				<div class="checkbox">
-					<label>
-						<g:checkBox name="credit" value="Credito" checked="${params?.credit ? true : false}"/>
-						Credito
-					</label>
-				</div>
+                <div class="form-group">
+                    <label>Vendedores</label>
+                    <g:select name="users" from="${filterBox.users}" optionKey="id" multiple="true" class="form-control" />
+                </div>
 
-				<h5>Estado</h5>
-				<div class="checkbox">
-					<label>
-						<g:checkBox name="isPending" value="Pendiente" checked="${params?.isPending ? true : false}"/>
-						Pendiente
-					</label>
-				</div>
-				<div class="checkbox">
-					<label>
-						<g:checkBox name="isCanceled" value="Cancelado" checked="${params?.isCanceled ? true : false}"/>
-						Cancelado
-					</label>
-				</div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <g:checkBox name="canceled" />
+                            Cancelado
+                        </label>
+                    </div>
+                </div>
 
-				<h5>Anulado</h5>
-				<div class="checkbox">
-					<label>
-						<g:checkBox name="canceled" value="true" checked="${params?.canceled ? true : false}"/>
-						Anulado
-					</label>
-				</div>
+                <button id="applyFilter" class="btn btn-primary">Aplicar filtro</button>
+            </form>
+        </div>
+    </div>
 
-				<h5>Vendedores</h5>
-				<g:each in="${users}" var="user">
-					<div class="checkbox">
-						<label>
-							<g:checkBox name="users" value="${user.id}" checked="${params?.users?.contains(user.id.toString()) ? true : false}"/>
-							${user.fullName}
-						</label>
-					</div>
-				</g:each>
+    <div class="row">
+        <div class="col-md-9">
+            <g:if test="${sales}">
+                <table class="table table-hover table-bordered">
+                    <caption>Ventas</caption>
 
-				<g:submitButton name="filter" value="Filtrar" class="btn btn-primary btn-block"/>
-			</g:form>
-		</div>
-	</div>
+                    <col width="1%">
+                    <col width="3%">
+                    <col width="48%">
+                    <col width="14%">
+                    <col width="13%">
+                    <col width="10%">
+                    <col width="11%">
+
+                    <thead>
+                        <th>#</th>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Total compra</th>
+                        <th>Tipo compra</th>
+                        <th>Cancelado</th>
+                        <th>Vendedor</th>
+                    </thead>
+
+                    <tbody>
+                        <g:each in="${sales}" var="sale" status="index">
+                            <tr>
+                                <td>
+                                    <g:link action="show" id="${sale.id}">
+                                        ${index + 1}
+                                    </g:link>
+                                </td>
+                                <td>
+                                    <g:formatDate date="${sale.dateCreated}" formatName="hour.date.format"/>
+                                </td>
+                                <td>
+                                    <g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
+                                        ${sale.client}
+                                    </g:if>
+                                </td>
+                                <td>${sale.balance}</td>
+                                <td>
+                                    <g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
+                                        ${sale.typeOfPurchase}
+                                    </g:if>
+                                    <g:else>
+                                        Contado
+                                    </g:else>
+                                </td>
+                                <td>${sale.canceled ? 'Si' : ''}</td>
+                                <td>${sale.user.shortFullName()}</td>
+                            </tr>
+                        </g:each>
+                    </tbody>
+                </table>
+            </g:if>
+            <g:else>
+                <p>Sin ventas que mostrar</p>
+            </g:else>
+        </div>
+
+        <div class="col-md-3">
+            <table class="table table-hover table-bordered">
+                <caption>Diario</caption>
+
+                <tbody>
+                    <tr>
+                        <td>Monto vendido</td>
+                        <td>
+                            ${dailyBox.amountSold}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Monto gasto diario</td>
+                        <td>${dailyBox.dailyExpenseAmount}</td>
+                    </tr>
+                    <tr>
+                        <td>Monto en caja</td>
+                        <td>${dailyBox.totalAmount}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

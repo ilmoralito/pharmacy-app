@@ -1,11 +1,13 @@
 import ni.sb.*
 import grails.util.Environment
 import grails.util.Holders
+import grails.converters.JSON
 
 class BootStrap {
   def itemService
 
   def init = { servletContext ->
+    registerregisterObjectMarshaller()
 
     switch(Environment.current) {
       case Environment.DEVELOPMENT:
@@ -307,5 +309,43 @@ class BootStrap {
     }
   }
   def destroy = {
+  }
+
+  def registerregisterObjectMarshaller() {
+    JSON.registerObjectMarshaller(Sale) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['user'] = [id: it.user.id, fullName: fullNameToShortName(it.user.fullName)]
+      output['hour'] = it.dateCreated.format('HH:mm')
+      output['balance'] = it.balance
+      output['canceled'] = it.canceled
+      output['typeOfPurchase'] = 'Contado'
+
+      output
+    }
+
+    JSON.registerObjectMarshaller(SaleToClient) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['user'] = [id: it.user.id, fullName: fullNameToShortName(it.user.fullName)]
+      output['hour'] = it.dateCreated.format('HH:mm')
+      output['balance'] = it.balance
+      output['canceled'] = it.canceled
+      output['client'] = [id: it.client.id, fullName: it.client.fullName]
+      output['typeOfPurchase'] = it.typeOfPurchase
+      output['status'] = it.status
+
+      output
+    }
+  }
+
+  def fullNameToShortName(final String fullName) {
+    List<String> names = fullName.tokenize(' ')
+    final String firstName = names[0]
+    final String lastName = names[1]
+
+    "${firstName[0].toUpperCase()}. ${lastName}"
   }
 }
