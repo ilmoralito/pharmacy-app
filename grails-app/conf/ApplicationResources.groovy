@@ -76,4 +76,12 @@ modules = {
   reports {
     resource url:"js/reports.js"
   }
+
+  providerList {
+    dependsOn 'app'
+    resource url: 'css/toddler.css'
+    resource url: 'js/toddler.js'
+    resource url: 'js/createProvider.js'
+    resource url: 'js/providerFilter.js'
+  }
 }

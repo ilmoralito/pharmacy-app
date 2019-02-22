@@ -11,26 +11,44 @@ class BootStrap {
 
     switch(Environment.current) {
       case Environment.DEVELOPMENT:
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        //PROVIDERS
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        def provider1 = new Provider(name:"provider1", address:"address1", phone:"23114455")
+        // Contacts
+        Contact contact1 = new Contact(
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@domain.com',
+          telephoneNumber: '8888 8787'
+        ).save(failOnError: true)
+
+        Contact contact2 = new Contact(
+          firstName: 'Ken',
+          lastName: 'Follet',
+          email: 'ken.follet@domain.com',
+          telephoneNumber: '6585 8787'
+        ).save(failOnError: true)
+
+        // Providers
+        Provider provider1 = new Provider(
+          name: 'provider1',
+          address: 'Lorem ipsum dolor sit amet, consectetur.',
+          phone: '2311 4455',
+          contact: contact1,
+        )
 
         def product1 = new Product(name:"product1", location:"E1-1")
         def product2 = new Product(name:"product2", location:"E1-2")
         def product3 = new Product(name:"product3", location:"E2-2")
         def medicine1 = new Medicine(name:"Medicine1", code:"1234", genericName:"someGenericName", location:"E4-2")
-          
+
           def presentation1 = new Presentation(name:"Cremas", measures:["5g", "15g"])
           medicine1.addToPresentations(presentation1)
 
         def medicine2 = new Medicine(name:"Medicine2", code:"1235", genericName:"someGenericName", location:"E4-2")
-          
+
           def presentation2 = new Presentation(name:"AmpollasBebibles", measures:["5g/10ml"])
           medicine2.addToPresentations(presentation2)
 
         def medicine3 = new Medicine(name:"Medicine3", code:"1236", genericName:"anotherGenericName", location:"V1-2")
-          
+
           def presentation3 = new Presentation(name:"AmpollasInyectables", measures:["2mg", "500mg/2ml"])
           medicine3.addToPresentations(presentation3)
 
@@ -47,7 +65,12 @@ class BootStrap {
 
         provider1.save(failOnError:true)
 
-        def provider2 = new Provider(name:"provider2", address:"address2", phone:"23114488")
+        Provider provider2 = new Provider(
+          name: 'provider2',
+          address: 'address2',
+          phone: '2311 4488',
+          contact: contact2
+        )
 
         def product4 = new Product(name:"product4", location:"V1-2")
         def product5 = new Product(name:"product5", location:"V1-3")
@@ -359,6 +382,20 @@ class BootStrap {
       output['client'] = [id: it.client.id, fullName: it.client.fullName]
       output['typeOfPurchase'] = it.typeOfPurchase
       output['status'] = it.status
+
+      output
+    }
+
+    JSON.registerObjectMarshaller(Provider) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['name'] = it.name
+      output['address'] = it.address
+      output['phone'] = it.phone
+      output['status'] = it.status ? 'Activo' : 'Inactivo'
+      output['contact'] = [fullName: "${it.contact.firstName} ${it.contact.lastName}"]
+      output['products'] = it.products
 
       output
     }

@@ -2,57 +2,78 @@ package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_ADMIN"])
+@Secured(['ROLE_ADMIN'])
 class ProviderController {
-	static defaultAction = "list"
-	static allowedMethods = [
-		list:"GET",
-    create:["GET", "POST"],
-		show:"GET",
-    update:"POST"
-	]
+  static defaultAction = 'list'
+  static allowedMethods = [
+    update: 'POST',
+    save: 'POST',
+  ]
 
   def list() {
-    def status = params?.status ?: true
-
-  	[providers:Provider.findAllByStatus(status)]
+    [providers: Provider.list()]
   }
 
-  def create() {
-    def provider = new Provider(params)
+  def save() {
+    Provider provider = new Provider(
+      name: params.name,
+      address: params.address,
+      phone: params.phone
+    )
 
-    if (request.method == "POST") {
-      if (!provider.save()) {
-        return [provider:provider]
+    if (provider.validate(['name', 'address', 'phone'])) {
+      Contact contact = new Contact(
+        firstName: params.firstName,
+        lastName: params.lastName,
+        email: params.email,
+        telephoneNumber: params.telephoneNumber
+      )
+
+      if (!contact.save()) {
+        render(contentType: 'application/json') {
+          [status: 'fail', errors: contact.errors]
+        }
+
+        return
       }
 
-      flash.message = "Proveedor creado"
-    } else {
-      [provider:provider]
-    }
-  }
+      provider.contact = contact
 
-  def show(Integer id) {
-  	def provider = Provider.get id
+      provider.save()
 
-  	if (!provider) { response.sendError 404 }
+      render(contentType: 'application/json') {
+        [status: 'ok', provider: provider]
+      }
 
-  	[provider:provider]
-  }
-
-  def update(Integer id) {
-    def provider = Provider.get(id)
-
-    if (!provider) { response.sendError 404 }
-
-    provider.properties = params
-
-    if (!provider.save()) {
-      render view:"show", model:[id:id, provider:provider]
       return
     }
 
-    flash.message = "Actualizado"
-    redirect action:"show", id:id
+    render(contentType: 'application/json') {
+      [status: 'fail', errors: provider.errors]
+    }
+  }
+
+  def show(Provider provider) {
+    [provider: provider]
+  }
+
+  def update(Provider provider) {
+    provider.properties = params
+    provider.contact.properties = params
+
+    if (!provider.save() || !provider.contact.save()) {
+      render view: 'show', model: [provider: provider]
+
+      return
+    }
+
+    flash.message = 'Datos de proveedor actualizados'
+    redirect action: 'show', id: provider.id
+  }
+
+  def getDatasetToFilter() {
+    render(contentType: 'application/json') {
+      Provider.list()
+    }
   }
 }
