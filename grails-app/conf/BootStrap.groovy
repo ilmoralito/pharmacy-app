@@ -34,9 +34,21 @@ class BootStrap {
           contact: contact1,
         )
 
-        def product1 = new Product(name:"product1", location:"E1-1")
-        def product2 = new Product(name:"product2", location:"E1-2")
-        def product3 = new Product(name:"product3", location:"E2-2")
+        Merchandise merchandise1 = new Merchandise(
+          name: 'Lorem ipsum dolor.',
+          location: 'E1-1'
+        )
+
+        Merchandise merchandise2 = new Merchandise(
+          name:'Lorem ipsum.',
+          location: 'E1-2'
+        )
+
+        Merchandise merchandise3 = new Merchandise(
+          name: 'Lorem ipsum dolor sit.',
+          location: 'E2-2'
+        )
+
         def medicine1 = new Medicine(name:"Medicine1", code:"1234", genericName:"someGenericName", location:"E4-2")
 
           def presentation1 = new Presentation(name:"Cremas", measures:["5g", "15g"])
@@ -57,13 +69,20 @@ class BootStrap {
 
           brandProduct0.addToBrands(brand0)
 
-        def productsInProvider1 = [product1, product2, product3, medicine1, medicine2, medicine3, brandProduct0]
+        List<Product> productsInProvider1 = [
+          merchandise1,
+          merchandise2,
+          merchandise3,
+          medicine1,
+          medicine2,
+          medicine3,brandProduct0
+        ]
 
         productsInProvider1.each { product ->
-          provider1.addToProducts product
+          provider1.addToProducts(product)
         }
 
-        provider1.save(failOnError:true)
+        provider1.save(failOnError: true)
 
         Provider provider2 = new Provider(
           name: 'provider2',
@@ -100,22 +119,16 @@ class BootStrap {
         assert provider2.products.size() == 4
         assert BrandProduct.count() == 3
         assert Medicine.count() == 3
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        //PROVIDERS
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        //|||||||||||||||||||||||||||||||||||||||||||||||||||
-
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
-        //PURCHASE ORDER
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Orders
         def today = new Date()
+
         def purchaseOrder1 = new PurchaseOrder(store:provider1.name, dutyDate:today + 31, invoiceNumber:"001", typeOfPurchase:"Contado", balance:0, status:true)
         purchaseOrder1.addToProviders provider1
 
-        def item1 = new Item(product:product1, quantity:100, purchasePrice:15, sellingPrice:15 + (15 * 0.25), total:100 * 15)
-        def item2 = new Item(product:product2, quantity:100, purchasePrice:25, sellingPrice:25 + (25 * 0.25), total:100 * 25)
-        def item3 = new Item(product:product3, quantity:50, purchasePrice:10, sellingPrice:55 + (55 * 0.25), total:50 * 10)
+        def item1 = new Item(product: merchandise1, quantity:100, purchasePrice:15, sellingPrice:15 + (15 * 0.25), total:100 * 15)
+        def item2 = new Item(product: merchandise2, quantity:100, purchasePrice:25, sellingPrice:25 + (25 * 0.25), total:100 * 25)
+        def item3 = new Item(product: merchandise3, quantity:50, purchasePrice:10, sellingPrice:55 + (55 * 0.25), total:50 * 10)
 
         def m0 = new MedicineOrder(
           product:medicine1,
@@ -179,7 +192,7 @@ class BootStrap {
           total:50 * 5
         )
 
-        def p2item1 = new Item(product:product1, quantity:40, purchasePrice:16, sellingPrice:16 + (16 * 0.25), total:100 * 16)
+        def p2item1 = new Item(product: merchandise1, quantity:40, purchasePrice:16, sellingPrice:16 + (16 * 0.25), total:100 * 16)
 
         purchaseOrder2.addToItems(item4).addToItems(item5).addToItems(m1).addToItems(m2).addToItems(m3).addToItems(p2item1)
 

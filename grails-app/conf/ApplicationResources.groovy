@@ -84,4 +84,13 @@ modules = {
     resource url: 'js/createProvider.js'
     resource url: 'js/providerFilter.js'
   }
+
+  goods {
+    dependsOn 'app'
+    resource url: 'css/toddler.css'
+    resource url: 'js/toddler.js'
+    resource url: 'js/merchandiseAdd.js'
+    resource url: 'js/merchandiseFilter.js'
+    resource url: 'js/merchandiseEdit.js'
+  }
 }

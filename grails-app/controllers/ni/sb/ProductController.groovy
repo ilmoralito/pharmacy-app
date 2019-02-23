@@ -8,14 +8,12 @@ class ProductController {
 
 	static defaultAction = "productList"
 	static allowedMethods = [
-		productList:"GET",
-    medicineList:"GET",
-    brandList:"GET",
     createProduct:["GET", "POST"],
     createMedicine:["GET", "POST"],
 		createBrandProduct:["GET", "POST"],
 		show:"GET",
-		update:"POST"
+		update:"POST",
+    addMerchandise: 'POST',
 	]
 
   def productList(Integer providerId) {
@@ -186,7 +184,7 @@ class ProductController {
     done() {
       redirect action:"brandList", params:[providerId:flow.provider.id]
     }
-  } 
+  }
 
   def show(Integer id) {
   	def product = Product.get id

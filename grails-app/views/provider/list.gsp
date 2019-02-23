@@ -45,7 +45,7 @@
                         <td>${provider.phone}</td>
                         <td>${provider.status ? 'Activo' : 'No activo'}</td>
                         <td>
-                            <g:link controller="product" action="productList" params="[providerId:provider.id]">
+                            <g:link controller="merchandise" id="${provider.id}">
                                 <g:if test="${!provider.products}">*</g:if>
                                 Productos
                             </g:link>
