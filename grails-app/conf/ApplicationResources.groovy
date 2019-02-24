@@ -3,13 +3,18 @@ modules = {
     resource url:"css/main.css"
   }
 
+  toddler {
+    resource url: 'css/toddler.css'
+    resource url: 'js/toddler.js'
+  }
+
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
   }
 
   adminMedicine {
-  	dependsOn "app"
+    dependsOn "app"
     dependsOn "calculateSellingPrice"
     resource url:"js/application.js"
   }
@@ -92,5 +97,13 @@ modules = {
     resource url: 'js/merchandiseAdd.js'
     resource url: 'js/merchandiseFilter.js'
     resource url: 'js/merchandiseEdit.js'
+  }
+
+  medicines {
+    dependsOn 'app'
+    dependsOn 'toddler'
+    resource url: 'js/medicineAdd.js'
+    resource url: 'js/medicineFilter.js'
+    // resource url: 'js/medicineEdit.js'
   }
 }

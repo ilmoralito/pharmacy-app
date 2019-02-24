@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSubmit(event) {
         event.preventDefault();
 
-        const endpoint = '/pharmacyApp/merchandise/save'
+        const endpoint = '/pharmacyApp/merchandise/save';
         const formData = new FormData(form);
         const init = {
             method: 'POST',

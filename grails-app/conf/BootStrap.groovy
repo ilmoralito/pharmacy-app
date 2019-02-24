@@ -412,6 +412,20 @@ class BootStrap {
 
       output
     }
+
+    JSON.registerObjectMarshaller(Medicine) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['name'] = it.name
+      output['code'] = it.code
+      output['status'] = it.status
+      output['location'] = it.location
+      output['genericName'] = it.genericName
+      output['presentations'] = it.presentations.collect { Presentation presentation -> [name: presentation.name, measures: presentation.measures]}
+
+      output
+    }
   }
 
   def fullNameToShortName(final String fullName) {

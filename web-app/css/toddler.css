@@ -1,21 +1,38 @@
 .toddler {
     background: #FFF;
-    border-right: 1px solid #EEE;
+    border-right: 1px solid #DDD;
     position: fixed;
-    overflow: hidden;
+    overflow-y: scroll;
     top: 0;
     left: -400px;
     width: 400px;
     min-height: 100%;
+    max-height:100vh;
     z-index: 1000000;
     transition: left .4s;
 }
 
-#notification {
+.toddler .panel-body {
+    
+}
+
+.toddler details {
+    margin: 10px;
+}
+
+.toddler details > summary {
+    cursor: pointer;
+}
+
+.toddler details .content {
+    padding-left: 20px;
+}
+
+.toddler #notification {
     margin-top: 10px;
 }
 
-textarea {
+.toddler textarea {
     min-height: 100px;
     max-height: 200px;
 }
