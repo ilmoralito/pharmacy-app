@@ -6,12 +6,15 @@ import grails.converters.JSON
 @Secured(['ROLE_ADMIN'])
 class MerchandiseController {
 
+  ProviderService providerService
+
   static defaultAction = 'list'
   static allowedMethods = [
     save: 'POST'
   ]
 
-  def list(Provider provider) {
+  def list() {
+    Provider provider = providerService.get(params.long('providerId'))
     List<Merchandise> merchandises = Merchandise.findAllByProviderAndStatus(provider, 'true')
 
     withFormat {
@@ -21,7 +24,7 @@ class MerchandiseController {
   }
 
   def save() {
-    Provider provider = Provider.get(params.int('id'))
+    Provider provider = providerService.get(params.long('providerId'))
 
     if (!provider) {
       render(contentType: 'application/json') {

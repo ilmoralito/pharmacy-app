@@ -13,15 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getGoods() {
-        const provider = getCurrentProvider();
+        const providerId = getCurrentProviderId();
 
-        fetch(`/pharmacyApp/merchandise/list/${provider}.json`)
+        fetch(`/pharmacyApp/provider/${providerId}/merchandises?format=json`)
             .then(response => response.json())
             .then(json => dataset = json)
             .catch(error => console.error(error.message()));
     }
 
-    function getCurrentProvider() {
+    function getCurrentProviderId() {
         return document.querySelector('input[type=hidden]').value;
     }
 

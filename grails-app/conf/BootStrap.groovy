@@ -422,7 +422,9 @@ class BootStrap {
       output['status'] = it.status
       output['location'] = it.location
       output['genericName'] = it.genericName
-      output['presentations'] = it.presentations.collect { Presentation presentation -> [name: presentation.name, measures: presentation.measures]}
+      output['presentations'] = it.presentations.collect { Presentation presentation ->
+        [name: presentation.name, measures: presentation.measures]
+      }
 
       output
     }

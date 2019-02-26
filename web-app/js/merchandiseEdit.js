@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
 
         if (target.classList.contains('btn')) {
+            event.preventDefault();
+
             if (target.textContent === 'Editar') {
                 target.textContent = 'Confirmar';
 
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    const message = json.errors.errors.map(error => error.message).join('\n ');
+                    const message = json.errors.errors.map(error => error.message).join('\n');
 
                     alert(message);
                 })

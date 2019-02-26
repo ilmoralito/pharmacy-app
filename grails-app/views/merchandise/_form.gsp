@@ -1,4 +1,4 @@
-<input type="hidden" name="id" value="${params.id}">
+<input type="hidden" name="providerId" value="${params.providerId}">
 
 <div class="form-group">
     <label for="name">Nombre del producto</label>

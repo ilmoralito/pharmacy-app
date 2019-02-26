@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.form;
+    const notification = document.querySelector('#notification');
 
     form.addEventListener('submit', handleSubmit);
 
@@ -19,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (json.status === 'ok') {
                     clean();
                     sync(json.merchandise);
+
+                    notification.innerHTML = '';
 
                     return;
                 }
@@ -54,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function logErrors(errors) {
         const list = errors.errors.map(errorToView).join('');
 
-        document.querySelector('#notification').innerHTML = `<ul>${list}</ul>`;
+        notification.innerHTML = `<ul>${list}</ul>`;
     }
 
     function errorToView(error) {

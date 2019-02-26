@@ -18,18 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchMedicines() {
-        const provider = getCurrentProvider();
+        const providerId = getCurrentProviderId();
 
-        fetch(`/pharmacyApp/medicine/list/${provider}.json`)
+        fetch(`/pharmacyApp/provider/${providerId}/medicines?format=json`)
             .then(response => response.json())
-            .then(json => {
-                console.log(json)
-                medicines = json
-            })
+            .then(json => medicines = json)
             .catch(error => console.error(error.message()));
     }
 
-    function getCurrentProvider() {
+    function getCurrentProviderId() {
         return document.querySelector('input[type=hidden]').value;
     }
 
@@ -41,12 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toRowView(medicine) {
         return `<tr>
-            <td>
-                <a href="show/${medicine.id}">${medicine.name}</a>
+            <td style="vertical-align: middle;">
+                <a href="#" data-presentations='${JSON.stringify(medicine.presentations)}'>${medicine.name}</a>
             </td>
-            <td>${medicine.genericName}</td>
-            <td>${medicine.location}</td>
-            <td>${medicine.code}</td>
+            <td style="vertical-align: middle;">${medicine.genericName}</td>
+            <td style="vertical-align: middle;">${medicine.location}</td>
+            <td style="vertical-align: middle;">${medicine.code}</td>
+            <td>
+                <a href="edit/${medicine.id}" class="btn btn-default btn-sm">Editar</a>
+            </td>
         </tr>`;
     }
 

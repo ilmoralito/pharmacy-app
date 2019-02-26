@@ -104,6 +104,15 @@ modules = {
     dependsOn 'toddler'
     resource url: 'js/medicineAdd.js'
     resource url: 'js/medicineFilter.js'
-    // resource url: 'js/medicineEdit.js'
+    resource url: 'js/medicineShow.js'
+  }
+
+  presentations {
+    dependsOn 'app'
+    dependsOn 'toddler'
+    resource url: 'js/presentationHelpers.js'
+    resource url: 'js/presentationAdd.js'
+    resource url: 'js/presentationEdit.js'
+    resource url: 'js/presentationFilter.js'
   }
 }

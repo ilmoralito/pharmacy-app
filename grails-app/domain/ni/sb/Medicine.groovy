@@ -17,6 +17,7 @@ class Medicine extends Product {
 
   static mapping = {
     version false
+    presentations cascade: 'all-delete-orphan'
   }
 
   static hasMany = [presentations: Presentation]

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.forms.form;
     const root = document.querySelector('table tbody');
+    const notification = document.querySelector('#notification');
 
     form.addEventListener('submit', handleSubmit);
 
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sync(json.medicine);
                     clean();
 
+
                     return;
                 }
 
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getElements() {
         const elements = [...form.elements]
-            .filter(element => element.type === 'text' || element.nodeName === 'SELECT' || element.id === 'id' || (element.type === 'checkbox' && element.checked))
+            .filter(element => element.type === 'text' || element.nodeName === 'SELECT' || element.id === 'providerId' || (element.type === 'checkbox' && element.checked))
 
         return elements;
     }
@@ -44,8 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return formData;
     }
 
-    function logErrors(errros) {
+    function logErrors(errors) {
+        const list = errors.errors.map(error => `<li>${error.message}</li>`).join('');
 
+        notification.innerHTML = `<ul>${list}</ul>`;
     }
 
     function sync(medicine) {
@@ -54,20 +58,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const tdGenericName = document.createElement('td');
         const tdLocation = document.createElement('td');
         const tdCode = document.createElement('td');
+        const tdEdit = document.createElement('td');
         const anchor = document.createElement('a');
+        const editAnchor = document.createElement('a');
 
-        anchor.href = `show/${medicine.id}`;
+        anchor.href = `#`;
         anchor.textContent = medicine.name;
+        anchor.setAttribute('data-presentations', JSON.stringify(medicine.presentations));
+
+        editAnchor.href = `edit/${medicine.id}`;
+        editAnchor.className = "btn btn-default btn-sm";
+        editAnchor.textContent = 'Editar';
+
+        tdName.style.verticalAlign = 'middle';
+        tdGenericName.style.verticalAlign = 'middle';
+        tdLocation.style.verticalAlign = 'middle';
+        tdCode.style.verticalAlign = 'middle';
 
         tdName.appendChild(anchor);
         tdGenericName.textContent = medicine.genericName;
         tdLocation.textContent = medicine.location;
         tdCode.textContent = medicine.code;
+        tdEdit.appendChild(editAnchor);
 
         tr.appendChild(tdName);
         tr.appendChild(tdGenericName);
         tr.appendChild(tdLocation);
         tr.appendChild(tdCode);
+        tr.appendChild(tdEdit);
 
         root.appendChild(tr);
     }

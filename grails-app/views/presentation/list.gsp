@@ -1,55 +1,46 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="layout" content="main">
-	<title>Presentaciones</title>
-	<r:require modules="bootstrap-css, bootstrap-collapse, app"/>
+    <meta charset="UTF-8">
+    <meta name="layout" content="main">
+    <title>Presentaciones</title>
+    <r:require modules="bootstrap-css, bootstrap-collapse, presentations"/>
 </head>
 <body>
-	<g:render template="toolbar"/>
+    <g:render template="/toddler/toddler"/>
 
-	<g:if test="${presentations}">
-		<table class="table">
-			<thead>
-				<th>Presentaciones</th>
-				<th width="1"></th>
-			</thead>
-			<tbody>
-				<g:each in="${presentations}" var="presentation">
-					<tr id="${presentation}">
-						<td>${presentation}</td>
-						<td>
-							<g:link action="delete" params="[id:presentation.id]">
-								<span class="glyphicon glyphicon-trash"></span>
-							</g:link>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							<g:form action="addMeasures">
-								<g:hiddenField name="id" value="${presentation.id}"/>
-								<g:hiddenField name="presentation" value="${presentation}"/>
-								<g:hiddenField name="productId" value="${params?.productId}"/>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" id="filter" class="form-control" placeholder="Filtrar">
+        </div>
+        <div class="col-md-6">
+            <a href="#" id="trigger" class="btn btn-primary pull-right">Agregar</a>
+        </div>
+    </div>
 
-								<g:each in="${grailsApplication.config.ni.sb.presentationsAndMeasures[presentation.name]}" var="measure">
-									<div class="checkbox">
-										<label>
-											<g:checkBox name="measures" value="${measure}" checked="${presentation.measures.contains(measure)}"/>
-											${measure}
-										</label>
-									</div>
-								</g:each>
-								<g:submitButton name="confirm" value="Agregar unidad de medida" class="btn btn-primary btn-xs"/>
-							</g:form>
-						</td>
-					</tr>
-				</g:each>
-			</tbody>
-		</table>
-	</g:if>
-	<g:else>
-		<h4>Sin presentaciones</h4>
-	</g:else>
+    <g:if test="${presentations}">
+        <table class="table table-hover table-bordered">
+            <col width="90%">
+            <col width="10%">
+
+            <thead>
+                <th>Nombres</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <g:each in="${presentations}" var="presentation">
+                    <tr>
+                        <td>${presentation}</td>
+                        <td class="text-center" style="vertical-align: middle;">
+                            <a href="#" id="${presentation.id}">Editar</a>
+                        </td>
+                    </tr>
+                </g:each>
+            </tbody>
+        </table>
+    </g:if>
+    <g:else>
+        <p>Sin datos que mostrar</p>
+    </g:else>
 </body>
 </html>

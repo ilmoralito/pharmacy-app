@@ -1,92 +1,59 @@
 package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
-import grails.util.Holders
+import grails.converters.JSON
 
-@Secured(["ROLE_ADMIN"])
+@Secured(['ROLE_ADMIN'])
 class PresentationController {
-	def grailsApplication
+  PresentationService presentationService
 
-	static defaultAction = "list"
-	static allowedMethods = [
-		list:"GET",
-    addMeasures:"POST",
-    save:"POST",
-    delete:"GET"
-	]
+  static defaultAction = 'list'
+  static allowedMethods = [
+    save: 'POST',
+    update: 'PUT',
+  ]
 
-  def list(Integer productId) {
-  	def medicine = Medicine.get productId
+  def list() {
+    List<Presentation> presentationList = presentationService.findAll()
 
-  	if (!medicine) { response.sendError 404 }
-
-  	def productPresentations = medicine.presentations.name
-    def presentationsKeys = grailsApplication.config.ni.sb.presentationsAndMeasures.keySet()
-    def presentationsList = presentationsKeys - productPresentations
-
- 	 	[presentations:Presentation.findAllByMedicine(medicine), medicine:medicine, presentationsList:presentationsList]
+    withFormat {
+      html presentations: presentationList
+      json { render presentationList as JSON }
+    }
   }
 
-  def addMeasures(AddMeasuresCommand cmd, Integer id, Integer productId) {
-    if (cmd.hasErrors()) {
-      cmd.errors.allErrors.each { error ->
-        log.error "[$error.field: $error.defaultMessage]"
-      }
-    } else {
-      def presentation = Presentation.get id
+  def save() {
+    Presentation presentation = new Presentation(name: params.name)
 
-      if (!presentation) { response.sendError 404 }
-
-      def tmp = []
-      tmp.addAll presentation.measures
-
-      tmp.each { measure ->
-        presentation.removeFromMeasures measure
+    if (!presentation.save()) {
+      render(contentType: 'application/json') {
+        [status: 'fail', errors: presentation.errors]
       }
 
-      cmd.measures.each { measure ->
-        presentation.addToMeasures measure
-      }
-
-      presentation.save()
+      return
     }
 
-    redirect action:"list", params:[productId:productId], fragment:cmd.presentation
+    render(contentType: 'application/json') {
+      [status: 'ok', presentation: presentation]
+    }
   }
 
-  def save(Integer productId) {
-  	def product = Product.get productId
+  def update(Presentation presentation) {
+    println '>' * 100
+    println params
+    println '>' * 100
+    presentation.properties = params
 
-  	if (!product) { response.sendError 404 }
-
-  	def presentation = new Presentation(params)
-  	product.addToPresentations presentation
-
-  	product.save()
-
-  	redirect action:"list", params:[productId:productId]
-  }
-
-  def delete(Integer id) {
-  	def presentation = Presentation.get id
-
-  	if (!presentation) { response.sendError 404 }
-  	presentation.delete()
-
-  	redirect action:"list", params:[productId:presentation.medicine.id]
-  }
-}
-
-class AddMeasuresCommand {
-  String presentation
-  List<String> measures
-
-  static constraints = {
-    presentation inList:Holders.config.ni.sb.presentationsAndMeasures.keySet() as List
-    measures nullable:false, validator:{ measures, obj ->
-      if (!Holders.config.ni.sb.presentationsAndMeasures[obj.presentation].containsAll(measures)) {
-        "notMatch"
+    if (!presentation.save()) {
+      render(contentType: 'application/json') {
+        [status: 'fail', errors: presentation.errors]
       }
+
+      return
+    }
+
+    render(contentType: 'application/json') {
+      [status: 'ok', presentation: presentation]
     }
   }
 }
