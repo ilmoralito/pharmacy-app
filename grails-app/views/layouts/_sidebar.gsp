@@ -1,5 +1,5 @@
 <ul class="nav nav-pills nav-stacked">
-    <li class="${controllerName in ['provider', 'merchandise', 'presentation', 'brand'] ? 'active' : ''}">
+    <li class="${controllerName in ['provider', 'merchandise', 'brand'] ? 'active' : ''}">
         <g:link controller="provider" action="list">Proveedores</g:link>
     </li>
     <li class="${controllerName == 'client' ? 'active' : ''}">
@@ -17,6 +17,9 @@
     <br>
     <li class="${controllerName == 'presentation' ? 'active' : ''}">
         <g:link controller="presentation" action="list">Presentaciones</g:link>
+    </li>
+    <li class="${controllerName == 'measure' ? 'active' : ''}">
+        <g:link controller="measure" action="list">Medidas</g:link>
     </li>
     <br>
     <li class="${controllerName == 'purchaseOrder' && actionName == 'stock' ? 'active' : ''}">

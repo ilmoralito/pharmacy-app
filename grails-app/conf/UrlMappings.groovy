@@ -18,6 +18,13 @@ class UrlMappings {
     "/presentations" (controller: 'presentation', action: 'save', method: 'POST')
     "/presentations/$id" (controller: 'presentation', action: 'update', method: 'PUT')
 
+    //////////////
+    // measures //
+    //////////////
+    "/measures" (controller: 'measure', action: 'list', method: 'GET')
+    "/measures" (controller: 'measure', action: 'save', method: 'POST')
+    "/measures/$id" (controller: 'measure', action: 'update', method: 'PUT')
+
     "/"(controller:"login")
     "500"(view:'/error')
     }

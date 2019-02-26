@@ -115,4 +115,13 @@ modules = {
     resource url: 'js/presentationEdit.js'
     resource url: 'js/presentationFilter.js'
   }
+
+  measures {
+    dependsOn 'app'
+    dependsOn 'toddler'
+    resource url: 'js/measureHelpers.js'
+    resource url: 'js/measureAdd.js'
+    resource url: 'js/measureEdit.js'
+    resource url: 'js/measureFilter.js'
+  }
 }

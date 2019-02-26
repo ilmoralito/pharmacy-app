@@ -39,9 +39,6 @@ class PresentationController {
   }
 
   def update(Presentation presentation) {
-    println '>' * 100
-    println params
-    println '>' * 100
     presentation.properties = params
 
     if (!presentation.save()) {
