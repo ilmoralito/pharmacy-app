@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const table = document.querySelector('table');
-    
+
     table.addEventListener('click', handleClick);
 
     function handleClick(event) {
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const target = event.target;
 
-        if (target.nodeName === 'A') {
+        if (target.nodeName === 'A' && ['Editar', 'Confirmar'].includes(target.textContent)) {
             const tr = target.closest('tr');
             const cell = tr.children[0];
 

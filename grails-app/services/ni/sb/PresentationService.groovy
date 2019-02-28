@@ -9,6 +9,10 @@ class PresentationService {
     Presentation.list()
   }
 
+  Presentation find(Serializable id) {
+    Presentation.get(id)
+  }
+
   def presentationsByProduct(Integer productId) {
     def product = Product.get productId
 

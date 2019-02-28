@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="layout" content="main">
     <title>Presentaciones</title>
-    <r:require modules="bootstrap-css, bootstrap-collapse, presentations"/>
+    <r:require modules="bootstrap-css, bootstrap-collapse, measurePresentations"/>
 </head>
 <body>
     <g:render template="/toddler/toddler"/>
 
-    <div class="row">
+    <div class="row bar">
         <div class="col-md-6">
             <input type="text" id="filter" class="form-control" placeholder="Filtrar">
         </div>
@@ -18,24 +18,25 @@
         </div>
     </div>
 
-    <g:if test="${presentations}">
+    <g:if test="${measurePresentations}">
         <table class="table table-hover table-bordered">
-            <col width="80%">
+            <col width="70%">
             <col width="10%">
+            <col width="10% ">
             <col width="10%">
 
             <thead>
-                <th>Nombres</th>
-                <th></th>
+                <th>Presentacion</th>
+                <th>Medida</th>
+                <th>Cantidad</th>
                 <th></th>
             </thead>
             <tbody>
-                <g:each in="${presentations}" var="presentation">
+                <g:each in="${measurePresentations}" var="presentation">
                     <tr>
-                        <td>${presentation}</td>
-                        <td class="text-center" style="vertical-align: middle;">
-                            <a href="#" id="${presentation.id}">Medidas</a>
-                        </td>
+                        <td>${presentation.presentation.name}</td>
+                        <td>${presentation.measure.unit}</td>
+                        <td>${presentation.count}</td>
                         <td class="text-center" style="vertical-align: middle;">
                             <a href="#" id="${presentation.id}">Editar</a>
                         </td>

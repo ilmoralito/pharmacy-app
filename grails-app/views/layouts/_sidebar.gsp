@@ -21,6 +21,9 @@
     <li class="${controllerName == 'measure' ? 'active' : ''}">
         <g:link controller="measure" action="list">Medidas</g:link>
     </li>
+    <li class="${controllerName == 'measurePresentation' ? 'active' : ''}">
+        <g:link controller="measurePresentation" action="list">Presentaciones y medidas</g:link>
+    </li>
     <br>
     <li class="${controllerName == 'purchaseOrder' && actionName == 'stock' ? 'active' : ''}">
         <g:link controller="purchaseOrder" action="stock">Inventario</g:link>

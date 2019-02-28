@@ -7,12 +7,15 @@ class UrlMappings {
       }
     }
 
+    ///////////////
+    // providers //
+    ///////////////
     "/provider/$providerId/merchandises" (controller: 'merchandise', action: 'list', method: 'GET')
     "/provider/$providerId/medicines" (controller: 'medicine', action: 'list', method: 'GET')
     "/provider/$providerId/medicines/$id/edit" (controller: 'medicine', action: 'edit', method: 'GET')
 
     ///////////////////
-    // Presentations //
+    // presentations //
     ///////////////////
     "/presentations" (controller: 'presentation', action: 'list', method: 'GET')
     "/presentations" (controller: 'presentation', action: 'save', method: 'POST')
@@ -24,6 +27,14 @@ class UrlMappings {
     "/measures" (controller: 'measure', action: 'list', method: 'GET')
     "/measures" (controller: 'measure', action: 'save', method: 'POST')
     "/measures/$id" (controller: 'measure', action: 'update', method: 'PUT')
+
+    //////////////////////////
+    // measurePresentations //
+    //////////////////////////
+    "/measurePresentations" (controller: 'measurePresentation', action: 'list', method: 'GET')
+    "/measurePresentations" (controller: 'measurePresentation', action: 'save', method: 'POST')
+    "/measurePresentations/$id" (controller: 'measurePresentation', action: 'update', method: 'POST')
+    "/measurePresentations/byPresentation/$id" (controller: 'measurePresentation', action: 'getMeasurePresentationByPresentation', method: 'GET')
 
     "/"(controller:"login")
     "500"(view:'/error')

@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             fetch(`measures/${target.id}`, {
                 method: 'PUT',
-                headers:{
+                headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({id: target.id, unit: newUnit, abbreviation: newAbbreviation}),

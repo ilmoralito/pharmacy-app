@@ -3,6 +3,10 @@ modules = {
     resource url:"css/main.css"
   }
 
+  helper {
+    resource url: 'js/helper.js'
+  }
+
   toddler {
     resource url: 'css/toddler.css'
     resource url: 'js/toddler.js'
@@ -114,6 +118,7 @@ modules = {
     resource url: 'js/presentationAdd.js'
     resource url: 'js/presentationEdit.js'
     resource url: 'js/presentationFilter.js'
+    resource url: 'js/presentationMeasures.js'
   }
 
   measures {
@@ -123,5 +128,15 @@ modules = {
     resource url: 'js/measureAdd.js'
     resource url: 'js/measureEdit.js'
     resource url: 'js/measureFilter.js'
+  }
+
+  measurePresentations {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/measurePresentationsHelper.js'
+    resource url: 'js/measurePresentationsAdd.js'
+    resource url: 'js/measurePresentationsFilter.js'
+    resource url: 'js/measurePresentationsEdit.js'
   }
 }

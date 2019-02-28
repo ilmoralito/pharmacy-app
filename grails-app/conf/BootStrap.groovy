@@ -49,6 +49,44 @@ class BootStrap {
           location: 'E2-2'
         )
 
+        Presentation presentation0 = new Presentation(name: 'Talco').save(failOnError: true)
+        Presentation presentation1 = new Presentation(name: 'Pomada').save(failOnError: true)
+        Presentation presentation2 = new Presentation(name: 'Jarabe').save(failOnError: true)
+        Presentation presentation3 = new Presentation(name: 'Pastilla').save(failOnError: true)
+        Presentation presentation4 = new Presentation(name: 'Gel').save(failOnError: true)
+        Presentation presentation5= new Presentation(name: 'Inyeccion').save(failOnError: true)
+
+        Measure measure0 = new Measure(
+          unit: 'Gramos',
+          abbreviation: 'gr'
+        ).save(failOnError: true)
+
+        Measure measure1 = new Measure(
+          unit: 'Kilogramos',
+          abbreviation: 'kg'
+        ).save(failOnError: true)
+
+        Measure measure2 = new Measure(
+          unit: 'Onzas',
+          abbreviation: 'oz'
+        ).save(failOnError: true)
+
+        Measure measure3 = new Measure(
+          unit: 'Libras',
+          abbreviation: 'lb'
+        ).save(failOnError: true)
+
+        MeasurePresentation mp0 = MeasurePresentation.create(measure0, presentation0, '1')
+        MeasurePresentation mp1 = MeasurePresentation.create(measure0, presentation2, '2')
+        MeasurePresentation mp2 = MeasurePresentation.create(measure0, presentation2, '3')
+        MeasurePresentation mp3 = MeasurePresentation.create(measure0, presentation2, '4')
+        MeasurePresentation mp4 = MeasurePresentation.create(measure1, presentation2, '1.0')
+        MeasurePresentation mp5 = MeasurePresentation.create(measure1, presentation0, '1.1')
+        MeasurePresentation mp6 = MeasurePresentation.create(measure2, presentation0, '1.2')
+        MeasurePresentation mp7 = MeasurePresentation.create(measure2, presentation0, '10')
+        MeasurePresentation mp8 = MeasurePresentation.create(measure2, presentation1, '20')
+        MeasurePresentation mp9 = MeasurePresentation.create(measure2, presentation1, '25')
+
         // def medicine1 = new Medicine(name:"Medicine1", code:"1234", genericName:"someGenericName", location:"E4-2")
 
         //   def presentation1 = new Presentation(name:"Cremas")
@@ -425,6 +463,17 @@ class BootStrap {
       output['presentations'] = it.presentations.collect { Presentation presentation ->
         [name: presentation.name, measures: presentation.measures]
       }
+
+      output
+    }
+
+    JSON.registerObjectMarshaller(MeasurePresentation) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['count'] = it.count
+      output['presentation'] = [id: it.presentation.id, name: it.presentation.name]
+      output['measure'] = [id: it.measure.id, unit: it.measure.unit, abbreviation: it.measure.abbreviation]
 
       output
     }
