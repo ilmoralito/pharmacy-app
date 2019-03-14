@@ -1,78 +1,59 @@
 package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
+import grails.converters.JSON
 
-@Secured(["ROLE_ADMIN"])
+@Secured(['ROLE_ADMIN'])
 class BrandController {
-	static defaultAction = "show"
-	static allowedMethods = [
-		show:"GET",
-		update:"POST",
-    delete:"GET",
-    addBrand:"POST"
-	]
+  BrandService brandService
 
-  def show(Integer id) {
-  	def brandProduct = BrandProduct.get id
+  static defaultAction = 'list'
+  static allowedMethods = [
+    save: 'POST',
+    update: 'POST'
+  ]
 
-  	if (!brandProduct) {
-  		response.sendError 404
-  	}
+  def list() {
+    List<Brand> brandList = brandService.findAll()
 
-    def brands = brandProduct.brands
-  	def distinctBrands = Brand.distinctBrands.list()
-    def availableBrands = distinctBrands - brands.name
-
-  	[brandProduct:brandProduct, brands:brands, availableBrands:availableBrands]
-  }
-
-  //@params id: brandProduct id
-  def update(Integer id) {
-  	def brandProduct = BrandProduct.get id
-
-  	if (!brandProduct) {
-  		response.sendError 404
-  	}
-
-  	brandProduct.name = params?.name
-
-  	if (!brandProduct.save()) {
-  		chain action:"show", params:[id:id]
-  		return
-  	}
-
-  	flash.message = "Producto actualizado"
-  	redirect action:"show", id:id
-  }
-
-  def delete(Integer id) {
-    def brand = Brand.get id
-
-    if (!brand) {
-      response.sendError 404
+    withFormat {
+      html brands: brandList
+      json { render brandList as JSON }
     }
-
-    def brandProduct = brand.brandProduct
-
-    brandProduct.removeFromBrands brand
-
-    redirect action:"show", id:brandProduct.id
   }
 
-  //@params id: brandProduct id
-  def addBrand(Integer id) {
-    def brandProduct = BrandProduct.get id
+  def save() {
+    try {
+      Brand brand = brandService.save(params.name)
 
-    if (!brandProduct) { response.sendError 404 }
-
-    if (params?.brand && params?.details) {
-      def details = params?.details?.tokenize(",")
-      def brand = new Brand(name:params?.brand, details:details)
-
-      brandProduct.addToBrands brand
-      brandProduct.save(flush:true)
+      render(contentType: 'application/json') {
+        [status: 'ok', brand: brand]
+      }
+    } catch(ValidationException e) {
+      render(contentType: 'application/json') {
+        [status: 'fail', errors: e.errors]
+      }
     }
+  }
 
-    redirect action:"show", id:id
+  def update() {
+    try {
+      Brand brand = brandService.update(params.id, params.name)
+
+      render(contentType: 'application/json') {
+        [status: 'ok', brand: brand]
+      }
+    } catch(ValidationException e) {
+      render(contentType: 'application/json') {
+        [status: 'fail', errors: e.errors]
+      }
+    }
+  }
+
+  def count() {
+    render(contentType: 'application/json') {
+      [count: brandService.count()]
+    }
   }
 }

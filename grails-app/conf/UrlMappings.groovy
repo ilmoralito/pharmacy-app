@@ -36,6 +36,14 @@ class UrlMappings {
     "/measurePresentations/$id" (controller: 'measurePresentation', action: 'update', method: 'POST')
     "/measurePresentations/byPresentation/$id" (controller: 'measurePresentation', action: 'getMeasurePresentationByPresentation', method: 'GET')
 
+    ////////////
+    // brands //
+    ////////////
+    "/brands"(controller: 'brand', action: 'list', method: 'GET')
+    "/brands"(controller: 'brand', action: 'save', method: 'POST')
+    "/brands/$id"(controller: 'brand', action: 'update', method: 'POST')
+    "/brands/count"(controller: 'brand', action: 'count', method: 'GET')
+
     "/"(controller:"login")
     "500"(view:'/error')
     }
