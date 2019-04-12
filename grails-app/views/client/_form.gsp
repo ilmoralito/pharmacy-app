@@ -39,12 +39,12 @@
 </div>
 
 <div class="form-group">
-    <label for="address">Direccion</label>
+    <label for="address">Dirección</label>
     <g:textArea
         name="address"
         value="${client?.address}"
         class="form-control"
-        placeholder="Ej. Mina el limon, Arlen Siu, direccion..."
+        placeholder="Ej. Mina el limón, Arlen Siu, dirección..."
     />
 </div>
 

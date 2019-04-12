@@ -34,5 +34,5 @@ class Client implements Serializable {
     version false
   }
 
-  String toString() { "$firstName $middleName $surname $lastName" }
+  String toString() { "$firstName ${middleName ? middleName : ''} $surname $lastName" }
 }
