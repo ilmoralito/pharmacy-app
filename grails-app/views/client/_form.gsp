@@ -1,26 +1,85 @@
 <div class="form-group">
-    <label for="fullName">Nombre completo</label>
-    <g:textField name="fullName" value="${client?.fullName}" class="form-control" autofocus="true"/>
+    <label for="firstName">Primer nombre</label>
+    <g:textField
+        name="firstName"
+        value="${client?.firstName}"
+        class="form-control"
+        autofocus="true"
+    />
+</div>
+
+<div class="form-group">
+    <label for="middleName">Segundo nombre</label>
+    <g:textField
+        name="middleName"
+        value="${client?.middleName}"
+        class="form-control"
+        autofocus="true"
+    />
+</div>
+
+<div class="form-group">
+    <label for="surname">Primer apellido</label>
+    <g:textField
+        name="surname"
+        value="${client?.surname}"
+        class="form-control"
+        autofocus="true"
+    />
+</div>
+
+<div class="form-group">
+    <label for="lastName">Segundo apellido</label>
+    <g:textField
+        name="lastName"
+        value="${client?.lastName}"
+        class="form-control"
+        autofocus="true"
+    />
 </div>
 
 <div class="form-group">
     <label for="address">Direccion</label>
-    <g:textArea name="address" value="${client?.address}" class="form-control"/>
+    <g:textArea
+        name="address"
+        value="${client?.address}"
+        class="form-control"
+        placeholder="Ej. Mina el limon, Arlen Siu, direccion..."
+    />
 </div>
 
 <div class="form-group">
     <label for="identificationCard">Cedula</label>
-    <g:textField name="identificationCard" value="${client?.identificationCard}" class="form-control"/>
+    <g:field
+        type="text"
+        name="identificationCard"
+        value="${client?.identificationCard}"
+        class="form-control"
+        placeholder="Ej. 291-170180-0001W"
+        maxLength="16"
+        minLength="16"
+    />
 </div>
 
 <div class="form-group">
     <label>Telefonos</label>
-    <g:textField name="phones" class="form-control" value="${client?.phones}" placeholder="Ej. (C)8888 7777, (M)9898 8888, ..."/>
+    <g:textField
+        name="phones"
+        class="form-control"
+        value="${client?.phones}"
+        placeholder="Ej. (c)8888 7777, (m)9898 8888, ..."
+    />
 </div>
 
 <g:if test="${actionName == 'show'}">
     <div class="form-group">
         <label for="status" class="sr-only">Estado</label>
-        <g:select name="status" from="['Activo', 'Inactivo']" keys="[true, false]" value="${client?.status}" class="form-control"/>
+        <g:select
+            name="status"
+            from="['Activo', 'Inactivo']"
+            keys="[true, false]"
+            value="${client?.status}"
+            class="form-control"
+        />
     </div>
 </g:if>

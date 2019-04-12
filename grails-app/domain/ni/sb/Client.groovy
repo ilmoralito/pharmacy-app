@@ -3,10 +3,11 @@ package ni.sb
 import org.grails.databinding.BindUsing
 
 class Client implements Serializable {
-  @BindUsing({ obj, source ->
-    source['fullName']?.toLowerCase()?.tokenize(' ')*.capitalize().join(' ')
-  })
-  String fullName
+
+  String firstName
+  String middleName
+  String surname
+  String lastName
   String address
   @BindUsing({ obj, source ->
     source['identificationCard']?.toUpperCase()
@@ -15,20 +16,23 @@ class Client implements Serializable {
   String phones
   Boolean status = true
 
+  User createdBy
   Date dateCreated
   Date lastUpdated
 
   static constraints = {
-    fullName blank:false
-    address blank:false
-    identificationCard blank:false, unique:true, maxSize:16, minSize: 16
+    firstName blank: false
+    middleName nullable: true
+    surname blank: false
+    lastName blank: false
+    address blank: false
+    identificationCard blank: false, unique: true, maxSize: 16, minSize: 16
     phones nullable: true
   }
 
   static mapping = {
     version false
-    sort dateCreated: 'desc'
   }
 
-  String toString() { fullName }
+  String toString() { "$firstName $middleName $surname $lastName" }
 }

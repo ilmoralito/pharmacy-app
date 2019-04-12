@@ -1,5 +1,6 @@
 package ni.sb
 
+import  grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.converters.JSON
 
@@ -11,11 +12,20 @@ class ClientController {
     update: 'POST'
   ]
 
+  SpringSecurityService springSecurityService
+
   def list() {
-    [clients: Client.list(sort: 'fullName')]
+    List<Client> clientList = Client.list()
+
+    request.withFormat {
+      html clients: clientList
+      json { render clientList as JSON }
+    }
   }
 
   def save() {
+    params.createdBy = springSecurityService.currentUser
+
     Client client = new Client(params)
 
     if (client.save()) {
@@ -46,5 +56,9 @@ class ClientController {
 
     flash.message = 'Datos del cliente actualizado'
     redirect action: 'show', id: client.id
+  }
+
+  def register(Client client) {
+    [client: client]
   }
 }

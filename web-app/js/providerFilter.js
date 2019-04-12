@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const root = document.querySelector('table tbody');
     const filter = document.querySelector('#filter');
-    let dataset = [];
 
     filter.addEventListener('keyup', handleFilter);
 
@@ -31,16 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${provider.phone}</td>
                 <td>${provider.status}</td>
                 <td>
-                    <a href="#">${!provider.products ? '* ' : ''}Productos</a>
+                    <a href="#">Productos</a>
                 </td>
             </tr>`;
-    }
-
-    function fetchDataset() {
-        fetch('getDatasetToFilter')
-            .then(response => response.json())
-            .then(json => dataset = json)
-            .catch(error => console.error(error.message()));
     }
 
     fetchDataset();

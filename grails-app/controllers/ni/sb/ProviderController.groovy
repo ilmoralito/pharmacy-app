@@ -21,35 +21,35 @@ class ProviderController {
       phone: params.phone
     )
 
-    if (provider.validate(['name', 'address', 'phone'])) {
-      Contact contact = new Contact(
-        firstName: params.firstName,
-        lastName: params.lastName,
-        email: params.email,
-        telephoneNumber: params.telephoneNumber
-      )
-
-      if (!contact.save()) {
-        render(contentType: 'application/json') {
-          [status: 'fail', errors: contact.errors]
-        }
-
-        return
-      }
-
-      provider.contact = contact
-
-      provider.save()
-
+    if (!provider.validate(['name', 'address', 'phone'])) {
       render(contentType: 'application/json') {
-        [status: 'ok', provider: provider]
+        [status: 'fail', errors: provider.errors]
       }
 
       return
     }
 
+    Contact contact = new Contact(
+      firstName: params.firstName,
+      lastName: params.lastName,
+      email: params.email,
+      telephoneNumber: params.telephoneNumber
+    )
+
+    if (!contact.save()) {
+      render(contentType: 'application/json') {
+        [status: 'fail', errors: contact.errors]
+      }
+
+      return
+    }
+
+    provider.contact = contact
+
+    provider.save()
+
     render(contentType: 'application/json') {
-      [status: 'fail', errors: provider.errors]
+      [status: 'ok', provider: provider]
     }
   }
 

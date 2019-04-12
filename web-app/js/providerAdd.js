@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(json => {
                 if (json.status === 'ok') {
-                    debugger
                     sync(json.provider);
+
                     clean();
+
+                    fetchDataset();
 
                     return;
                 }
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         anchor.text = provider.name;
 
         productsAnchor.href = '#';
-        productsAnchor.textContent = '* Productos';
+        productsAnchor.textContent = 'Productos';
 
         nameTd.appendChild(anchor);
         addressTd.textContent = provider.address;
@@ -54,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
         tr.appendChild(statusTd);
         tr.appendChild(productsTd);
 
-        document.querySelector('table tbody').appendChild(tr);
+        document.querySelector('tbody').appendChild(tr);
     }
 
     function clean() {
-        const filtered = [...form.elements].filter(element => element.nodeName !== 'BUTTON');
+        const elements = [...form.elements].filter(element => element.nodeName !== 'BUTTON');
 
-        filtered.forEach(element => element.value = '');
+        elements.forEach(element => element.value = '');
     }
 
     function logErrors(errors) {

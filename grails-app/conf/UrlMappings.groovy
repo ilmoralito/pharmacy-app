@@ -7,6 +7,14 @@ class UrlMappings {
       }
     }
 
+    /////////////
+    // clients //
+    /////////////
+    '/clients' (controller: 'client', action: 'list', method: 'GET')
+    '/clients' (controller: 'client', action: 'save', method: 'POST')
+    "/clients/$id" (controller: 'client', action: 'show', method: 'GET')
+    "/clients/$id/register" (controller: 'client', action: 'register', method: 'GET')
+
     ///////////////
     // providers //
     ///////////////

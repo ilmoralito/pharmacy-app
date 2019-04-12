@@ -10,7 +10,6 @@ class Provider implements Serializable {
   String address
   String phone
   Boolean status = true
-  List products
   Contact contact
 
   Date dateCreated
@@ -20,10 +19,7 @@ class Provider implements Serializable {
     name blank: false, unique: true
     address blank: false, unique: true
     phone blank: false, unique: true
-    products nullable: true
   }
-
-  static hasMany = [products: Product]
 
   static mapping = {
     version false

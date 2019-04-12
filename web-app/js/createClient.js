@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const createClient = document.querySelector('#createClient');
+    const notification = document.querySelector('#notification');
     const confirm = document.querySelector('#confirm');
 
     createClient.addEventListener('click', toggle);
@@ -12,22 +13,24 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         const formData = new FormData(document.form);
-        const init = { method: 'POST', body: formData };
+        const options = { method: 'POST', body: formData };
 
-        fetch('/pharmacyApp/client/save', init)
+        fetch('clients', options)
             .then(response => response.json())
             .then(json => {
                 if (json.status === 'ok') {
                     sync(json.client);
+                    cleanErrors();
+                    getClients();
 
                     return;
                 }
 
                 const errors = json.errors.errors.map(errorToLiView).join('');
 
-                document.querySelector('#notification').innerHTML = `<ul>${errors}</ul>`;
+                notification.innerHTML = `<ul>${errors}</ul>`;
             })
-            .catch(error => console.error(error.message()));
+            .catch(error => console.error(error.message));
     }
 
     function errorToLiView(error) {
@@ -64,11 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function clean() {
-        const elements = [...document.form.elements].filter(element => element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA');
+        const elements = [...document.form.elements].filter(
+            element =>
+                element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA'
+        );
 
-        elements.forEach(element => element.value = '');
+        elements.forEach(element => (element.value = ''));
 
         elements[0].focus();
+    }
+
+    function cleanErrors() {
+        notification.innerHTML = '';
     }
 
     function toggle() {

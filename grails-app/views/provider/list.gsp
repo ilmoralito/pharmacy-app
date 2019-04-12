@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="layout" content="main">
     <title>Proveedores</title>
-    <r:require modules="bootstrap-css, bootstrap-collapse, providerList"/>
+    <r:require modules="bootstrap-css, bootstrap-collapse, providers"/>
 </head>
 <body>
     <g:render template="/toddler/toddler"/>
@@ -46,7 +46,6 @@
                         <td>${provider.status ? 'Activo' : 'No activo'}</td>
                         <td>
                             <g:link controller="merchandise" params="[providerId: provider.id]">
-                                <g:if test="${!provider.products}">*</g:if>
                                 Productos
                             </g:link>
                         </td>

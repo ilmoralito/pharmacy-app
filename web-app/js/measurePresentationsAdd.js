@@ -26,9 +26,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+                const domPresentation = form.querySelector('#form');
+                const currentPresentation = domPresentation.options(domPresentation.selectedIndex).text;
+
+                console.log(currentPresentation);
+
                 // TODO: Highlight row with repeated data
                 // if (json.errors.errors.find(error => error.message === 'Intentas agregar un dato que ya existe')) {
-                    
+                //     const tbody = document.querySelector('tbody');
+                //     const rows = [...tbody.rows];
+
+                //     for (const row of rows) {
+                //         const [presentationCell, measureCell, countCell] = row.cells;
+
+
+
+                //         if (
+                //             presentationCell.textContent === form.querySelector('#presentation').textContent &&
+                //             measureCell.textContent === form.querySelector('#measure').textContent &&
+                //             countCell.textContent === form.querySelector('#count').value
+                //         ) {
+                //             row.style.background = 'red';
+
+                //             break;
+                //         }
+                //     }
                 // }
 
                 renderErrors(json.errors.errors);

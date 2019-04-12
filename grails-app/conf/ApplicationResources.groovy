@@ -41,9 +41,14 @@ modules = {
 
   client {
     dependsOn 'app'
+    resource url: 'js/clientHelpers.js'
     resource url: 'js/clientFilter.js'
     resource url: 'js/createClient.js'
     resource url: 'css/toddler.css'
+  }
+
+  clientFirst {
+    resource url: 'js/clientFirst.js'
   }
 
   chosenLib {
@@ -86,12 +91,13 @@ modules = {
     resource url:"js/reports.js"
   }
 
-  providerList {
+  providers {
     dependsOn 'app'
     resource url: 'css/toddler.css'
     resource url: 'js/toddler.js'
-    resource url: 'js/createProvider.js'
+    resource url: 'js/providerAdd.js'
     resource url: 'js/providerFilter.js'
+    resource url: 'js/providerHelper.js'
   }
 
   goods {
