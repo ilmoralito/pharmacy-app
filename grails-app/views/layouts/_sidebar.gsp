@@ -27,11 +27,12 @@
                 <li class="${controllerName == 'measure' ? 'active' : ''}">
                     <g:link controller="measure" action="list">Medidas</g:link>
                 </li>
-                <li class="${controllerName == 'measurePresentation' ? 'active' : ''}">
-                    <g:link controller="measurePresentation" action="list">Presentaciones medidas</g:link>
-                </li>
                 <li class="${controllerName == 'brand' ? 'active' : ''}">
                     <g:link controller="brand" action="list">Marcas</g:link>
+                </li>
+
+                <li class="${controllerName == 'measurePresentation' ? 'active' : ''}">
+                    <g:link controller="measurePresentation" action="list">Presentaciones/Medidas</g:link>
                 </li>
             </ul>
         </div>

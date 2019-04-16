@@ -16,7 +16,7 @@ class PresentationController {
   def list() {
     List<Presentation> presentationList = presentationService.findAll()
 
-    withFormat {
+    request.withFormat {
       html presentations: presentationList
       json { render presentationList as JSON }
     }

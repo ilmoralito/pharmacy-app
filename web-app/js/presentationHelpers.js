@@ -1,8 +1,12 @@
-let presentations;
-
-function fetchPresentations() {
-    fetch('presentations?format=json')
-        .then(response => response.json())
-        .then(json => presentations = json)
-        .catch(error => console.error(error.message()));
+function presentationToRowView(presentation) {
+    return `
+        <tr>
+            <td>${presentation.name}</td>
+            <td class="text-center" style="vertical-align: middle;">
+                <a href="#" id="${presentation.id}">Medidas</a>
+            </td>
+            <td class="text-center" style="vertical-align: middle;">
+                <a href="#" id="${presentation.id}">Editar</a>
+            </td>
+        </tr>`;
 }

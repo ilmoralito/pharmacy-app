@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const table = document.querySelector('table');
+    const body = document.querySelector('body');
 
-    table.addEventListener('click', handleClick);
+    body.addEventListener('click', handleClick);
 
     function handleClick(event) {
-        event.preventDefault();
-
         const target = event.target;
 
-        if (target.nodeName === 'A' && ['Editar', 'Confirmar'].includes(target.textContent)) {
+        if (itsALink(target) && itsEditLink(target)) {
+            event.preventDefault();
+
             const tr = target.closest('tr');
             const cell = tr.children[0];
 
@@ -23,14 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const newValue = cell.querySelector('input').value;
-
-            fetch(`presentations/${target.id}`, {
+            const options = {
                 method: 'PUT',
-                headers:{
+                headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({id: target.id, name: newValue}),
-            })
+                body: JSON.stringify({ id: target.id, name: newValue })
+            };
+
+            fetch(`presentations/${target.id}`, options)
                 .then(response => response.json())
                 .then(json => {
                     if (json.status === 'ok') {
@@ -38,21 +39,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         swapLabel(target);
 
-                        fetchPresentations();
-
                         return;
                     }
 
-                    const errors = json.errors.errors.map(error => error.message).join('\n');
+                    const errors = json.errors.errors
+                        .map(error => error.message)
+                        .join('\n');
 
                     alert(errors);
                 })
-                .catch(error => console.error(error.message()));
+                .catch(error => console.error(error.message));
         }
     }
 
     function swapLabel(target) {
-        target.textContent = target.textContent === 'Editar' ? 'Confirmar' : 'Editar';
+        target.textContent =
+            target.textContent === 'Editar' ? 'Confirmar' : 'Editar';
+    }
+
+    function itsALink(target) {
+        return target.nodeName === 'A';
+    }
+
+    function itsEditLink(target) {
+        return ['Editar', 'Confirmar'].includes(target.textContent);
     }
 });
-

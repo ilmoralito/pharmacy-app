@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.forms.form;
-    const notification = document.querySelector('#notification');
-    const root = document.querySelector('table tbody');
 
     form.addEventListener('submit', handleSubmit);
 
@@ -16,56 +14,43 @@ document.addEventListener('DOMContentLoaded', () => {
         })
             .then(response => response.json())
             .then(json => {
-                if (json.status === 'ok') {
-                    sync(json.presentation);
-                    cleanNotifications();
-                    cleanInputs();
+                fetchResource('presentations').then(presentations => {
+                    if (json.status === 'ok') {
+                        if (presentations.length === 1) {
+                            window.location.href = 'presentations';
+                        } else {
+                            sync(presentations);
 
-                    return;
-                }
+                            cleanErrors();
 
-                logErrors(json.errors);
+                            cleanInputs(form);
+                        }
+
+                        return;
+                    }
+
+                    renderErrors(json.errors.errors);
+                });
             });
     }
 
-    function logErrors(errors) {
-        const list = errors.errors.map(error => `<li>${error.message}</li>`);
+    function sync(presentations) {
+        const rows = presentations.map(presentationToRowView).join('');
 
-        notification.innerHTML = `<ul>${list}</ul>`;
-    }
+        document.querySelector('#root').innerHTML = `
+            <table class="table table-hover table-bordered">
+                <col width="80%">
+                <col width="10%">
+                <col width="10%">
 
-    function sync(presentation) {
-        const tr = document.createElement('tr');
-        const td1 = document.createElement('td');
-        const td2 = document.createElement('td');
-        const a = document.createElement('a');
-
-        td1.textContent = presentation.name;
-
-        td2.className = 'text-center';
-        td2.style.verticalAlign = 'middle';
-
-        a.href = '#';
-        a.id = presentation.id
-        a.textContent = 'Editar'
-
-        td2.appendChild(a);
-
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-
-        root.appendChild(tr);
-    }
-
-    function cleanInputs() {
-        const elements = [...form.elements];
-
-        elements.forEach(element => element.value = '');
-
-        elements[0].focus();
-    }
-
-    function cleanNotifications() {
-        notification.innerHTML = '';
+                <thead>
+                    <th>Nombres</th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>`;
     }
 });

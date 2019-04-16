@@ -126,12 +126,21 @@ modules = {
 
   presentations {
     dependsOn 'app'
+    dependsOn 'helper'
     dependsOn 'toddler'
     resource url: 'js/presentationHelpers.js'
     resource url: 'js/presentationAdd.js'
     resource url: 'js/presentationEdit.js'
     resource url: 'js/presentationFilter.js'
     resource url: 'js/presentationMeasures.js'
+  }
+
+  presentationFirst {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/presentationHelpers.js'
+    resource url: 'js/presentationAdd.js'
   }
 
   measures {
