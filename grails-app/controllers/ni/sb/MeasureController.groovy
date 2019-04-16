@@ -16,7 +16,7 @@ class MeasureController {
   def list() {
     List<Measure> measureList = measureService.findAll()
 
-    withFormat {
+    request.withFormat {
       html measures: measureList
       json { render measureList as JSON }
     }

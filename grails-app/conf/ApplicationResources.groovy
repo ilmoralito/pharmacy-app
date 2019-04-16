@@ -145,11 +145,20 @@ modules = {
 
   measures {
     dependsOn 'app'
+    dependsOn 'helper'
     dependsOn 'toddler'
     resource url: 'js/measureHelpers.js'
     resource url: 'js/measureAdd.js'
     resource url: 'js/measureEdit.js'
     resource url: 'js/measureFilter.js'
+  }
+
+  measureFirst {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/measureHelpers.js'
+    resource url: 'js/measureAdd.js'
   }
 
   measurePresentations {
