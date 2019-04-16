@@ -18,9 +18,9 @@ class UrlMappings {
     ///////////////
     // providers //
     ///////////////
-    "/provider/$providerId/merchandises" (controller: 'merchandise', action: 'list', method: 'GET')
-    "/provider/$providerId/medicines" (controller: 'medicine', action: 'list', method: 'GET')
-    "/provider/$providerId/medicines/$id/edit" (controller: 'medicine', action: 'edit', method: 'GET')
+    '/providers' (controller: 'provider', action: 'list', method: 'GET')
+    '/providers' (controller: 'provider', action: 'save', method: 'POST')
+    "/providers/$id/show" (controller: 'provider', action: 'show', method: 'GET')
 
     ///////////////////
     // presentations //

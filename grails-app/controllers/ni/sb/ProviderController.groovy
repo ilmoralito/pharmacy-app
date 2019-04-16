@@ -1,6 +1,7 @@
 package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
+import grails.converters.JSON
 
 @Secured(['ROLE_ADMIN'])
 class ProviderController {
@@ -11,7 +12,12 @@ class ProviderController {
   ]
 
   def list() {
-    [providers: Provider.list()]
+    List<Provider> providerList = Provider.list()
+
+    request.withFormat {
+      html providers: providerList
+      json { render providerList as JSON }
+    }
   }
 
   def save() {
@@ -69,11 +75,5 @@ class ProviderController {
 
     flash.message = 'Datos de proveedor actualizados'
     redirect action: 'show', id: provider.id
-  }
-
-  def getDatasetToFilter() {
-    render(contentType: 'application/json') {
-      Provider.list()
-    }
   }
 }

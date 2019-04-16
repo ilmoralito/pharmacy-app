@@ -1,30 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('table tbody');
     const filter = document.querySelector('#filter');
 
     filter.addEventListener('keyup', handleFilter);
 
     function handleFilter(event) {
-        const providers = dataset.filter(data => {
-            const criteria = event.target.value.toLowerCase();
+        const criteria = event.target.value.toLowerCase();
 
-            return data.name.toLowerCase().includes(criteria) || data.contact.fullName.toLowerCase().includes(criteria);
+        fetchProviders().then(providers => {
+            const results = providers.filter(provider => {
+                return (
+                    provider.name.toLowerCase().includes(criteria) ||
+                    provider.address.toLowerCase().includes(criteria) ||
+                    provider.phone.toLowerCase().includes(criteria) ||
+                    provider.phone.toLowerCase().includes(criteria) ||
+                    provider.contact.fullName.toLowerCase().includes(criteria)
+                );
+            });
+
+            sync(results);
         });
-
-        sync(providers);
     }
 
     function sync(providers) {
         const rows = providers.map(resultToRowView).join('');
 
-        root.innerHTML = rows;
+        document.querySelector('table tbody').innerHTML = rows;
     }
 
     function resultToRowView(provider) {
         return `
             <tr>
                 <td>
-                    <a href="show/${provider.id}">${provider.name}</a>
+                    <a href="providers/${provider.id}/show">${provider.name}</a>
                 </td>
                 <td>${provider.address}</td>
                 <td>${provider.phone}</td>
@@ -34,6 +41,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>
             </tr>`;
     }
-
-    fetchDataset();
 });

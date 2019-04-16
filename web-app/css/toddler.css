@@ -12,8 +12,12 @@
     transition: left .4s;
 }
 
-.toddler .panel-body {
-    
+.open {
+    left: 0px;
+}
+
+.close {
+    left: -400px;
 }
 
 .toddler details {

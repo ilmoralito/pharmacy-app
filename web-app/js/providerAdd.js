@@ -1,73 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.forms.form
+    const notification = document.querySelector('#notification');
+    const form = document.forms.form;
 
     form.addEventListener('submit', handleSubmit);
 
     function handleSubmit(event) {
         event.preventDefault();
 
-        const formData = new FormData(form);
-        const endpoint = '/pharmacyApp/provider/save';
-        const init = { method: 'POST', body: formData };
+        const formData = new FormData(event.target);
+        const options = {
+            method: 'POST',
+            body: formData
+        };
 
-        fetch(endpoint, init)
+        fetch('providers', options)
             .then(response => response.json())
             .then(json => {
-                if (json.status === 'ok') {
-                    sync(json.provider);
+                fetchProviders().then(providers => {
+                    if (json.status === 'ok') {
+                        if (providers.length === 1) {
+                            window.location.href = 'providers';
+                        } else {
+                            sync(providers);
 
-                    clean();
+                            cleanInputs();
 
-                    fetchDataset();
+                            cleanErrors();
+                        }
 
-                    return;
-                }
+                        return;
+                    }
 
-                logErrors(json.errors);
+                    logErrors(json.errors);
+                });
             })
-            .catch(error => console.error(error.message()));
+            .catch(error => console.error(error.message));
     }
 
-    function sync(provider) {
-        const tr = document.createElement('tr');
-        const nameTd = document.createElement('td');
-        const addressTd = document.createElement('td');
-        const phoneTd = document.createElement('td');
-        const statusTd = document.createElement('td');
-        const productsTd = document.createElement('td');
-        const anchor = document.createElement('a');
-        const productsAnchor = document.createElement('a');
+    function sync(providers) {
+        const rows = providers
+            .map(provider => {
+                return `<tr>
+                <td>
+                    <a href="products/${provider.id}/show">${provider.name}</a>
+                </td>
+                <td>${provider.address}</td>
+                <td>${provider.phone}</td>
+                <td>${provider.status}</td>
+                <td>
+                    <a href="#">Productos</a>
+                </td>
+            </tr>`;
+            })
+            .join('');
 
-        anchor.href = `show/${provider.id}`;
-        anchor.text = provider.name;
+        document.querySelector('#root').innerHTML = `
+            <table class="table table-bordered table-hover">
+                <col width="20%" />
+                <col width="57%" />
+                <col width="8%" />
+                <col width="7%" />
+                <col width="9%" />
 
-        productsAnchor.href = '#';
-        productsAnchor.textContent = 'Productos';
-
-        nameTd.appendChild(anchor);
-        addressTd.textContent = provider.address;
-        phoneTd.textContent = provider.phone;
-        statusTd.textContent = provider.status ? 'Activo' : 'No activo'
-        productsTd.appendChild(productsAnchor);
-
-        tr.appendChild(nameTd);
-        tr.appendChild(addressTd);
-        tr.appendChild(phoneTd);
-        tr.appendChild(statusTd);
-        tr.appendChild(productsTd);
-
-        document.querySelector('tbody').appendChild(tr);
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Telefono</th>
+                        <th>Estado</th>
+                        <th>Productos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>`;
     }
 
-    function clean() {
-        const elements = [...form.elements].filter(element => element.nodeName !== 'BUTTON');
+    function cleanInputs() {
+        [...form.elements]
+            .filter(element => element.nodeName !== 'BUTTON')
+            .forEach(element => (element.value = ''));
+    }
 
-        elements.forEach(element => element.value = '');
+    function cleanErrors() {
+        notification.innerHTML = '';
     }
 
     function logErrors(errors) {
-        const list = errors.errors.map(error => `<li>${error.message}</li>`).join('');
+        const list = errors.errors
+            .map(error => `<li>${error.message}</li>`)
+            .join('');
 
-        document.querySelector('#notification').innerHTML = `<ul>${list}</li>`;
+        notification.innerHTML = `<ul>${list}</li>`;
     }
 });

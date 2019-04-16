@@ -100,6 +100,13 @@ modules = {
     resource url: 'js/providerHelper.js'
   }
 
+  providerFirst {
+    resource url: 'css/toddler.css'
+    resource url: 'js/toddler.js'
+    resource url: 'js/providerAdd.js'
+    resource url: 'js/providerHelper.js'
+  }
+
   goods {
     dependsOn 'app'
     resource url: 'css/toddler.css'

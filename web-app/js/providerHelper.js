@@ -1,8 +1,11 @@
-let dataset = [];
+async function fetchProviders() {
+    const options = {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+    };
+    const response = await fetch('providers', options);
 
-function fetchDataset() {
-    fetch('getDatasetToFilter')
-        .then(response => response.json())
-        .then(json => dataset = json)
-        .catch(error => console.error(error.message));
+    return await response.json();
 }
+

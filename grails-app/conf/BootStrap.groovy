@@ -40,33 +40,33 @@ class BootStrap {
         ///////////////
         // Providers //
         ///////////////
-        Provider provider1 = new Provider(
-            name: 'Lorem ipsum dolor.',
-            address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad.',
-            phone: '2713 7728',
-            contact: contact1
-        ).save(failOnError: true)
+        // Provider provider1 = new Provider(
+        //     name: 'Lorem ipsum dolor.',
+        //     address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad.',
+        //     phone: '2713 7728',
+        //     contact: contact1
+        // ).save(failOnError: true)
 
-        Provider provider2 = new Provider(
-            name: 'Lorem ipsum dolor sit.',
-            address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, ipsam!',
-            phone: '2713 9828',
-            contact: contact2
-        ).save(failOnError: true)
+        // Provider provider2 = new Provider(
+        //     name: 'Lorem ipsum dolor sit.',
+        //     address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem, ipsam!',
+        //     phone: '2713 9828',
+        //     contact: contact2
+        // ).save(failOnError: true)
 
-        Provider provider3 = new Provider(
-            name: 'Lorem ipsum dolor sit amet.',
-            address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam, ex, aliquam.',
-            phone: '2713 7828',
-            contact: contact3
-        ).save(failOnError: true)
+        // Provider provider3 = new Provider(
+        //     name: 'Lorem ipsum dolor sit amet.',
+        //     address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam, ex, aliquam.',
+        //     phone: '2713 7828',
+        //     contact: contact3
+        // ).save(failOnError: true)
 
-        Provider provider4 = new Provider(
-            name: 'Lorem ipsum dolor sit amet, consectetur.',
-            address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab tempore totam, consectetur.',
-            phone: '2713 8228',
-            contact: contact1
-        ).save(failOnError: true)
+        // Provider provider4 = new Provider(
+        //     name: 'Lorem ipsum dolor sit amet, consectetur.',
+        //     address: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab tempore totam, consectetur.',
+        //     phone: '2713 8228',
+        //     contact: contact1
+        // ).save(failOnError: true)
 
         ///////////
         // Users //
