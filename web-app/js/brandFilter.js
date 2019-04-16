@@ -5,9 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleKeyup(event) {
         const text = event.target.value;
-        const brands = dataset.filter(data => data.name.toLowerCase().includes(text.toLowerCase()));
 
-        sync(brands);
+        fetchResource('brands').then(brands => {
+            const results = brands.filter(data =>
+                data.name.toLowerCase().includes(text.toLowerCase())
+            );
+
+            sync(results);
+        });
     }
 
     function sync(brands) {
@@ -15,6 +20,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('tbody').innerHTML = rows;
     }
-
-    fetchResource('brands?format=json');
 });

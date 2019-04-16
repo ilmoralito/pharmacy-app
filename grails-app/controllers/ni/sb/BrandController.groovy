@@ -17,7 +17,7 @@ class BrandController {
   def list() {
     List<Brand> brandList = brandService.findAll()
 
-    withFormat {
+    request.withFormat {
       html brands: brandList
       json { render brandList as JSON }
     }
@@ -48,12 +48,6 @@ class BrandController {
       render(contentType: 'application/json') {
         [status: 'fail', errors: e.errors]
       }
-    }
-  }
-
-  def count() {
-    render(contentType: 'application/json') {
-      [count: brandService.count()]
     }
   }
 }

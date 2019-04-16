@@ -13,10 +13,6 @@ class BrandService {
     Brand.get(id)
   }
 
-  Number count() {
-    Brand.count()
-  }
-
   Brand save(String name) {
     Brand brand = new Brand(name: name)
 

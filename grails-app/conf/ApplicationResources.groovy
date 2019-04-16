@@ -162,4 +162,11 @@ modules = {
     resource url: 'js/brandEdit.js'
     resource url: 'js/brandFilter.js'
   }
+
+  brandFirst {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/brandAdd.js'
+  }
 }

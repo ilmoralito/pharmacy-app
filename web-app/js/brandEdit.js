@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const tbody = document.querySelector('tbody');
+    const body = document.querySelector('body');
 
-    tbody.addEventListener('click', handleClick);
+    body.addEventListener('click', handleClick);
 
     function handleClick(event) {
         const target = event.target;
 
-        if (target.nodeName === 'A') {
+        if (itsALink(target) && isInsideACell(target)) {
             event.preventDefault();
 
             const parent = target.closest('tr');
@@ -55,5 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createInput(currentValue) {
         return `<input name="name" id="name" value="${currentValue}" class="form-control">`;
+    }
+
+    function itsALink(target) {
+        return target.nodeName === 'A';
+    }
+
+    function isInsideACell(target) {
+        return target.parentNode.nodeName === 'TD';
     }
 });

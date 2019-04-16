@@ -1,5 +1,4 @@
 const notification = document.querySelector('#notification');
-let dataset;
 
 function renderErrors(errors) {
     const list = errors.map(error => `<li>${error.message}</li>`).join('');
@@ -29,9 +28,13 @@ function cleanInputs(form, ...excludes) {
     }
 }
 
-function fetchResource(source) {
-    fetch(source)
-        .then(response => response.json())
-        .then(json => dataset = json)
-        .catch(error => console.error(error.message()));
+async function fetchResource(source) {
+    const options = {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        }
+    };
+    const response = await fetch(source, options);
+
+    return response.json();
 }
