@@ -195,4 +195,13 @@ modules = {
     dependsOn 'toddler'
     resource url: 'js/brandAdd.js'
   }
+
+  diarySpend {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/diarySpendHelper.js'
+    resource url: 'js/diarySpend.js'
+    resource url: 'js/diarySpendEdit.js'
+  }
 }

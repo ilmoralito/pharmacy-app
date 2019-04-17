@@ -52,6 +52,13 @@ class UrlMappings {
     "/brands/$id"(controller: 'brand', action: 'update', method: 'POST')
     "/brands/count"(controller: 'brand', action: 'count', method: 'GET')
 
+    //////////////
+    // diarySpend //
+    //////////////
+    '/expenses' (controller: 'diarySpend', action: 'list', method: 'GET')
+    '/expenses' (controller: 'diarySpend', action: 'save', method: 'POST')
+    "/expenses/$id" (controller: 'diarySpend', action: 'update', method: 'POST')
+
     "/"(controller:"login")
     "500"(view:'/error')
     }

@@ -8,8 +8,8 @@
     <li class="${controllerName == 'sale' ? 'active' : ''}">
         <g:link controller="sale" action="list">Ventas</g:link>
     </li>
-    <li class="${controllerName == 'expenses' ? 'active' : ''}">
-        <g:link controller="expenses" action="list">Gasto diario</g:link>
+    <li class="${controllerName == 'diarySpend' ? 'active' : ''}">
+        <g:link controller="diarySpend" action="list">Gasto diario</g:link>
     </li>
 
     <div class="panel panel-default" style="margin: 10px 0;">

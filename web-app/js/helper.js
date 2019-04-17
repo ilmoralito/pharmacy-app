@@ -1,9 +1,23 @@
 const notification = document.querySelector('#notification');
 
 function renderErrors(errors) {
-    const list = errors.map(error => `<li>${error.message}</li>`).join('');
+    const list = errors.map(errorToLiView).join('');
 
     notification.innerHTML = `<ul>${list}</ul>`;
+}
+
+function alertErrors(errors) {
+    const list = errors.map(errorToList).join('\n');
+
+    alert(list);
+}
+
+function errorToLiView(error) {
+    return `<li>${error.message}</li>`;
+}
+
+function errorToList(error) {
+    return error.message;
 }
 
 function cleanErrors() {

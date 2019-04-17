@@ -186,6 +186,21 @@ class BootStrap {
 
       output
     }
+
+    JSON.registerObjectMarshaller(DiarySpend) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['description'] = it.description
+      output['amount'] = it.amount
+      output['createdBy'] = it.createdBy.fullName
+      output['dateCreated'] = it.dateCreated
+      output['timeCreated'] = it.dateCreated.format('hh:mm')
+      output['lastUpdated'] = it.lastUpdated
+      output['timeUpdated'] = it.lastUpdated.format('hh:mm')
+
+      output
+    }
   }
 
   def fullNameToShortName(final String fullName) {
