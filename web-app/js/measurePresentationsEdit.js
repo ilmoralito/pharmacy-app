@@ -37,11 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('presentation', newPresentation);
             formData.append('measure', newMeasure);
             formData.append('count', newCount);
-
-            fetch(`measurePresentations/${target.id}`, {
+            const options = {
                 method: 'POST',
                 body: formData
-            })
+            };
+
+            fetch(`measurePresentations/${target.id}`, options)
                 .then(response => response.json())
                 .then(json => {
                     if (json.status === 'ok') {
@@ -51,14 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         target.textContent = 'Editar';
 
-                        fetchResource('measurePresentations?format=json')
-
                         return;
                     }
 
                     alert(json.errors.errors.map(error => `${error.message}\n`)).join('');
                 })
-                .catch(error => console.error(error.message()));
+                .catch(error => console.error(error.message));
         }
     }
 

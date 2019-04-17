@@ -5,25 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleKeyup(event) {
         const criteria = event.target.value.toLowerCase();
-        const results = dataset
-            .filter(data => data.count.includes(criteria) || data.presentation.name.toLowerCase().includes(criteria) || data.measure.unit.toLowerCase().includes(criteria));
 
-        sync(results);
+        fetchResource('measurePresentations').then(measurePresentations => {
+            const results = measurePresentations.filter(
+                data =>
+                    data.count.includes(criteria) ||
+                    data.presentation.name.toLowerCase().includes(criteria) ||
+                    data.measure.unit.toLowerCase().includes(criteria)
+            );
+
+            sync(results);
+        });
     }
 
-    function sync(results) {
-        const rows = results.map(result => `<tr>
-            <td>${result.presentation.name}</td>
-            <td>${result.measure.unit}</td>
-            <td>${result.count}</td>
-            <td class="text-center" style="vertical-align: middle;">
-                <a href="#" id="${result.id}">Editar</a>
-            </td>
-        <tr>`).join('');
+    function sync(measurePresentations) {
+        const rows = measurePresentations
+            .map(measurePresentationToRowView)
+            .join('');
 
         document.querySelector('tbody').innerHTML = rows;
     }
-
-    fetchResource('measurePresentations?format=json');
 });
-

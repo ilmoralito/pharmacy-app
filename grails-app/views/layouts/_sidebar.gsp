@@ -12,7 +12,7 @@
         <g:link controller="daily" action="list">Diario</g:link>
     </li>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="margin: 10px 0;">
         <div class="panel-body">
             <ul class="nav nav-pills nav-stacked">
                 <li class="${controllerName in ['provider'] ? 'active' : ''}">

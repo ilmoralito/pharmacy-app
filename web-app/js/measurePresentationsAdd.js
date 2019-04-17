@@ -7,92 +7,59 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         const formData = new FormData(form);
-
-        fetch('measurePresentations', {
+        const options = {
             method: 'POST',
             body: formData
-        })
+        };
+
+        fetch('measurePresentations', options)
             .then(response => response.json())
             .then(json => {
-                if (json.status === 'ok') {
-                    sync(json.measurePresentation);
+                fetchResource('measurePresentations').then(
+                    measurePresentations => {
+                        if (json.status === 'ok') {
+                            if (measurePresentations.length === 1) {
+                                window.location.href = 'measurePresentations';
+                            } else {
+                                sync(measurePresentations);
 
-                    cleanErrors();
+                                cleanInputs(form, 'presentation', 'measure');
 
-                    cleanInputs(form, 'presentation', 'measure');
+                                cleanErrors();
+                            }
 
-                    fetchResource('measurePresentations?format=json')
+                            return;
+                        }
 
-                    return;
-                }
-
-                const domPresentation = form.querySelector('#form');
-                const currentPresentation = domPresentation.options(domPresentation.selectedIndex).text;
-
-                console.log(currentPresentation);
-
-                // TODO: Highlight row with repeated data
-                // if (json.errors.errors.find(error => error.message === 'Intentas agregar un dato que ya existe')) {
-                //     const tbody = document.querySelector('tbody');
-                //     const rows = [...tbody.rows];
-
-                //     for (const row of rows) {
-                //         const [presentationCell, measureCell, countCell] = row.cells;
-
-
-
-                //         if (
-                //             presentationCell.textContent === form.querySelector('#presentation').textContent &&
-                //             measureCell.textContent === form.querySelector('#measure').textContent &&
-                //             countCell.textContent === form.querySelector('#count').value
-                //         ) {
-                //             row.style.background = 'red';
-
-                //             break;
-                //         }
-                //     }
-                // }
-
-                renderErrors(json.errors.errors);
+                        renderErrors(json.errors.errors);
+                    }
+                );
             })
             .catch(error => console.error(error.message()));
     }
 
-    function sync(dataset) {
-        if (!hasTableElement()) {
-            createTable(dataset);
+    function sync(measurePresentations) {
+        const rows = measurePresentations
+            .map(measurePresentationToRowView)
+            .join('');
 
-            return;
-        }
+        document.querySelector('#root').innerHTML = `
+            <table class="table table-hover table-bordered">
+                <col width="70%">
+                <col width="10%">
+                <col width="10% ">
+                <col width="10%">
 
-        addRowToTable(dataset);
-    }
-
-    function createTable(dataset) {
-        document.querySelector('p').innerHTML = `<table class="table table-hover table-bordered">
-            <col width="45%">
-            <col width="45%">
-            <col width="10%">
-
-            <thead>
-                <tr>
+                <thead>
                     <th>Presentacion</th>
                     <th>Medida</th>
                     <th>Cantidad</th>
                     <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>${dataset.presentation.name}</td>
-                    <td>${dataset.measure.unit}</td>
-                    <td>${dataset.count}</td>
-                    <td class="text-center" style="vertical-align: middle;">
-                        <a href="#" id="${dataset.id}">Editar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>`;
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        `;
     }
 });

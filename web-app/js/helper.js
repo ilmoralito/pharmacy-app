@@ -10,10 +10,6 @@ function cleanErrors() {
     notification.innerHTML = '';
 }
 
-function hasTableElement() {
-    return document.querySelector('table');
-}
-
 function getFormElements(form) {
     return [...form.elements];
 }
