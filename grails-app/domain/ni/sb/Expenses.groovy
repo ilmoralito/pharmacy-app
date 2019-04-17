@@ -4,19 +4,20 @@ import groovy.transform.ToString
 
 @ToString
 class Expenses {
-	String description
-  BigDecimal quantity
+  String description
+  BigDecimal amount
+  User createdBy
 
-	Date dateCreated
+  Date dateCreated
+  Date lastUpdated
 
   static constraints = {
-    description blank:false
-    quantity nullable:false, min:0.1
+    description blank: false
+    amount nullable: false, min: 0.1
+    createdBy nullable: false
   }
 
   static mapping = {
-  	version false
+    version false
   }
-
-  static belongsTo = [daily:Daily]
 }
