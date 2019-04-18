@@ -58,6 +58,8 @@ class UrlMappings {
     '/expenses' (controller: 'diarySpend', action: 'list', method: 'GET')
     '/expenses' (controller: 'diarySpend', action: 'save', method: 'POST')
     "/expenses/$id" (controller: 'diarySpend', action: 'update', method: 'POST')
+    '/expenses/resume' (controller: 'diarySpend', action: 'resume', method: 'GET')
+    "/expenses/of/$dateCreated" (controller: 'diarySpend', action: 'expensesByDate', method: 'GET')
 
     "/"(controller:"login")
     "500"(view:'/error')

@@ -25,7 +25,7 @@ class DiarySpendController {
   }
 
   def save() {
-    params.createdBy = springSecurityService.currentUser
+    params.createdBy = springSecurityService.currentUser.id
     DiarySpend diarySpend = new DiarySpend(params)
 
     if (!diarySpend.save()) {
@@ -58,6 +58,23 @@ class DiarySpendController {
 
     render(contentType: 'application/json') {
       [ok: true, diarySpend: diarySpend]
+    }
+  }
+
+  @Secured(['ROLE_ADMIN'])
+  def resume() {
+    List<Map> expenses = DiarySpend.resume.list()
+
+    [expenses: expenses]
+  }
+
+  @Secured(['ROLE_ADMIN'])
+  def expensesByDate() {
+    Date dateCreated = Date.parse('yyyy-MM-dd', params.dateCreated)
+    List<DiarySpend> expenses = DiarySpend.byDateCreated(dateCreated).list()
+
+    render(contentType: 'application/json') {
+      expenses
     }
   }
 }

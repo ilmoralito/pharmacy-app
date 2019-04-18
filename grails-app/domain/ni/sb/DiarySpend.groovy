@@ -1,6 +1,8 @@
 package ni.sb
 
 import groovy.transform.ToString
+import org.hibernate.type.StandardBasicTypes
+import org.hibernate.transform.AliasToEntityMapResultTransformer
 
 @ToString
 class DiarySpend  implements Serializable {
@@ -25,6 +27,18 @@ class DiarySpend  implements Serializable {
 
     assignedTo { User user ->
       eq 'createdBy', user
+    }
+
+    byDateCreated { Date dateCreated ->
+      between 'dateCreated', dateCreated, dateCreated + 1
+    }
+
+    resume {
+      resultTransformer(AliasToEntityMapResultTransformer.INSTANCE)
+
+      projections {
+        sqlGroupProjection 'DATE(date_created) as dateCreated, sum(amount) as amount', 'DATE(date_created)', ['dateCreated', 'amount'], [StandardBasicTypes.DATE, StandardBasicTypes.FLOAT]
+      }
     }
   }
 

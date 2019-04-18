@@ -8,9 +8,19 @@
     <li class="${controllerName == 'sale' ? 'active' : ''}">
         <g:link controller="sale" action="list">Ventas</g:link>
     </li>
-    <li class="${controllerName == 'diarySpend' ? 'active' : ''}">
-        <g:link controller="diarySpend" action="list">Gasto diario</g:link>
-    </li>
+
+    <div class="panel panel-default" style="margin: 10px 0;">
+        <div class="panel-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="${controllerName == 'diarySpend' && actionName != 'resume' ? 'active' : ''}">
+                    <g:link controller="diarySpend" action="list">Gasto diario</g:link>
+                </li>
+                <li class="${controllerName == 'diarySpend' && actionName == 'resume' ? 'active' : ''}">
+                    <g:link controller="diarySpend" action="resume">Resumen gasto diario</g:link>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     <div class="panel panel-default" style="margin: 10px 0;">
         <div class="panel-body">

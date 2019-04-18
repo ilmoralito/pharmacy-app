@@ -35,34 +35,34 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error(error.message));
     }
-
-    function sync(expenses) {
-        const rows = expenses.map(diarySpendToRowView).join('');
-
-        document.querySelector('#root').innerHTML = `
-            <table class="table table-hover table-bordered">
-                <col width="15%">
-                <col width="10%">
-                <col width="59%">
-                <col width="8%">
-                <col width="11%">
-
-                <thead>
-                    <tr>
-                        <th>Creado por</th>
-                        <th>Hora creación</th>
-                        <th>Descripción</th>
-                        <th>Cantidad</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${rows}
-                    <tr>
-                        <td colspan="3"></td>
-                        <td id="total">${getTotalDailyExpenses(expenses)}</td>
-                    </tr>
-                </tbody>
-            </table>`;
-    }
 });
+
+function sync(expenses) {
+    const rows = expenses.map(diarySpendToRowView).join('');
+
+    document.querySelector('#root').innerHTML = `
+        <table class="table table-hover table-bordered">
+            <col width="15%">
+            <col width="10%">
+            <col width="59%">
+            <col width="8%">
+            <col width="11%">
+
+            <thead>
+                <tr>
+                    <th>Creado por</th>
+                    <th>Hora creación</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+                <tr>
+                    <td colspan="3"></td>
+                    <td id="total">${getTotalDailyExpenses(expenses)}</td>
+                </tr>
+            </tbody>
+        </table>`;
+}

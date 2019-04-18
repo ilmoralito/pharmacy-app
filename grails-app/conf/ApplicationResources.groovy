@@ -204,4 +204,10 @@ modules = {
     resource url: 'js/diarySpend.js'
     resource url: 'js/diarySpendEdit.js'
   }
+
+  diarySpendDetail {
+    dependsOn 'app'
+    resource url: 'js/diarySpendHelper.js'
+    resource url: 'js/diarySpendDetail.js'
+  }
 }
