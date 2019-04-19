@@ -1,89 +1,85 @@
 package ni.sb
+
+import  grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
+import grails.converters.JSON
 
 @Secured(['ROLE_ADMIN'])
 class UserController {
-	def springSecurityService
-	def passwordEncoder
+  SpringSecurityService springSecurityService
+  AuthorityService authorityService
+  def passwordEncoder
 
   static allowedMethods = [
-    list:["GET", "POST"],
-    create:["GET", "POST"],
-    edit:["GET", "POST"],
-    profile:"GET",
-    updateProfile:"POST",
-    password:"GET",
-    updatePassword:"POST"
+    save: 'POST',
+    update: 'POST',
+    updateProfile: 'POST',
+    updatePassword: 'POST'
   ]
 
-  def list(){
-    if (request.method == "GET") {
-      [userInstance:User.list()]
-    }else{
-      def userInstance = new User(
-        username:params?.username,
-        email:params?.username,
-        password:"farmaciaSB",
-        fullName:params?.fullName,
-      )
+  def list() {
+    List<User> userList = User.list()
 
-      if (!userInstance.save(flush:true)) {
-        render(view:"list", model:[user:userInstance, userInstance:User.list()])
-        return false
-      }
-
-      def role = Role.findByAuthority(params?.authority)
-      UserRole.create userInstance, role, true
-      flash.message = "Usuario creado correctamente!!"
-      redirect(action:"list")
+    request.withFormat {
+      html { [ users: userList, authorities: authorityService.getAuthorities() ] }
+      json { render userList as JSON }
     }
   }
 
-  def edit(){
-    def userInstance = User.get(params.id)
-    if (!userInstance) { response.sendError 404 }
+  def save() {
+    params.password = 'temporal'
 
-    if (request.method == "GET") {
-      [userInstance:userInstance]
-    }else{
-      params.email = params.username
+    User user = new User(params)
 
-      userInstance.properties = params
-
-      if (!userInstance.save()) {
-        render(view:"edit", model:[userInstance:userInstance])
-        return false
+    if (!user.save()) {
+      render(contentType: 'application/json') {
+        [ok: false, errors: user.errors]
       }
 
-      def r = UserRole.findByUser(userInstance)
+      return
+    }
 
-      if (r.role.authority != params.authority) {
-        def roleDelete = Role.findByAuthority(r.role.authority)
-        UserRole.remove userInstance, roleDelete, true
+    Role role = Role.findByAuthority(params.authority)
+    UserRole.create(user, role, true)
 
-        def role = Role.findByAuthority(params.authority)
-        UserRole.create userInstance, role, true
-      }
-
-      redirect(action:"edit", params:[id:params.id])
-      flash.message = "Datos de usuario actualiados correctamente!!"
+    render(contentType: 'application/json') {
+      [ok: true, user: user]
     }
   }
 
-  def enabled(){
-    def userInstance = User.get(params.id)
-    if (!userInstance) { response.sendError 404 }
+  def update() {
+      User user = User.get(params.id)
 
-    userInstance.properties = params
+      if (user) {
+        params.enabled = params.enabled == 'Activo' ? true : false
 
-    redirect(action:"edit", params:[id:params.id])
-    flash.message = "La cuanta fue actualizada correctamente!!"
+        user.properties = params
+
+        if (!user.save()) {
+          render(contentType: 'application/json') {
+            [ok: false, errors: user.errors]
+          }
+
+          return
+        }
+
+        if (!user.authorities.authority.contains(params.authority)) {
+          Role role = Role.findByAuthority(params.authority)
+
+          UserRole.removeAll(user, true)
+
+          UserRole.create(user, role, true)
+        }
+
+        render(contentType: 'application/json') {
+          [ok: true, user: user]
+        }
+      }
   }
 
-	@Secured(['ROLE_ADMIN','ROLE_USER'])
+  @Secured(['ROLE_ADMIN','ROLE_USER'])
   def profile(){
-    def userInstance = springSecurityService.currentUser
-    [userInstance:userInstance]
+    [userInstance: springSecurityService.currentUser]
   }
 
   @Secured(['ROLE_ADMIN','ROLE_USER'])
@@ -114,7 +110,7 @@ class UserController {
     def userInstance = springSecurityService.currentUser
 
     if (cmd.hasErrors()) {
-    	flash.message = "Las contraseñas no coinciden, intentelo nuevamente!!"
+      flash.message = "Las contraseñas no coinciden, intentelo nuevamente!!"
       redirect (action:"password")
       return false
     }

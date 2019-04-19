@@ -210,4 +210,11 @@ modules = {
     resource url: 'js/diarySpendHelper.js'
     resource url: 'js/diarySpendDetail.js'
   }
+
+  users {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/users.js'
+  }
 }

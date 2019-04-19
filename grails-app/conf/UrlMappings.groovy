@@ -7,6 +7,14 @@ class UrlMappings {
       }
     }
 
+    ///////////
+    // users //
+    ///////////
+
+    '/users' (controller: 'user', action: 'list', method: 'GET')
+    '/users' (controller: 'user', action: 'save', method: 'POST')
+    "/users/$id" (controller: 'user', action: 'update', method: 'POST')
+
     /////////////
     // clients //
     /////////////

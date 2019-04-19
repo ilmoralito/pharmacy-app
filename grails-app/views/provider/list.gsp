@@ -37,7 +37,7 @@
                     <th>Dirección</th>
                     <th>Telefono</th>
                     <th>Estado</th>
-                    <th>Productos</th>
+                    <th></th>
                 </thead>
                 <tbody>
                     <g:each in="${providers}" var="provider">

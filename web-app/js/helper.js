@@ -38,6 +38,22 @@ function cleanInputs(form, ...excludes) {
     }
 }
 
+function createInput({ id, defaultValue }) {
+    return `<input name="${id}" name="${id}" value="${defaultValue}" class="form-control" />`;
+}
+
+function createSelect({ id, values, defaultValue }) {
+    const options = values
+        .map(value => {
+            const selected = value === defaultValue ? 'selected' : '';
+
+            return `<option value="${value}" ${selected}>${value}</option>`;
+        })
+        .join('');
+
+    return `<select name="${id}" id="${id}" class="form-control">${options}</select>`;
+}
+
 async function fetchResource(source) {
     const options = {
         headers: {

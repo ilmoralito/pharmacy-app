@@ -201,6 +201,19 @@ class BootStrap {
 
       output
     }
+
+    JSON.registerObjectMarshaller(User) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['username'] = it.username
+      output['email'] = it.email
+      output['fullName'] = it.fullName
+      output['enabled'] = it.enabled ? 'Activo' : 'No activo'
+      output['authority'] = it.authorities.join('')
+
+      output
+    }
   }
 
   def fullNameToShortName(final String fullName) {
