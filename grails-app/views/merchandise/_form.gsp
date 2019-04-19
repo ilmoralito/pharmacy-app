@@ -1,11 +1,20 @@
-<input type="hidden" name="providerId" value="${params.providerId}">
-
 <div class="form-group">
-    <label for="name">Nombre del producto</label>
-    <g:textField name="name" value="${product?.name}" class="form-control" placeholder="Nombre del producto" autofocus="true"/>
+    <label for="name">Nombre</label>
+    <g:textField
+        name="name"
+        value="${merchandise?.name}"
+        class="form-control"
+        autofocus="true"
+    />
 </div>
 
 <div class="form-group">
-    <label for="location">Ubicacion</label>
-    <g:select name="location" from="${grailsApplication.config.ni.sb.locations}" value="${product?.location}" class="form-control" noSelection="['':'Selecciona ubicacion']"/>
+    <label for="location">Ubicación</label>
+    <g:select
+        name="location"
+        from="${locations}"
+        value="${merchandise?.location}"
+        class="form-control"
+        noSelection="['':'Selecciona ubicación']"
+    />
 </div>

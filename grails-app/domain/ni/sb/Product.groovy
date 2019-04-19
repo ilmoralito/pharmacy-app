@@ -21,10 +21,8 @@ class Product implements Serializable {
 
   static mapping = {
     version false
-    sort dateCreated: 'desc'
+    sort 'name'
   }
-
-  static belongsTo = [provider: Provider]
 
   String toString() { name }
 }

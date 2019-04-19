@@ -109,8 +109,9 @@ modules = {
 
   goods {
     dependsOn 'app'
-    resource url: 'css/toddler.css'
-    resource url: 'js/toddler.js'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/merchandiseHelper.js'
     resource url: 'js/merchandiseAdd.js'
     resource url: 'js/merchandiseFilter.js'
     resource url: 'js/merchandiseEdit.js'

@@ -1,57 +1,75 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const table = document.querySelector('table');
+    const root = document.querySelector('#root');
 
-    table.addEventListener('click', handleEdit);
+    if (!root) {
+        return false;
+    }
+
+    root.addEventListener('click', handleEdit);
 
     function handleEdit(event) {
         const target = event.target;
 
-        if (target.classList.contains('btn')) {
+        if (target.nodeName === 'A') {
             event.preventDefault();
+
+            const row = target.closest('tr');
+            const [name, location] = [...row.cells];
 
             if (target.textContent === 'Editar') {
                 target.textContent = 'Confirmar';
 
-                const cell = target.closest('tr').children[0];
-                const value = cell.textContent;
-
-                cell.innerHTML = `<input class="form-control" value="${value}">`;
-
-                return;
-            }
-
-            const newValue = target.closest('tr').querySelector('input').value;
-
-            if (!newValue) {
-                alert('Campo requerido');
+                name.innerHTML = createInput({
+                    id: 'name',
+                    defaultValue: name.textContent
+                });
+                location.innerHTML = createSelect({
+                    id: 'location',
+                    values: getLocations(),
+                    defaultValue: location.textContent
+                });
 
                 return;
             }
+
+            const newName = name.querySelector('input').value;
+            const newLocation = location.querySelector('select').value;
 
             const formData = new FormData();
 
-            formData.append('id', target.id);
-            formData.append('name', newValue);
+            formData.append('name', newName);
+            formData.append('location', newLocation);
 
-            fetch('/pharmacyApp/merchandise/update', {
+            fetch(`merchandises/${target.id}`, {
                 method: 'POST',
                 body: formData
             })
                 .then(response => response.json())
                 .then(json => {
-                    if (json.status === 'ok') {
-                        target.closest('tr').children[0].innerHTML = json.merchandise.name;
+                    if (json.ok) {
+                        const merchandise = json.merchandise;
+
+                        name.innerHTML = merchandise.name;
+                        location.innerHTML = merchandise.location;
 
                         target.textContent = 'Editar';
 
                         return;
                     }
 
-                    const message = json.errors.errors.map(error => error.message).join('\n');
+                    alertErrors(json.errors.errors);
 
                     alert(message);
                 })
-                .catch(error => console.error(error.message()));
+                .catch(error => console.error(error.message));
         }
+    }
+
+    function getLocations() {
+        const location = document.querySelector('#location');
+
+        return [...location.options]
+            .filter(option => option.value)
+            .map(option => option.value);
     }
 });

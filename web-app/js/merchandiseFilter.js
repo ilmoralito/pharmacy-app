@@ -1,44 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('table tbody');
+    const root = document.querySelector('#root');
     const filter = document.querySelector('#filter');
-    let dataset = [];
+
+    if (!filter) {
+        return false;
+    }
 
     filter.addEventListener('keyup', handleFilter);
 
     function handleFilter(event) {
         const criteria = event.target.value.toLowerCase();
-        const results = dataset.filter(good => good.name.toLowerCase().includes(criteria));
 
-        sync(results);
+        fetchResource('merchandises').then(merchandises => {
+            const results = merchandises.filter(good => {
+                return (
+                    good.name.toLowerCase().includes(criteria) ||
+                    good.location.toLowerCase().includes(criteria)
+                );
+            });
+
+            sync(results);
+        });
     }
-
-    function getGoods() {
-        const providerId = getCurrentProviderId();
-
-        fetch(`/pharmacyApp/provider/${providerId}/merchandises?format=json`)
-            .then(response => response.json())
-            .then(json => dataset = json)
-            .catch(error => console.error(error.message()));
-    }
-
-    function getCurrentProviderId() {
-        return document.querySelector('input[type=hidden]').value;
-    }
-
-    function sync(results) {
-        const rows = results.map(goodToRowView).join('');
-
-        root.innerHTML = rows;
-    }
-
-    function goodToRowView(good) {
-        return `<tr>
-            <td style="vertical-align: middle;">${good.name}</td>
-            <td class="text-center">
-                <a href="#" id="${good.id}" class="btn btn-default btn-sm">Editar</a>
-            </td>
-        </tr>`;
-    }
-
-    getGoods();
 });
