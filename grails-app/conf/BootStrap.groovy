@@ -119,6 +119,19 @@ class BootStrap {
       output
     }
 
+    JSON.registerObjectMarshaller(Merchandise) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['name'] = it.name
+      output['location'] = it.location
+      output['status'] = it.status
+      output['dateCreated'] = it.dateCreated
+      output['lastUpdated'] = it.lastUpdated
+
+      output
+    }
+
     JSON.registerObjectMarshaller(Sale) {
       Map output = [:]
 

@@ -42,13 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(provider => {
                 return `<tr>
                 <td>
-                    <a href="products/${provider.id}/show">${provider.name}</a>
+                    <a href="providers/${provider.id}/show">${provider.name}</a>
                 </td>
                 <td>${provider.address}</td>
                 <td>${provider.phone}</td>
                 <td>${provider.status}</td>
                 <td>
-                    <a href="#">Productos</a>
+                    <a href="providers/${
+                        provider.id
+                    }/merchandises">Productos</a>
                 </td>
             </tr>`;
             })

@@ -29,6 +29,8 @@ class UrlMappings {
     '/providers' (controller: 'provider', action: 'list', method: 'GET')
     '/providers' (controller: 'provider', action: 'save', method: 'POST')
     "/providers/$id/show" (controller: 'provider', action: 'show', method: 'GET')
+    "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'list', method: 'GET')
+    "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'save', method: 'POST')
 
     ///////////////////
     // presentations //

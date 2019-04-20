@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${provider.phone}</td>
                 <td>${provider.status}</td>
                 <td>
-                    <a href="#">Productos</a>
+                    <a href="providers/${
+                        provider.id
+                    }/merchandises">Productos</a>
                 </td>
             </tr>`;
     }

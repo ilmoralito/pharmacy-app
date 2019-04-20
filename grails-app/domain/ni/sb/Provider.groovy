@@ -21,6 +21,10 @@ class Provider implements Serializable {
     phone blank: false, unique: true
   }
 
+  Set<Merchandise> getMerchandises() {
+      MerchandiseSupplier.findAllByProvider(this).collect { it.merchandise }
+  }
+
   static mapping = {
     version false
   }

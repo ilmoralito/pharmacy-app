@@ -218,4 +218,10 @@ modules = {
     dependsOn 'toddler'
     resource url: 'js/users.js'
   }
+
+  merchandiseSupplier {
+    dependsOn 'app'
+    resource url: 'js/merchandiseSupplier.js'
+    resource url: 'js/merchandiseSupplierFilter.js'
+  }
 }

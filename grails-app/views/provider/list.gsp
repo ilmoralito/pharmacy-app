@@ -51,7 +51,7 @@
                             <td>${provider.phone}</td>
                             <td>${provider.status ? 'Activo' : 'No activo'}</td>
                             <td>
-                                <a href="#">Productos</a>
+                                <a href="providers/${provider.id}/merchandises">Productos</a>
                             </td>
                         </tr>
                     </g:each>
