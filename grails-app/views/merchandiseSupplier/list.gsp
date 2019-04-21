@@ -9,7 +9,7 @@
         />
     </head>
     <body>
-        <p>${provider.name}</p>
+        <p>${provider?.name}</p>
 
         <g:render template="/navbars/products" />
 

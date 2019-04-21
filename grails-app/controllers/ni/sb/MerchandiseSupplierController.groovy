@@ -17,7 +17,7 @@ class MerchandiseSupplierController {
   def list() {
     Provider provider = providerService.get(params.int('id'))
     List<Merchandise> merchandiseList = merchandiseService.list()
-    Set<Merchandise> merchandisesSupplierList = provider.merchandises
+    Set<Merchandise> merchandisesSupplierList = provider?.merchandises
 
     request.withFormat {
       html {
