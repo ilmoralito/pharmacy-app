@@ -1,17 +1,19 @@
 package ni.sb
 
+import org.grails.databinding.BindUsing
+
 class BrandProduct extends Product {
-  List brands
 
-  static constraints = {
-    brands nullable:false
-  }
+    @BindUsing({ obj, source ->
+      source['name']?.toLowerCase()?.tokenize(' ')*.capitalize()?.join(' ')
+    })
+    String name
 
-  static hasMany = [brands:Brand]
+    static constraints = {
+        name blank: false, unique: true
+    }
 
-  static mapping = {
-  	brands cascade: "all-delete-orphan"
-  }
-
-  String toString() { name }
+    static mapping = {
+        version false
+    }
 }

@@ -57,10 +57,16 @@ class UrlMappings {
     ////////////
     // brands //
     ////////////
-    "/brands"(controller: 'brand', action: 'list', method: 'GET')
-    "/brands"(controller: 'brand', action: 'save', method: 'POST')
-    "/brands/$id"(controller: 'brand', action: 'update', method: 'POST')
-    "/brands/count"(controller: 'brand', action: 'count', method: 'GET')
+    "/brands" (controller: 'brand', action: 'list', method: 'GET')
+    "/brands" (controller: 'brand', action: 'save', method: 'POST')
+    "/brands/$id" (controller: 'brand', action: 'update', method: 'POST')
+
+    //////////////////
+    // brandProduct //
+    //////////////////
+    '/branded' (controller: 'brandProduct', action: 'list', method: 'GET')
+    '/branded' (controller: 'brandProduct', action: 'save', method: 'POST')
+    "/branded/$id" (controller: 'brandProduct', action: 'update', method: 'POST')
 
     //////////////
     // diarySpend //

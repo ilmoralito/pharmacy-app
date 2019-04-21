@@ -40,6 +40,9 @@
                 <li class="${controllerName == 'brand' ? 'active' : ''}">
                     <g:link controller="brand" action="list">Marcas</g:link>
                 </li>
+                <li class="${controllerName == 'brandProduct' ? 'active' : ''}">
+                    <g:link controller="brandProduct" action="list">Productos de marca</g:link>
+                </li>
                 <li class="${controllerName == 'merchandise' ? 'active' : ''}">
                     <g:link controller="merchandise" action="list">Productos</g:link>
                 </li>

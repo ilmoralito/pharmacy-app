@@ -224,4 +224,14 @@ modules = {
     resource url: 'js/merchandiseSupplier.js'
     resource url: 'js/merchandiseSupplierFilter.js'
   }
+
+  branded {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    resource url: 'js/brandedHelpers.js'
+    resource url: 'js/branded.js'
+    resource url: 'js/brandedEdit.js'
+    resource url: 'js/brandedFilter.js'
+  }
 }
