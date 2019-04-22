@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     root.addEventListener('click', handleClick);
 
     function handleClick(event) {
+        event.preventDefault();
+
         const target = event.target;
 
         if (target.nodeName !== 'A') return;

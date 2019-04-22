@@ -22,7 +22,7 @@ function brandedToRowView(branded) {
     return `<tr>
         <td>${branded.name}</td>
         <td>${branded.location}</td>
-        <td class="text-center">
+        <td class="text-center" style="vertical-align: middle;">
             <a href="#" id="${branded.id}">Editar</a>
         </td>
     </tr>`;
