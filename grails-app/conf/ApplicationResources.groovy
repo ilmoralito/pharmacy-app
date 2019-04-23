@@ -244,4 +244,11 @@ modules = {
     resource url: 'js/brandBrandedFilter.js'
     resource url: 'js/brandBrandedEdit.js'
   }
+
+  providerBrandBranded {
+    dependsOn 'app'
+    dependsOn 'helper'
+    resource url: 'js/providerBrandBranded.js'
+    resource url: 'js/providerBrandBrandedFilter.js'
+  }
 }

@@ -10,7 +10,6 @@ class UrlMappings {
     ///////////
     // users //
     ///////////
-
     '/users' (controller: 'user', action: 'list', method: 'GET')
     '/users' (controller: 'user', action: 'save', method: 'POST')
     "/users/$id" (controller: 'user', action: 'update', method: 'POST')
@@ -31,6 +30,8 @@ class UrlMappings {
     "/providers/$id/show" (controller: 'provider', action: 'show', method: 'GET')
     "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'list', method: 'GET')
     "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'save', method: 'POST')
+    "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'list', method: 'GET')
+    "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'save', method: 'POST')
 
     ///////////////////
     // presentations //

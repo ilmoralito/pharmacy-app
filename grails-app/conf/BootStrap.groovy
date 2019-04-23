@@ -123,11 +123,38 @@ class BootStrap {
       Map output = [:]
 
       output['id'] = it.id
+      output['toString'] = it.toString()
       output['brand'] = [id: it.brand.id, name: it.brand.name]
       output['branded'] = [id: it.branded.id, name: it.branded.name]
       output['description'] = it.description
       output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
       output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd hh:mm')
+
+      output
+    }
+
+    JSON.registerObjectMarshaller(ProviderBrandBranded) {
+      Map output = [:]
+
+      Provider provider = it.provider
+      BrandBranded brandBranded = it.brandBranded
+
+      output['id'] = it.id
+      output['toString'] = it.toString()
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
+      output['provider'] = [name: provider.name]
+      output['brandBranded'] = [
+        id: brandBranded.id,
+        description: brandBranded.description,
+        brand: [
+          id: brandBranded.brand.id,
+          name: brandBranded.brand.name
+        ],
+        brandProduct: [
+          id: brandBranded.branded.id,
+          name: brandBranded.branded.name
+        ],
+      ]
 
       output
     }

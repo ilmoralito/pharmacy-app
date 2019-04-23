@@ -40,4 +40,8 @@ class BrandBranded {
   static mapping = {
     version false
   }
+
+  String toString() {
+    "${brand.name} ${branded.name} $description"
+  }
 }

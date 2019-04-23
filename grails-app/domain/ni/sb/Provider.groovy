@@ -22,7 +22,11 @@ class Provider implements Serializable {
   }
 
   Set<Merchandise> getMerchandises() {
-      MerchandiseSupplier.findAllByProvider(this).collect { it.merchandise }
+    MerchandiseSupplier.findAllByProvider(this).collect { it.merchandise }
+  }
+
+  Set<ProviderBrandBranded> getBranders() {
+    ProviderBrandBranded.findAllByProvider(this).collect { it }
   }
 
   static mapping = {

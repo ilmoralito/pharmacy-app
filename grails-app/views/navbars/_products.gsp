@@ -9,7 +9,7 @@
             params="[providerId: params.providerId]"
             >Medicamentos</g:link>
     </li>
-    <li>
-        <a href="#">Artículos marca</a>
+    <li class="${controllerName == 'providerBrandBranded' ? 'active' : ''}">
+        <a href="/pharmacyApp/providers/${params.id}/branders">Artículos marca</a>
     </li>
 </ul>

@@ -5,22 +5,20 @@ import grails.transaction.Transactional
 @Transactional
 class BrandBrandedService {
 
+  List<BrandBranded> list() {
+    BrandBranded.list()
+  }
+
   BrandBranded get(Serializable id) {
     BrandBranded.get(id)
   }
 
   boolean exists(Brand brand, BrandProduct branded, String description) {
-    def res = BrandBranded.where {
+    BrandBranded.where {
       brand == brand &&
       branded == branded &&
       description == description
     }.count() > 0
-
-    println '*' * 100
-    println res
-    println '*' * 100
-
-    res
   }
 
   boolean exists(Brand brand, BrandProduct branded, String description, Long id) {

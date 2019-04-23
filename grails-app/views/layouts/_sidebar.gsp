@@ -41,7 +41,7 @@
     <div class="panel panel-default" style="margin: 10px 0;">
         <div class="panel-body">
             <ul class="nav nav-pills nav-stacked">
-                <li class="${controllerName in ['provider', 'merchandiseSupplier'] ? 'active' : ''}">
+                <li class="${controllerName in ['provider', 'merchandiseSupplier', 'providerBrandBranded'] ? 'active' : ''}">
                     <g:link controller="provider" action="list">Proveedores</g:link>
                 </li>
 
