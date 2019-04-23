@@ -68,6 +68,13 @@ class UrlMappings {
     '/branded' (controller: 'brandProduct', action: 'save', method: 'POST')
     "/branded/$id" (controller: 'brandProduct', action: 'update', method: 'POST')
 
+    //////////////////
+    // brandBranded //
+    //////////////////
+    '/branders' (controller: 'brandBranded', action: 'list', method: 'GET')
+    '/branders' (controller: 'brandBranded', action: 'save', method: 'POST')
+    "/branders/$id" (controller: 'brandBranded', action: 'update', method: 'POST')
+
     //////////////
     // diarySpend //
     //////////////

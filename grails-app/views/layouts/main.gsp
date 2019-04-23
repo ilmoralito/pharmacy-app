@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title><g:layoutTitle default="Farmacia Santa Barbara"/></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<r:layoutResources/>
+    <meta charset="UTF-8">
+    <title><g:layoutTitle default="Farmacia Santa Barbara"/></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <r:layoutResources/>
 </head>
 <body>
-	<!--NAVBAR-->
-	<g:render template="/layouts/navbar"/>
-	<div class="container-fluid">
-		<div class="col-md-2">
-			<g:render template="/layouts/sidebar"/>
-		</div>
-		<div class="col-md-10">
-			<g:layoutBody/>
-			<!--
-				The next code check is neccesary in order to display message 
-				from commons controlers and from webflow
-			-->
-			<g:set var="message" value="${message ?: flash.message}"/>
-			<g:if test="${message}">
-				<div class="message">${message}</div>
-			</g:if>
-		</div>
-	</div>
-	<br>
-	<r:layoutResources/>
+    <g:render template="/layouts/navbar"/>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar">
+                <g:render template="/layouts/sidebar"/>
+            </div>
+            <div class="col-md-10">
+                <div class="content">
+                    <g:layoutBody/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <r:layoutResources/>
 </body>
 </html>

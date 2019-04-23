@@ -54,6 +54,32 @@ function createSelect({ id, values, defaultValue }) {
     return `<select name="${id}" id="${id}" class="form-control">${options}</select>`;
 }
 
+function createSelect2({ id, values, defaultValue }) {
+    const options = values
+        .map(item => {
+            const isSelected = item.text === defaultValue;
+            const selected = isSelected ? 'selected' : '';
+
+            return `<option value="${item.value}" ${selected}>${
+                item.text
+            }</option>`;
+        })
+        .join('');
+
+    return `<select name="${id}" id="${id}" class="form-control">${options}</select>`;
+}
+
+function fetchDatasetFrom(target) {
+    const element = document.querySelector(`#${target}`);
+
+    return [...element.options]
+        .filter(option => option.value)
+        .map(option => ({
+            value: option.value,
+            text: option.textContent
+        }));
+}
+
 async function fetchResource(source) {
     const options = {
         headers: {

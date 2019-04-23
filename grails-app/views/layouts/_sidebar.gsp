@@ -25,6 +25,22 @@
     <div class="panel panel-default" style="margin: 10px 0;">
         <div class="panel-body">
             <ul class="nav nav-pills nav-stacked">
+                <li class="${controllerName == 'brand' ? 'active' : ''}">
+                    <g:link controller="brand" action="list">Marcas</g:link>
+                </li>
+                <li class="${controllerName == 'brandProduct' ? 'active' : ''}">
+                    <g:link controller="brandProduct" action="list">Productos</g:link>
+                </li>
+                <li class="${controllerName == 'brandBranded' ? 'active' : ''}">
+                    <g:link controller="brandBranded" action="list">Productos & Marcas</g:link>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="margin: 10px 0;">
+        <div class="panel-body">
+            <ul class="nav nav-pills nav-stacked">
                 <li class="${controllerName in ['provider', 'merchandiseSupplier'] ? 'active' : ''}">
                     <g:link controller="provider" action="list">Proveedores</g:link>
                 </li>
@@ -36,12 +52,6 @@
                 </li>
                 <li class="${controllerName == 'measure' ? 'active' : ''}">
                     <g:link controller="measure" action="list">Medidas</g:link>
-                </li>
-                <li class="${controllerName == 'brand' ? 'active' : ''}">
-                    <g:link controller="brand" action="list">Marcas</g:link>
-                </li>
-                <li class="${controllerName == 'brandProduct' ? 'active' : ''}">
-                    <g:link controller="brandProduct" action="list">Productos de marca</g:link>
                 </li>
                 <li class="${controllerName == 'merchandise' ? 'active' : ''}">
                     <g:link controller="merchandise" action="list">Productos</g:link>

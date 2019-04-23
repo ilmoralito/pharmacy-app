@@ -16,4 +16,8 @@ class BrandProduct extends Product {
     static mapping = {
         version false
     }
+
+    String toString() {
+        name
+    }
 }
