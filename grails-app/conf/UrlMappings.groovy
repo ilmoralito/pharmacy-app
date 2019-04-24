@@ -47,6 +47,13 @@ class UrlMappings {
     '/measures' (controller: 'measure', action: 'save', method: 'POST')
     "/measures/$id" (controller: 'measure', action: 'update', method: 'PUT')
 
+    //////////////////
+    // laboratories //
+    //////////////////
+    '/laboratories' (controller: 'laboratory', action: 'list', method: 'GET')
+    '/laboratories' (controller: 'laboratory', action: 'save', method: 'POST')
+    "/laboratories/$id" (controller: 'laboratory', action: 'update', method: 'POST')
+
     //////////////////////////
     // measurePresentations //
     //////////////////////////

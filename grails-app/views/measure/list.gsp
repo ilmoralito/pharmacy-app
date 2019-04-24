@@ -15,7 +15,7 @@
                 <input type="text" id="filter" class="form-control" placeholder="Filtrar...">
             </div>
             <div class="col-md-6">
-                <a href="#" id="trigger" class="btn btn-primary pull-right">Agregar</a>
+                <a href="#" id="trigger" class="btn btn-primary pull-right">Agregar medida</a>
             </div>
         </div>
 
@@ -36,7 +36,7 @@
                             <td>${measure.unit}</td>
                             <td>${measure.abbreviation}</td>
                             <td class="text-center" style="vertical-align: middle;">
-                                <a href="#" id="${measure.id}">Editar</a>
+                                <a href="" id="${measure.id}">Editar</a>
                             </td>
                         </tr>
                     </g:each>
