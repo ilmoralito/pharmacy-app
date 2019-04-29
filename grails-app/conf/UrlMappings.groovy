@@ -30,6 +30,8 @@ class UrlMappings {
     "/providers/$id/show" (controller: 'provider', action: 'show', method: 'GET')
     "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'list', method: 'GET')
     "/providers/$id/merchandises" (controller: 'merchandiseSupplier', action: 'save', method: 'POST')
+    "/providers/$id/medicines" (controller: 'providerMedicine', action: 'list', method: 'GET')
+    "/providers/$id/medicines" (controller: 'providerMedicine', action: 'save', method: 'POST')
     "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'list', method: 'GET')
     "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'save', method: 'POST')
 

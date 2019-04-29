@@ -25,6 +25,10 @@ class Provider implements Serializable {
     MerchandiseSupplier.findAllByProvider(this).collect { it.merchandise }
   }
 
+  Set<Medicine> getMedicines() {
+    ProviderMedicine.findAllByProvider(this).collect { it.medicine }
+  }
+
   Set<ProviderBrandBranded> getBranders() {
     ProviderBrandBranded.findAllByProvider(this).collect { it }
   }
