@@ -7,9 +7,5 @@ class Presentation implements Serializable {
     name blank: false, maxSize: 255, unique: true
   }
 
-  Set<Measure> getMeasures() {
-    MeasurePresentation.findAllByPresentation(this).collect { it.measure }
-  }
-
   String toString() { name }
 }

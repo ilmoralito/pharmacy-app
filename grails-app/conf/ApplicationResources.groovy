@@ -169,24 +169,6 @@ modules = {
     resource url: 'js/measureAdd.js'
   }
 
-  measurePresentations {
-    dependsOn 'app'
-    dependsOn 'helper'
-    dependsOn 'toddler'
-    resource url: 'js/measurePresentationsHelper.js'
-    resource url: 'js/measurePresentationsAdd.js'
-    resource url: 'js/measurePresentationsFilter.js'
-    resource url: 'js/measurePresentationsEdit.js'
-  }
-
-  measurePresentationFirst {
-    dependsOn 'app'
-    dependsOn 'helper'
-    dependsOn 'toddler'
-    resource url: 'js/measurePresentationsHelper.js'
-    resource url: 'js/measurePresentationsAdd.js'
-  }
-
   brands {
     dependsOn 'app'
     dependsOn 'helper'
