@@ -28,17 +28,17 @@
     <div class="panel panel-default" style="margin: 10px 0;">
         <div class="panel-body">
             <ul class="nav nav-pills nav-stacked">
-                <li class="${controllerName == 'measure' ? 'active' : ''}">
-                    <g:link controller="measure" action="list">Medidas</g:link>
+                <li class="${controllerName == 'laboratory' ? 'active' : ''}">
+                    <g:link controller="laboratory" action="list">Laboratorios</g:link>
                 </li>
                 <li class="${controllerName == 'presentation' ? 'active' : ''}">
                     <g:link controller="presentation" action="list">Presentaciones</g:link>
                 </li>
-                <li class="${controllerName == 'laboratory' ? 'active' : ''}">
-                    <g:link controller="laboratory" action="list">Laboratorios</g:link>
+                <li class="${controllerName == 'measure' ? 'active' : ''}">
+                    <g:link controller="measure" action="list">Medidas</g:link>
                 </li>
-                <li class="${controllerName == 'measurePresentation' ? 'active' : ''}">
-                    <g:link controller="measurePresentation" action="list">Medicinas</g:link>
+                <li class="${controllerName == 'medicine' ? 'active' : ''}">
+                    <g:link controller="medicine" action="list">Medicinas</g:link>
                 </li>
             </ul>
         </div>

@@ -6,89 +6,111 @@ import grails.converters.JSON
 @Secured(['ROLE_ADMIN'])
 class MedicineController {
 
-  ProviderService providerService
+  MedicineService medicineService
+  LaboratoryService laboratoryService
+  PresentationService presentationService
+  MeasureService measureService
 
   static defaultAction = 'list'
   static allowedMethods = [
     save: 'POST',
-    update: 'POST'
+    update: 'POST',
+    filter: 'POST',
   ]
 
   def list() {
-    Provider provider = providerService.get(params.long('providerId'))
-    List<Medicine> medicines = Medicine.findAllByProviderAndStatus(provider, 'true')
+    List<Medicine> medicineList = medicineService.list()
 
-    withFormat {
-      html { [medicineList: medicines, constants: createMedicineConstant()] }
-      json { render medicines as JSON }
+    request.withFormat {
+      html {
+        [
+          medicines: medicineList,
+          medicineForm: createMedicineForm()
+        ]
+      }
+      json { render medicineList as JSON }
     }
   }
 
   def save() {
-    Provider provider = providerService.get(params.long('providerId'))
-    List<String> presentations = grailsApplication.config.ni.sb.presentationsAndMeasures.keySet() as List
-    List<String> presentationList = presentations.findAll { it in params.keySet() }
-    List<Map> presentationCollection = presentationList.collect { String presentation -> [(presentation): params.list(presentation)]}
-
-    Medicine medicine = new Medicine(
-      name: params.name,
-      location: params.location,
-      code: params.code,
-      genericName: params.genericName,
-      provider: provider
-    )
-
-    presentationCollection.each { Map<String, List<String>> instance ->
-      String name = instance.keySet()[0]
-      List<String> measures = instance[name]
-
-      medicine.addToPresentations(new Presentation(name: name, measures: measures))
-    }
+    Medicine medicine = new Medicine(params)
 
     if (!medicine.save()) {
       render(contentType: 'application/json') {
-        [status: 'fail', errors: medicine.errors]
+          [ok: false, errors: medicine.errors]
       }
 
       return
     }
 
     render(contentType: 'application/json') {
-      [status: 'ok', medicine: medicine]
+        [ok: true, medicine: medicine]
     }
   }
 
-  def edit(Medicine medicine) {
-    [medicine: medicine, constants: createMedicineConstant()]
-  }
+  def update() {
+    Medicine medicine = medicineService.get(params.long('id'))
 
-  def update(Medicine medicine) {
+    if (!medicine) {
+      render(contentType: 'application/json') {
+          [ok: false]
+      }
+
+      return
+    }
+
     medicine.properties = params
 
-    medicine.save(flush: true)
+    if (!medicine.save()) {
+      render(contentType: 'application/json') {
+          [ok: false, errors: medicine.errors]
+      }
 
-    def temp = []
-
-    temp += medicine.presentations
-
-    temp.each { t ->
-      medicine.removeFromPresentations(t)
+      return
     }
 
-    // medicine.presentations.clear()
-
-    redirect action: 'edit', params: [providerId: medicine.provider.id, id: medicine.id]
+    render(contentType: 'application/json') {
+        [ok: true, medicine: medicine]
+    }
   }
 
-  private MedicineConstant createMedicineConstant() {
-    new MedicineConstant(
-      locations: grailsApplication.config.ni.sb.locations,
-      presentations: grailsApplication.config.ni.sb.presentationsAndMeasures
+  def fetchLaboratories() {
+    render(contentType: 'application/json') {
+      medicineService.getLaboratories()
+    }
+  }
+
+  def fetchGenericnames() {
+    render(contentType: 'application/json') {
+      medicineService.getGenericNames()
+    }
+  }
+
+  def filter(MedicineFilter medicineFilter) {
+    List<Medicine> medicines = medicineService.filter(medicineFilter)
+
+    render(contentType: 'application/json') {
+        [ok: true, medicines: medicines]
+    }
+  }
+
+  private MedicineForm createMedicineForm() {
+    new MedicineForm (
+      laboratories: laboratoryService.list(),
+      presentations: presentationService.findAll(),
+      measures: measureService.findAll()
     )
   }
 }
 
-class MedicineConstant {
-  List<String> locations
-  Map<String, List<String>> presentations
+class MedicineForm {
+  List<Laboratory> laboratories
+  List<Presentation> presentations
+  List<Measure> measures
 }
+
+class MedicineFilter {
+  List<String> laboratories
+  List<String> genericnames
+}
+

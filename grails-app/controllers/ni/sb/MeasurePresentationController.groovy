@@ -58,14 +58,6 @@ class MeasurePresentationController {
     }
   }
 
-  def getMeasurePresentationByPresentation(Presentation presentation) {
-    Map measurePresentations = MeasurePresentation.findAllBy(presentation)
-
-    render(contentType: 'application/json') {
-      measurePresentations
-    }
-  }
-
   private MeasurePresentationForm createMeasurePresentationForm() {
     new MeasurePresentationForm(
       presentations: presentationService.findAll(),

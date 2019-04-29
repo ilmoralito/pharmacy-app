@@ -39,13 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#root').innerHTML = `
             <table class="table table-hover table-bordered">
-                <col width="80%">
-                <col width="10%">
+                <col width="90%">
                 <col width="10%">
 
                 <thead>
                     <th>Nombres</th>
-                    <th></th>
                     <th></th>
                 </thead>
                 <tbody>

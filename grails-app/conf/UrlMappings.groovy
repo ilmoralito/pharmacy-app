@@ -57,10 +57,9 @@ class UrlMappings {
     //////////////////////////
     // measurePresentations //
     //////////////////////////
-    "/measurePresentations" (controller: 'measurePresentation', action: 'list', method: 'GET')
-    "/measurePresentations" (controller: 'measurePresentation', action: 'save', method: 'POST')
-    "/measurePresentations/$id" (controller: 'measurePresentation', action: 'update', method: 'POST')
-    "/measurePresentations/byPresentation/$id" (controller: 'measurePresentation', action: 'getMeasurePresentationByPresentation', method: 'GET')
+    // "/measurePresentations" (controller: 'measurePresentation', action: 'list', method: 'GET')
+    // "/measurePresentations" (controller: 'measurePresentation', action: 'save', method: 'POST')
+    // "/measurePresentations/$id" (controller: 'measurePresentation', action: 'update', method: 'POST')
 
     ////////////
     // brands //
@@ -98,6 +97,16 @@ class UrlMappings {
     '/merchandises' (controller: 'merchandise', action: 'list', method: 'GET')
     '/merchandises' (controller: 'merchandise', action: 'save', method: 'POST')
     "/merchandises/$id" (controller: 'merchandise', action: 'update', method: 'POST')
+
+    //////////////
+    // medicine //
+    //////////////
+    '/medicines' (controller: 'medicine', action: 'list', method: 'GET')
+    '/medicines' (controller: 'medicine', action: 'save', method: 'POST')
+    "/medicines/$id" (controller: 'medicine', action: 'update', method: 'POST')
+    '/medicines/laboratories' (controller: 'medicine', action: 'fetchLaboratories', method: 'GET')
+    '/medicines/genericnames' (controller: 'medicine', action: 'fetchGenericnames', method: 'GET')
+    '/medicines/filter' (controller: 'medicine', action: 'filter', method: 'POST')
 
     "/"(controller:"login")
     "500"(view:'/error')

@@ -69,15 +69,23 @@ function createSelect2({ id, values, defaultValue }) {
     return `<select name="${id}" id="${id}" class="form-control">${options}</select>`;
 }
 
-function fetchDatasetFrom(target) {
+function fetchDatasetFrom(target, excludeFalse = true) {
     const element = document.querySelector(`#${target}`);
+    const options = [...element.options];
 
-    return [...element.options]
-        .filter(option => option.value)
-        .map(option => ({
-            value: option.value,
-            text: option.textContent
-        }));
+    if (excludeFalse) {
+        return options
+            .filter(option => option.value)
+            .map(option => ({
+                value: option.value,
+                text: option.textContent
+            }));
+    }
+
+    return options.map(option => ({
+        value: option.value,
+        text: option.textContent
+    }));
 }
 
 async function fetchResource(source) {

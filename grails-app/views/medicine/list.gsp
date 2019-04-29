@@ -1,5 +1,4 @@
-<%! import grails.converters.JSON %>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,55 +7,70 @@
     <r:require modules="bootstrap-css, bootstrap-collapse, medicines"/>
 </head>
 <body>
-    <g:render template="/toddler/toddler"/>
-    <g:render template="/navbars/products"/>
+    <g:render template="/toddler/toddler" model="[status: medicines ? 'closed' : 'open' ]"/>
 
-    <div class="row">
-        <div class="col-md-6">
-            <input type="text" id="filter" class="form-control" placeholder="Filtrar por nombre, generico, codigo y ubicacion...">
+    <g:if test="${medicines}">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" id="filter" class="form-control" placeholder="Filtrar...">
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                    <a href="#" id="filterPlusPlus" class="btn btn-default">Filtro</a>
+                    <a href="#" id="trigger" class="btn btn-primary">Agregar medicina</a>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <a href="#" id="trigger" class="btn btn-primary pull-right">Agregar medicina</a>
+
+        <div id="filterContext" class="hidden">
+            <div class="row">
+                <div id="laboratories" class="col-md-6"></div>
+                <div id="genericnames" class="col-md-6"></div>
+            </div>
         </div>
-    </div>
 
-    <g:if test="${medicineList}">
-        <table class="table table-hover table-bordered">
-            <col width="30%">
-            <col width="50%">
-            <col width="10%">
-            <col width="10%">
-            <col width="10%">
+        <div id="root">
+            <table class="table table-hover table-bordered">
+                <col width="15%">
+                <col width="28%">
+                <col width="20%">
+                <col width="10%">
+                <col width="5%">
+                <col width="5%">
+                <col width="7%">
+                <col width="10%">
 
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Nombre generico</th>
-                    <th>Ubicacion</th>
-                    <th>Codigo</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <g:each in="${medicineList}" var="medicine">
+                <thead>
                     <tr>
-                        <td style="vertical-align: middle;">
-                            <a href="#" data-presentations="${medicine.presentations.collect {[name: it.name, measures: it.measures]} as JSON}">${medicine.name}</a>
-                        </td>
-                        <td style="vertical-align: middle;">${medicine.genericName}</td>
-                        <td style="vertical-align: middle;">${medicine.location}</td>
-                        <td style="vertical-align: middle;">${medicine.code}</td>
-                        <td>
-                            <g:link
-                                action="edit"
-                                params="[providerId: params.providerId, id: medicine.id]"
-                                class="btn btn-default btn-sm">Editar</g:link>
-                        </td>
+                        <th>Laboratorio</th>
+                        <th>Nombre</th>
+                        <th>Genérico</th>
+                        <th>Presentación</th>
+                        <th>Medida</th>
+                        <th>Cantidad</th>
+                        <th>Ubicación</th>
+                        <th></th>
                     </tr>
-                </g:each>
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    <g:each in="${medicines}" var="medicine">
+                        <tr>
+                            <td>${medicine?.laboratory?.name}</td>
+                            <td>${medicine.name}</td>
+                            <td>${medicine.genericName}</td>
+                            <td>${medicine.presentation.name}</td>
+                            <td>${medicine.measure.abbreviation}</td>
+                            <td>${medicine.quantity}</td>
+                            <td>${medicine.location}</td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <a href="" id="${medicine.id}">Editar</a>
+                            </td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
+        </div>
     </g:if>
     <g:else>
         <p>Nada que mostrar</p>

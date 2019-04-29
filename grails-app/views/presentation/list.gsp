@@ -21,22 +21,17 @@
 
         <div id="root">
             <table class="table table-hover table-bordered">
-                <col width="80%">
-                <col width="10%">
+                <col width="90%">
                 <col width="10%">
 
                 <thead>
                     <th>Nombres</th>
-                    <th></th>
                     <th></th>
                 </thead>
                 <tbody>
                     <g:each in="${presentations}" var="presentation">
                         <tr>
                             <td>${presentation}</td>
-                            <td class="text-center" style="vertical-align: middle;">
-                                <a href="#" id="${presentation.id}">Medidas</a>
-                            </td>
                             <td class="text-center" style="vertical-align: middle;">
                                 <a href="#" id="${presentation.id}">Editar</a>
                             </td>

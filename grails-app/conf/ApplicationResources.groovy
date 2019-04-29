@@ -12,6 +12,10 @@ modules = {
     resource url: 'js/toddler.js'
   }
 
+  notifier {
+    resource url: 'js/notifier.js'
+  }
+
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
@@ -119,10 +123,14 @@ modules = {
 
   medicines {
     dependsOn 'app'
+    dependsOn 'helper'
     dependsOn 'toddler'
-    resource url: 'js/medicineAdd.js'
+    dependsOn 'notifier'
+    resource url: 'js/medicineHelpers.js'
+    resource url: 'js/medicines.js'
     resource url: 'js/medicineFilter.js'
-    resource url: 'js/medicineShow.js'
+    resource url: 'js/medicineEdit.js'
+    resource url: 'js/filterPlusPlus.js'
   }
 
   presentations {
@@ -133,7 +141,6 @@ modules = {
     resource url: 'js/presentationAdd.js'
     resource url: 'js/presentationEdit.js'
     resource url: 'js/presentationFilter.js'
-    resource url: 'js/presentationMeasures.js'
   }
 
   presentationFirst {
