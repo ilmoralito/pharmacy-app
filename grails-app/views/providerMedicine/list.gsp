@@ -7,7 +7,10 @@
         <r:require modules="bootstrap-css, bootstrap-collapse, providerMedicine" />
     </head>
     <body>
-        <p>${provider?.name}</p>
+        <pharmacyApp:providerMenu
+            providers="${providers}"
+            currentProvider="${provider}"
+            resource="medicines" />
 
         <g:render template="/navbars/products" />
 

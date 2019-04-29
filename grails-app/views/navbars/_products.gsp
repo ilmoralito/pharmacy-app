@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs" style="margin-bottom: 10px;">
+<ul class="nav nav-tabs" style="margin: 10px 0;">
     <li class="${controllerName == 'merchandiseSupplier' ? 'active' : ''}">
         <a href="/pharmacyApp/providers/${params.id}/merchandises">Artículos</a>
     </li>

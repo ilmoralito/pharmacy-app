@@ -9,7 +9,10 @@
         />
     </head>
     <body>
-        <p>${provider?.name}</p>
+        <pharmacyApp:providerMenu
+            providers="${providers}"
+            currentProvider="${provider}"
+            resource="merchandises" />
 
         <g:render template="/navbars/products" />
 

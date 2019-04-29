@@ -1,9 +1,11 @@
 package ni.sb
 
+import groovy.xml.MarkupBuilder
+
 class AppTagLib {
     def saleService
 
-    static defaultEncodeAs = 'html'
+    static defaultEncodeAs = [providerMenu: 'raw']
     static namespace = 'pharmacyApp'
 
     def purchaseOrderStatus = { attrs, body ->
@@ -33,5 +35,35 @@ class AppTagLib {
         }
 
         out << receiptNumber
+    }
+
+    def providerMenu = { attrs ->
+        MarkupBuilder markupBuilder = new MarkupBuilder(out)
+        Provider currentProvider = attrs.currentProvider
+        List<Provider> providers = attrs.providers
+        String resource = attrs.resource
+
+        if (providers.size == 1) {
+            markupBuilder.p {
+                mkp.yield providers[0].name
+            }
+
+            return
+        }
+
+        markupBuilder.div(class: 'row') {
+            div(class: 'col-md-12') {
+                div(class: 'btn-group') {
+                    providers.each { Provider provider ->
+                        a(
+                            href: "/pharmacyApp/providers/${provider.id}/${resource}",
+                            class: "btn btn-default ${currentProvider == provider ? 'active' : ''}"
+                        ) {
+                            mkp.yield provider.name
+                        }
+                    }
+                }
+            }
+        }
     }
 }

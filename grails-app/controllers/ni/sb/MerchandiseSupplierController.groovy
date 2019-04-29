@@ -24,6 +24,7 @@ class MerchandiseSupplierController {
         [
           provider: provider,
           merchandises: merchandiseList,
+          providers: providerService.list(),
           merchandisesSupplier: merchandisesSupplierList,
         ]
       }

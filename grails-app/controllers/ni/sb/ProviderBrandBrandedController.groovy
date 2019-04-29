@@ -22,7 +22,8 @@ class ProviderBrandBrandedController {
         [
           branders: brandBrandedService.list(),
           providerBranders: provider.branders,
-          provider: provider
+          providers: providerService.list(),
+          provider: provider,
         ]
       }
 

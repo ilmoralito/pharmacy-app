@@ -8,4 +8,8 @@ class ProviderService {
   Provider get(Long id) {
     Provider.get(id)
   }
+
+  List<Provider> list() {
+    Provider.list()
+  }
 }

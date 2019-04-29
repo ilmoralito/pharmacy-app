@@ -22,6 +22,7 @@ class ProviderMedicineController {
         [
           medicines: medicineService.list(),
           providerMedicines: provider.medicines,
+          providers: providerService.list(),
           provider: provider
         ]
       }
