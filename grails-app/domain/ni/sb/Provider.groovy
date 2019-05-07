@@ -29,8 +29,8 @@ class Provider implements Serializable {
     ProviderMedicine.findAllByProvider(this).collect { it.medicine }
   }
 
-  Set<ProviderBrandBranded> getBranders() {
-    ProviderBrandBranded.findAllByProvider(this).collect { it }
+  Set<BrandBranded> getBranders() {
+    ProviderBrandBranded.findAllByProvider(this).collect { it.brandBranded }
   }
 
   static mapping = {

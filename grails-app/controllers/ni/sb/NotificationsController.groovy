@@ -20,14 +20,14 @@ class NotificationsController {
 
     def quantity = generalService.quantity()
     def expire = generalService.expire()
-    def expired = generalService.expired()
-    def pendingOrders = generalService.pendingOrders()
+    // def expired = generalService.expired()
+    // def pendingOrders = generalService.pendingOrders()
     def clientPayments = generalService.clientPayments()
 
     session["q"] = (quantity)?quantity.size():0
     session["ex"] = (expire)?expire.size():0
-    session["exd"] = (expired)?expired.size():0
-    session["po"] = (pendingOrders)?pendingOrders.size():0
+    // session["exd"] = (expired)?expired.size():0
+    // session["po"] = (pendingOrders)?pendingOrders.size():0
     session["cp"] = (clientPayments)?clientPayments.size():0
 
     if (session.q > 0 || session.ex > 0 || session.exd > 0 || session.po > 0 || session.cp > 0) {

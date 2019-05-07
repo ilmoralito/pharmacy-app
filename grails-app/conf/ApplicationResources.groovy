@@ -16,6 +16,12 @@ modules = {
     resource url: 'js/notifier.js'
   }
 
+  datepicker {
+    resource url: 'css/datepicker.min.css'
+    resource url: 'js/datepicker.min.js'
+    resource url: 'js/i18n/datepicker.es.js'
+  }
+
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
@@ -256,5 +262,33 @@ modules = {
     resource url: 'js/laboratories.js'
     resource url: 'js/laboratoriesEdit.js'
     resource url: 'js/laboratoriesFilter.js'
+  }
+
+  orders {
+    dependsOn 'app'
+    dependsOn 'toddler'
+    dependsOn 'datepicker'
+    resource url: 'js/orderHelpers.js'
+    resource url: 'js/orders.js'
+    resource url: 'js/orderDatepicker.js'
+  }
+
+  createOrder {
+    dependsOn 'app'
+    dependsOn 'helper'
+    dependsOn 'toddler'
+    dependsOn 'notifier'
+    dependsOn 'datepicker'
+    resource url: 'js/orderHelpers.js'
+    resource url: 'js/orderSetProducts.js'
+    resource url: 'js/orderUpdate.js'
+    resource url: 'js/orderRemove.js'
+    resource url: 'js/orderConfirm.js'
+    resource url: 'js/orderSetForm.js'
+    resource url: 'js/orderSetItems.js'
+    resource url: 'js/orderDatepicker.js'
+    resource url: 'js/orderFilter.js'
+    resource url: 'js/orderItem.js'
+    resource url: 'js/orderActions.js'
   }
 }

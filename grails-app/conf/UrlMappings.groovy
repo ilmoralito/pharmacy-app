@@ -103,6 +103,14 @@ class UrlMappings {
     '/medicines/genericnames' (controller: 'medicine', action: 'fetchGenericnames', method: 'GET')
     '/medicines/filter' (controller: 'medicine', action: 'filter', method: 'POST')
 
+    ///////////
+    // order //
+    ///////////
+    '/orders' (controller: 'order', action: 'list', method: 'GET')
+    "/orders/$provider/create" (controller: 'order', action: 'create', method: 'GET')
+    '/orders' (controller: 'order', action: 'save', method: 'POST')
+    "/order/by/${invoiceNumber}" (controller: 'order', action: 'orderByInvoiceNumber', method: 'GET')
+
     "/"(controller:"login")
     "500"(view:'/error')
     }

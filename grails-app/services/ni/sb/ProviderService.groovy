@@ -12,4 +12,12 @@ class ProviderService {
   List<Provider> list() {
     Provider.list()
   }
+
+  Set<Product> getProducts(Provider provider) {
+    Set<Product> merchandises = provider.merchandises
+    Set<Product> medicines = provider.medicines
+    Set<Product> branders = provider.branders
+
+    merchandises + medicines + branders
+  }
 }

@@ -38,8 +38,8 @@ function cleanInputs(form, ...excludes) {
     }
 }
 
-function createInput({ id, defaultValue }) {
-    return `<input name="${id}" name="${id}" value="${defaultValue}" class="form-control" />`;
+function createInput({ id, defaultValue, type = 'text' }) {
+    return `<input type="${type}" name="${id}" name="${id}" value="${defaultValue}" class="form-control" />`;
 }
 
 function createSelect({ id, values, defaultValue }) {

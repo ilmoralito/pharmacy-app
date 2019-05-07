@@ -59,11 +59,29 @@ class BootStrap {
       output
     }
 
+    JSON.registerObjectMarshaller(PurchaseOrder) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['provider'] = it.provider.name
+      output['registeredBy'] = it.registeredBy.fullName
+      output['updatedBy'] = it.updatedBy.fullName
+      output['type'] = it.type
+      output['invoiceNumber'] = it.invoiceNumber
+      output['paymentDate'] = it.paymentDate
+      output['balanceToPay'] = it.balanceToPay
+      output['canceled'] = it.canceled
+      output['dateCreated'] = it.dateCreated
+      output['lastUpdated'] = it.lastUpdated
+
+      output
+    }
+
     JSON.registerObjectMarshaller(BrandBranded) {
       Map output = [:]
 
       output['id'] = it.id
-      output['toString'] = it.toString()
+      output['name'] = it.branded.name
       output['brand'] = [id: it.brand.id, name: it.brand.name]
       output['branded'] = [id: it.branded.id, name: it.branded.name]
       output['description'] = it.description

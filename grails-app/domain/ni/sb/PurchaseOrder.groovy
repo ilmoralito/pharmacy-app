@@ -1,45 +1,50 @@
 package ni.sb
 
-class PurchaseOrder implements Serializable {
-  String store
-  Date dutyDate
-  String invoiceNumber
-  BigDecimal balance
-  String typeOfPurchase
-  Boolean status
+class PurchaseOrder {
+  transient springSecurityService
 
+  Provider provider
+  User registeredBy
+  User updatedBy
+  String type
+  String invoiceNumber
+  Date paymentDate
+  BigDecimal balanceToPay
+  Boolean canceled
   Date dateCreated
-	Date lastUpdated
+  Date lastUpdated
+
+  static transients = ['springSecurityService']
 
   static constraints = {
-    store blank:false
-    dutyDate nullable:false, validator: { dutyDate ->
-      def today = new Date()
-
-      if (dutyDate <= today) {
-        return "purchaseOrder.dutyDate.notMatch"
-      }
-    }
-    invoiceNumber blank:false, unique:true
-    balance nullable:true
-    typeOfPurchase inList:["Contado", "Credito"], maxSize:255
-    providers minSize:1
+    provider nullable: false
+    registeredBy nullable: false
+    type inList: ['cash payment', 'credit payment']
+    invoiceNumber blank: false, unique: true
+    paymentDate nullable: false
+    balanceToPay blank: false, min: 1.0
   }
 
   static mapping = {
-  	version false
-    sort dateCreated: "desc"
-    items cascade: "all-delete-orphan"
+    version false
+    sort dateCreated: 'desc'
+    items cascade: 'all-delete-orphan'
   }
 
-  List items
-  List providers
-  static hasMany = [items:Item, providers:Provider]
+  static hasMany = [items: Item]
 
   def beforeInsert() {
-    //TODO
-    //status = (typeOfPurchase == "Contado") ? true : false
+    registeredBy = springSecurityService.currentUser
+    canceled = (type == 'cash payment')
+    balanceToPay = items.totalBalance.sum()
   }
 
-  String toString() { invoiceNumber }
+  def beforeUpdate() {
+    updatedBy = springSecurityService.currentUser
+    balanceToPay = items.totalBalance.sum()
+  }
+
+  String toString() {
+    invoiceNumber
+  }
 }

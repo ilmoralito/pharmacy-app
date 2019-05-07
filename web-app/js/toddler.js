@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function toggle() {
+    function toggle(event) {
         const toddler = document.querySelector('.toddler');
 
         if (toddler.classList.contains('open')) {
