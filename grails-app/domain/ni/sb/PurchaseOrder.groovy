@@ -6,11 +6,8 @@ class PurchaseOrder {
   Provider provider
   User registeredBy
   User updatedBy
-  String type
   String invoiceNumber
-  Date paymentDate
   BigDecimal balanceToPay
-  Boolean canceled
   Date dateCreated
   Date lastUpdated
 
@@ -19,9 +16,7 @@ class PurchaseOrder {
   static constraints = {
     provider nullable: false
     registeredBy nullable: false
-    type inList: ['cash payment', 'credit payment']
     invoiceNumber blank: false, unique: true
-    paymentDate nullable: false
     balanceToPay blank: false, min: 1.0
   }
 
@@ -33,9 +28,9 @@ class PurchaseOrder {
 
   static hasMany = [items: Item]
 
-  def beforeInsert() {
+  def beforeValidate() {
     registeredBy = springSecurityService.currentUser
-    canceled = (type == 'cash payment')
+    updatedBy = springSecurityService.currentUser
     balanceToPay = items.totalBalance.sum()
   }
 

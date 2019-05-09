@@ -123,3 +123,14 @@ textarea {
 .middle-aligned {
     vertical-align: middle !important;
 }
+
+.products-list {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid #ddd;
+}
+
+.products-list table {
+    margin-top: 0;
+    margin-bottom: 0;
+}

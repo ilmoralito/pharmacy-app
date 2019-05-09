@@ -8,11 +8,25 @@ class AppTagLib {
     static defaultEncodeAs = [providerMenu: 'raw']
     static namespace = 'pharmacyApp'
 
-    def purchaseOrderStatus = { attrs, body ->
-        if (attrs.status) {
-            out << 'Pagado'
+    def isCreditPaymentPurchaseOrderInstance = { attrs, body ->
+        if (attrs.order.instanceOf(CreditPaymentPurchaseOrder)) {
+            out << body()
+        }
+    }
+
+    def paymentType = { attrs ->
+        if (attrs.order.instanceOf(CashPaymentPurchaseOrder)) {
+            out << 'Contado'
         } else {
-            out << 'Pendiente'
+            out << 'Credito'
+        }
+    }
+
+    def canceled = { attrs ->
+        if (attrs.canceled) {
+            out << 'Si'
+        } else {
+            out << 'No'
         }
     }
 

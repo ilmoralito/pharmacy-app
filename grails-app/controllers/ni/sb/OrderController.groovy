@@ -1,6 +1,7 @@
 package ni.sb
 
 import grails.plugin.springsecurity.annotation.Secured
+import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.converters.JSON
 
 @Secured(['ROLE_ADMIN'])
@@ -31,7 +32,49 @@ class OrderController {
     }
   }
 
-  def save() {}
+  def save() {
+    JSONObject order = request.JSON.order
+    PurchaseOrder purchaseOrder
+
+    if (order.containsKey('paymentDate')) {
+      purchaseOrder = new CreditPaymentPurchaseOrder (
+        provider: order.provider,
+        invoiceNumber: order.invoiceNumber,
+        paymentDate: order.paymentDate
+      )
+    } else {
+      purchaseOrder = new CashPaymentPurchaseOrder (
+        provider: order.provider,
+        invoiceNumber: order.invoiceNumber
+      )
+    }
+
+    List<Item> items = order.items.collect { JSONObject item ->
+      new Item (
+        product: item.id,
+        quantity: item.quantity,
+        purchasePrice: item.purchasePrice,
+        salePrice: item.salePrice,
+        totalBalance: item.balanceToPay
+      )
+    }
+
+    items.each { item ->
+      purchaseOrder.addToItems(item)
+    }
+
+    if (!purchaseOrder.save(flush: true, insert: true)) {
+      render(contentType: 'application/json') {
+          [ok: false, errors: purchaseOrder.errors]
+      }
+
+      return
+    }
+
+    render(contentType: 'application/json') {
+        [ok: true, purchaseOrder: purchaseOrder]
+    }
+  }
 
   def orderByInvoiceNumber() {
     render(contentType: 'application/json') {

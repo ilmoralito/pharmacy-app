@@ -269,6 +269,7 @@ modules = {
     dependsOn 'toddler'
     dependsOn 'datepicker'
     resource url: 'js/orderHelpers.js'
+    resource url: 'js/orderToggleType.js'
     resource url: 'js/orders.js'
     resource url: 'js/orderDatepicker.js'
   }
@@ -280,6 +281,7 @@ modules = {
     dependsOn 'notifier'
     dependsOn 'datepicker'
     resource url: 'js/orderHelpers.js'
+    resource url: 'js/orderToggleType.js'
     resource url: 'js/orderSetProducts.js'
     resource url: 'js/orderUpdate.js'
     resource url: 'js/orderRemove.js'

@@ -30,7 +30,7 @@
             />
         </div>
 
-        <div id="products" style="height: 200px; overflow: auto;"></div>
+        <div id="products" class="products-list"></div>
 
         <div id="items"></div>
     </body>

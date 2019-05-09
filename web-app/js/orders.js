@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const trigger = document.querySelector('#trigger');
     const form = document.forms.form;
 
     form.addEventListener('submit', handleSubmit);
@@ -28,9 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!order) return;
 
-        const trigger = document.querySelector('#trigger');
-
-        trigger.parentNode.innerHTML = `
+        trigger.outerHTML = `
             <a
                 href="orders/${order.provider}/create"
                 class="btn btn-primary">Continuar orden</a>`;

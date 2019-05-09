@@ -20,6 +20,8 @@ function makeHelper() {
         return [...formData.entries()].reduce((entry, current) => {
             const [key, value] = current;
 
+            if (isItHidden(key)) return entry;
+
             entry[key] = value;
 
             return entry;
@@ -32,13 +34,6 @@ function makeHelper() {
 
     function sync(order) {
         localStorage.setItem('order', JSON.stringify(order));
-    }
-
-    function updateOrder(order) {
-        const currentOrder = getCurrentOrder();
-        const newOrder = Object.assign({}, currentOrder, order);
-
-        sync(newOrder);
     }
 
     function removeItem(id) {
@@ -178,6 +173,32 @@ function makeHelper() {
         });
     }
 
+    function isThereAnUnconfirmedItem() {
+        const order = getCurrentOrder();
+
+        if (!order.hasOwnProperty('items')) return true;
+
+        return order.items.some(item => !item.confirmed);
+    }
+
+    function setForm(form) {
+        const order = getCurrentOrder();
+
+        for (const key in order) {
+            if (!form[key]) continue;
+
+            form[key].value = order[key];
+        }
+    }
+
+    function isItHidden(key) {
+        const node = document.querySelector(`#${key}`);
+
+        if (!node) return false;
+
+        return node.closest('.form-group').classList.contains('hide');
+    }
+
     function excludeSelectedProducts({ items, products }) {
         const itemList = items.map(item => item.product);
 
@@ -267,7 +288,6 @@ function makeHelper() {
         formDataToObject,
         getCurrentOrder,
         sync,
-        updateOrder,
         removeItem,
         getItem,
         addItem,
@@ -276,6 +296,8 @@ function makeHelper() {
         setProducts,
         setItems,
         createDefaultItem,
-        filter
+        filter,
+        isThereAnUnconfirmedItem,
+        setForm
     };
 }
