@@ -40,7 +40,7 @@ class OrderController {
 
   def create() {
     Provider provider = providerService.get(params.long('provider'))
-    Set<Product> products = providerService.getProducts(provider)
+    List<Product> products = providerService.getProducts(provider)
 
     request.withFormat {
       html { [ orderForm: createOrderForm() ] }

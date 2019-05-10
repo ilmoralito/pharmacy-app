@@ -13,11 +13,9 @@ class ProviderService {
     Provider.list()
   }
 
-  Set<Product> getProducts(Provider provider) {
-    Set<Product> merchandises = provider.merchandises
-    Set<Product> medicines = provider.medicines
-    Set<Product> branders = provider.branders
+  List<Product> getProducts(Provider provider) {
+    Set<Product> products = provider.merchandises + provider.medicines + provider.branders
 
-    merchandises + medicines + branders
+    products.toList().sort() { a, b -> a.toString() <=> b.toString() }
   }
 }
