@@ -191,6 +191,22 @@ function makeHelper() {
         }
     }
 
+    function updateOrder(order) {
+        const items = getCurrentOrderItems();
+
+        if (items) {
+            order.items = items;
+        }
+
+        sync(order);
+    }
+
+    function getCurrentOrderItems() {
+        const order = getCurrentOrder();
+
+        return order.items;
+    }
+
     function isItHidden(key) {
         const node = document.querySelector(`#${key}`);
 
@@ -298,6 +314,7 @@ function makeHelper() {
         createDefaultItem,
         filter,
         isThereAnUnconfirmedItem,
-        setForm
+        setForm,
+        updateOrder
     };
 }

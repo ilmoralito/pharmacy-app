@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location.href = `/pharmacyApp/orders/${order.provider}/create`;
         }
 
-        helper.sync(order);
+        helper.updateOrder(order);
         helper.setForm(form);
 
         document.querySelector('.toddler').classList.add('close');
