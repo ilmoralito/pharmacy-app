@@ -8,6 +8,14 @@ class AppTagLib {
     static defaultEncodeAs = [providerMenu: 'raw']
     static namespace = 'pharmacyApp'
 
+    def daysToPay = { attrs ->
+        Date paymentDate = attrs.paymentDate
+        Date today = new Date()
+        Integer days = paymentDate - today
+
+        out << days
+    }
+
     def isCreditPaymentPurchaseOrderInstance = { attrs, body ->
         if (attrs.order.instanceOf(CreditPaymentPurchaseOrder)) {
             out << body()
@@ -19,14 +27,6 @@ class AppTagLib {
             out << 'Contado'
         } else {
             out << 'Credito'
-        }
-    }
-
-    def canceled = { attrs ->
-        if (attrs.canceled) {
-            out << 'Si'
-        } else {
-            out << 'No'
         }
     }
 

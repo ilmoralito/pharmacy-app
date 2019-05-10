@@ -70,6 +70,7 @@ class BootStrap {
       output['balanceToPay'] = it.balanceToPay
       output['paymentDate'] = it.paymentDate
       output['canceled'] = it.canceled
+      output['canceledBy'] = [id: it.canceledBy.id, fullName: it.canceledBy.fullName]
       output['dateCreated'] = it.dateCreated
       output['lastUpdated'] = it.lastUpdated
 

@@ -107,6 +107,8 @@ class UrlMappings {
     // order //
     ///////////
     '/orders' (controller: 'order', action: 'list', method: 'GET')
+    "/orders/$id" (controller: 'order', action: 'show', method: 'GET')
+    "/orders/$id/cancel" (controller: 'order', action: 'cancel', method: 'GET')
     "/orders/$provider/create" (controller: 'order', action: 'create', method: 'GET')
     '/orders' (controller: 'order', action: 'save', method: 'POST')
     "/order/by/${invoiceNumber}" (controller: 'order', action: 'orderByInvoiceNumber', method: 'GET')

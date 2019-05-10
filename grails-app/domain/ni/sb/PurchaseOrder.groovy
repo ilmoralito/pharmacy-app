@@ -10,6 +10,7 @@ class PurchaseOrder {
   BigDecimal balanceToPay
   Date dateCreated
   Date lastUpdated
+  List items
 
   static transients = ['springSecurityService']
 

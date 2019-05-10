@@ -22,11 +22,11 @@ class Item {
   }
 
   def beforeInsert() {
-    totalBalance = purchasePrice * quantity
+    totalBalance = salePrice * quantity
   }
 
   def beforeUpdate() {
-    totalBalance = purchasePrice * quantity
+    totalBalance = salePrice * quantity
   }
 
   static mapping = {

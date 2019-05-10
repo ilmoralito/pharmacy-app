@@ -293,4 +293,9 @@ modules = {
     resource url: 'js/orderItem.js'
     resource url: 'js/orderActions.js'
   }
+
+  orderShow {
+    dependsOn 'app'
+    resource url: 'js/orderCancel.js'
+  }
 }

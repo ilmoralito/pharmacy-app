@@ -22,6 +22,22 @@ class OrderController {
     ]
   }
 
+  def show(PurchaseOrder order) {
+    [order: order]
+  }
+
+  def cancel() {
+    CreditPaymentPurchaseOrder creditPaymentPurchaseOrder = orderService.get(params.long('id'))
+
+    creditPaymentPurchaseOrder.canceled = new Date()
+
+    creditPaymentPurchaseOrder.save()
+
+    render(contentType: 'application/json') {
+        [ok: true, creditPaymentPurchaseOrder: creditPaymentPurchaseOrder]
+    }
+  }
+
   def create() {
     Provider provider = providerService.get(params.long('provider'))
     Set<Product> products = providerService.getProducts(provider)

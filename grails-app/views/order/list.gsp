@@ -53,15 +53,15 @@
                             </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
                         </td>
                         <td>
-                            <g:formatNumber number="${order.balanceToPay}" type="currency" currencyCode="NIO" />
+                            <g:formatNumber number="${order.balanceToPay}" type="number" maxFractionDigits="2" />
                         </td>
                         <td>
                             <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
-                                <pharmacyApp:canceled canceled="${order.canceled}" />
+                                <formatDate date="${order.canceled}" format="yyyy-MM-dd" />
                             </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
                         </td>
                         <td class="text-center">
-                            <a href="">Editar</a>
+                            <g:link action="show" id="${order.id}">Ver</g:link>
                         </td>
                     </tr>
                 </g:each>
