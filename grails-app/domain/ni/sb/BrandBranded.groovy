@@ -1,6 +1,6 @@
 package ni.sb
 
-class BrandBranded {
+class BrandBranded extends Product {
 
   BrandBrandedService brandBrandedService
 
@@ -39,6 +39,14 @@ class BrandBranded {
 
   static mapping = {
     version false
+  }
+
+  def beforeValidate() {
+    name = "${brand.name} ${branded.name} $description"
+  }
+
+  def beforeUpdate() {
+    name = "${brand.name} ${branded.name} $description"
   }
 
   String toString() {

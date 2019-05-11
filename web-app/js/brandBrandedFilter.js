@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     brandBranded.branded.name
                         .toLowerCase()
                         .includes(criteria) ||
-                    brandBranded.description.toLowerCase().includes(criteria)
+                    brandBranded.description.toLowerCase().includes(criteria) ||
+                    brandBranded.location.toLowerCase().includes(criteria)
                 );
             });
 

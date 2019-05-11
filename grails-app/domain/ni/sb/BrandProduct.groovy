@@ -2,7 +2,7 @@ package ni.sb
 
 import org.grails.databinding.BindUsing
 
-class BrandProduct extends Product {
+class BrandProduct {
 
     @BindUsing({ obj, source ->
       source['name']?.toLowerCase()?.tokenize(' ')*.capitalize()?.join(' ')
@@ -17,7 +17,5 @@ class BrandProduct extends Product {
         version false
     }
 
-    String toString() {
-        name
-    }
+    String toString() { name }
 }

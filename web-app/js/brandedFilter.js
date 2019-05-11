@@ -11,13 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchResource('branded')
             .then(brandProducts => {
                 const results = brandProducts.filter(branded => {
-                    return (
-                        branded.name.toLowerCase().includes(criteria) ||
-                        branded.location.toLowerCase().includes(criteria)
-                    );
+                    return branded.name.toLowerCase().includes(criteria);
                 });
 
-                render(results);
+                const helper = makeHelper();
+
+                helper.render(results);
             })
             .catch(error => console.error(error.message));
     }

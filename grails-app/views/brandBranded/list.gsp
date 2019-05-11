@@ -25,7 +25,8 @@
                 <table class="table table-hover table-bordered">
                     <col width="20%" />
                     <col width="20%" />
-                    <col width="50%" />
+                    <col width="40%" />
+                    <col width="10%" >
                     <col width="10%" />
 
                     <thead>
@@ -33,6 +34,7 @@
                             <th>Marca</th>
                             <th>Producto</th>
                             <th>Descripción</th>
+                            <th>Ubicación</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -42,6 +44,7 @@
                                 <td>${brandBranded.brand}</td>
                                 <td>${brandBranded.branded}</td>
                                 <td>${brandBranded.description}</td>
+                                <td>${brandBranded.location}</td>
                                 <td class="text-center" style="vertical-align: middle;">
                                     <a href="" id="${brandBranded.id}">Editar</a>
                                 </td>

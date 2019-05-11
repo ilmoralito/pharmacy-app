@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target.nodeName !== 'A') return;
 
         const row = target.closest('tr');
-        const [name, location] = [...row.cells];
+        const [name] = [...row.cells];
 
         if (target.textContent === 'Editar') {
             target.textContent = 'Confirmar';
@@ -22,11 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: 'name',
                 defaultValue: name.textContent
             });
-            location.innerHTML = createSelect({
-                id: 'location',
-                values: getLocations(),
-                defaultValue: location.textContent
-            });
 
             return;
         }
@@ -34,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
 
         formData.append('name', name.querySelector('input').value);
-        formData.append('location', location.querySelector('select').value);
 
         fetch(`branded/${target.id}`, { method: 'POST', body: formData })
             .then(response => response.json())
@@ -46,18 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 name.innerHTML = json.branded.name;
-                location.innerHTML = json.branded.location;
 
                 target.textContent = 'Editar';
             })
             .catch(error => console.error(error.message));
-    }
-
-    function getLocations() {
-        const location = document.querySelector('#location');
-
-        return [...location.options]
-            .filter(option => option.value)
-            .map(option => option.value);
     }
 });

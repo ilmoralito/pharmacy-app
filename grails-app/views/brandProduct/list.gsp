@@ -17,26 +17,23 @@
                     <input type="text" id="filter" class="form-control" placeholder="Filtrar...">
                 </div>
                 <div class="col-md-6">
-                    <button id="trigger" class="btn btn-primary pull-right">Agregar producto de marca</button>
+                    <button id="trigger" class="btn btn-primary pull-right">Agregar producto</button>
                 </div>
             </div>
 
             <div id="root">
                 <table class="table table-hover table-bordered">
-                    <col width="20%" />
-                    <col width="70%" />
+                    <col width="90%" />
                     <col width="10%" />
 
                     <thead>
-                        <th>Nombre</th>
-                        <th>Ubicación</th>
+                        <th>Productos</th>
                         <th></th>
                     </thead>
                     <tbody>
                         <g:each in="${brandProducts}" var="branded">
                             <tr>
                                 <td>${branded.name}</td>
-                                <td>${branded.location}</td>
                                 <td class="text-center" style="vertical-align: middle;">
                                     <a href="#" id="${branded.id}">Editar</a>
                                 </td>

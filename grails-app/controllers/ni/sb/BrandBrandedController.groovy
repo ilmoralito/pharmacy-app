@@ -34,6 +34,7 @@ class BrandBrandedController {
     BrandProduct branded = brandProductService.get(params.branded)
 
     BrandBranded brandBranded = new BrandBranded (
+      location: params.location,
       brand: brand,
       branded: branded,
       description: params.description

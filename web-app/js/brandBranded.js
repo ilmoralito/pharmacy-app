@@ -6,9 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSubmit(event) {
         event.preventDefault();
 
-        const formData = new FormData(this);
-
-        fetch('branders', { method: 'POST', body: formData })
+        fetch('branders', { method: 'POST', body: new FormData(this) })
             .then(response => response.json())
             .then(json => {
                 if (!json.ok) {
@@ -24,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
 
-                    cleanInputs(form, 'brand', 'branded');
+                    cleanInputs(form, 'brand', 'branded', 'location');
 
                     cleanErrors();
 

@@ -96,10 +96,11 @@ class BootStrap {
       Map output = [:]
 
       output['id'] = it.id
-      output['name'] = it.branded.name
+      output['name'] = "${it.brand.name} ${it.branded.name} ${it.description}"
       output['brand'] = [id: it.brand.id, name: it.brand.name]
       output['branded'] = [id: it.branded.id, name: it.branded.name]
       output['description'] = it.description
+      output['location'] = it.location
       output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
       output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd hh:mm')
 

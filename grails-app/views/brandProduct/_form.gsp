@@ -7,13 +7,3 @@
     />
 </div>
 
-<div class="form-group">
-    <label for="location">Ubicación</label>
-    <g:select
-        name="location"
-        from="${grailsApplication.config.ni.sb.locations}"
-        value="${branded?.location}"
-        class="form-control"
-        noSelection="['':'Selecciona ubicación']"
-    />
-</div>
