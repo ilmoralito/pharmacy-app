@@ -258,7 +258,9 @@ function makeHelper() {
                     ? item.salePrice
                     : `<input type="text" value="0.0">`
             }</td>
-            <td class="middle-aligned">${item.balanceToPay}</td>
+            <td class="middle-aligned">
+                ${Number(item.balanceToPay).toFixed(2)}
+            </td>
             <td class="text-center">
                 <button id="${item.id}">
                     ${item.confirmed ? 'Editar' : 'Confirmar'}
