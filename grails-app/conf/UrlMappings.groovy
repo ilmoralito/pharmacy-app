@@ -113,6 +113,12 @@ class UrlMappings {
     '/orders' (controller: 'order', action: 'save', method: 'POST')
     "/order/by/${invoiceNumber}" (controller: 'order', action: 'orderByInvoiceNumber', method: 'GET')
 
+    ///////////////
+    // inventory //
+    ///////////////
+    '/inventory' (controller: 'inventory', action: 'index', method: 'GET')
+    "/inventory/$id" (controller: 'inventory', action: 'show', method: 'GET')
+
     "/"(controller:"login")
     "500"(view:'/error')
     }

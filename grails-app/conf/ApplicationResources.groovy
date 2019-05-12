@@ -298,4 +298,10 @@ modules = {
     dependsOn 'app'
     resource url: 'js/orderCancel.js'
   }
+
+  inventory {
+    dependsOn 'app'
+    dependsOn 'helper'
+    resource url: 'js/inventory.js'
+  }
 }

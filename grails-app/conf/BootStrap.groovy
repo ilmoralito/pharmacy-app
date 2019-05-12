@@ -39,6 +39,20 @@ class BootStrap {
   }
 
   def registerregisterObjectMarshaller() {
+    JSON.registerObjectMarshaller(Inventory) {
+      Map output = [:]
+
+      output['product'] = [id: it.product.id, name: it.product.name]
+      output['stock'] = it.stock
+      output['salePrice'] = it.salePrice
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd')
+      output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd')
+      output['registeredBy'] = [id: it.registeredBy.id, fullName: it.registeredBy.fullName]
+      output['updatedBy'] = [id: it.updatedBy.id, fullName: it.updatedBy.fullName]
+
+      output
+    }
+
     JSON.registerObjectMarshaller(Client) {
       Map output = [:]
 

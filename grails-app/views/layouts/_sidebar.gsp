@@ -70,8 +70,8 @@
         </div>
     </div>
 
-    <li class="${controllerName == 'order' && actionName == 'stock' ? 'active' : ''}">
-        <g:link controller="order" action="stock">Inventario</g:link>
+    <li class="${controllerName == 'inventory' ? 'active' : ''}">
+        <g:link controller="inventory">Inventario</g:link>
     </li>
     <li class="${controllerName == 'reports' ? 'active' : ''}">
         <g:link controller="reports" action="sales">Reportes</g:link>

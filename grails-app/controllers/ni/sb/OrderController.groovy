@@ -9,6 +9,7 @@ class OrderController {
 
   OrderService orderService
   ProviderService providerService
+  InventoryService inventoryService
 
   static defaultAction = 'list'
   static allowedMethods = [
@@ -86,6 +87,8 @@ class OrderController {
 
       return
     }
+
+    inventoryService.update(items)
 
     render(contentType: 'application/json') {
         [ok: true, purchaseOrder: purchaseOrder]
