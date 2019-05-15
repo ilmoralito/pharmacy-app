@@ -1,50 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="layout" content="main">
-	<title>Venta</title>
-	<r:require modules="bootstrap-css, bootstrap-collapse"/>
-</head>
-<body>
-	<div class="row">
-		<div class="col-md-10">
-			<g:render template="saleDetail"/>
-		</div>
-		<div class="col-md-2">
-			<g:if test="${!sale.canceled}">
-				<g:link action="cancelSale" id="${sale.id}" class="btn btn-warning btn-block">Anular venta</g:link>
-			</g:if>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="layout" content="main" />
+        <title>Venta</title>
+        <r:require modules="bootstrap-css, bootstrap-collapse, app" />
+    </head>
+    <body>
+        <table class="table table-hover table-bordered">
+            <col width="25%">
+            <col width="75%">
 
-			<g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
-				<g:if test="${sale.typeOfPurchase == 'Credito' && sale.status == 'Pendiente'}">
-					<g:link action="pay" id="${sale.id}" class="btn btn-info btn-block">Abonar</g:link>
-				</g:if>
-				<g:else>
-					<g:link action="pay" id="${sale.id}" class="btn btn-primary btn-block">Ver Abonos</g:link>
-				</g:else>
-			</g:if>
+            <tbody>
+                <tr>
+                    <td>Cliente</td>
+                    <td>${sale.client}</td>
+                </tr>
+                <tr>
+                    <td>Tipo</td>
+                    <td>
+                        <pharmacyApp:saleType sale="${sale}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Efectivo recibido</td>
+                    <td>${sale.cashReceived}</td>
+                </tr>
+                <tr>
+                    <td>Vuelto</td>
+                    <td>${sale.turned}</td>
+                </tr>
+                <tr>
+                    <td>Saldo</td>
+                    <td>${sale.totalBalance}</td>
+                </tr>
+            </tbody>
+        </table>
 
-			<h4>Fecha de venta</h4>
-			<g:formatDate date="${sale.dateCreated}" formatName="custom.date.format"/>
+        <table class="table table-hover table-bordered">
+            <col width="25%">
+            <col width="75%">
 
-			<h4>Vendedor</h4>
-			${sale.user}
+            <tbody>
+                <tr>
+                    <td>Atendido por</td>
+                    <td>${sale.registeredBy}</td>
+                </tr>
+                <tr>
+                    <td>Fecha de creación</td>
+                    <td>
+                        <g:formatDate date="${sale.dateCreated}" format="yyyy-MM-dd hh:mm" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Actualización mas reciente</td>
+                    <td>
+                        <g:formatDate date="${sale.lastUpdated}" format="yyyy-MM-dd hh:mm" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-			<h4>Saldo de venta</h4>
-			${sale.balance}
+        <table class="table table-hover table-bordered">
+            <col width="25%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="45%" />
 
-			<g:if test="${sale.instanceOf(ni.sb.SaleToClient)}">
-				<h4>Cliente</h4>
-				${sale.client}
+            <caption>Detalle de venta</caption>
 
-				<h4>Tipo de compra</h4>
-				${sale.typeOfPurchase}
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio venta</th>
+                    <th>Cantidad</th>
+                    <th>Total compra</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-				<h4>Estado</h4>
-				${sale.status}
-			</g:if>
-		</div>
-	</div>
-</body>
+            <tbody>
+                <g:each in="${sale.salesDetail}" var="saleDetail">
+                    <tr>
+                        <td>${saleDetail.product}</td>
+                        <td>${saleDetail.salePrice}</td>
+                        <td>${saleDetail.quantity}</td>
+                        <td>${saleDetail.total}</td>
+                        <td></td>
+                    </tr>
+                </g:each>
+            </tbody>
+        </table>
+    </body>
 </html>

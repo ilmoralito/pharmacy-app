@@ -304,4 +304,16 @@ modules = {
     dependsOn 'helper'
     resource url: 'js/inventory.js'
   }
+
+  sales {
+    dependsOn 'app'
+    resource url: 'js/salesDetail.js'
+    resource url: 'js/salesHelper.js'
+    resource url: 'js/saleClients.js'
+    resource url: 'js/sales.js'
+    resource url: 'js/salesDetailActions.js'
+    resource url: 'js/salesFilter.js'
+    resource url: 'js/salesFetchInventory.js'
+    resource url: 'js/salesSaveInstance.js'
+  }
 }

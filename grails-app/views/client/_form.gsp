@@ -9,26 +9,6 @@
 </div>
 
 <div class="form-group">
-    <label for="middleName">Segundo nombre</label>
-    <g:textField
-        name="middleName"
-        value="${client?.middleName}"
-        class="form-control"
-        autofocus="true"
-    />
-</div>
-
-<div class="form-group">
-    <label for="surname">Primer apellido</label>
-    <g:textField
-        name="surname"
-        value="${client?.surname}"
-        class="form-control"
-        autofocus="true"
-    />
-</div>
-
-<div class="form-group">
     <label for="lastName">Segundo apellido</label>
     <g:textField
         name="lastName"

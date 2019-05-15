@@ -21,6 +21,7 @@ class UrlMappings {
     '/clients' (controller: 'client', action: 'save', method: 'POST')
     "/clients/$id" (controller: 'client', action: 'show', method: 'GET')
     "/clients/$id/register" (controller: 'client', action: 'register', method: 'GET')
+    '/clients/enabled' (controller: 'client', action: 'listEnabled', method: 'GET')
 
     ///////////////
     // providers //
@@ -117,9 +118,18 @@ class UrlMappings {
     // inventory //
     ///////////////
     '/inventory' (controller: 'inventory', action: 'index', method: 'GET')
+    '/inventory/enabled' (controller: 'inventory', action: 'enabled', method: 'GET')
     "/inventory/$id" (controller: 'inventory', action: 'show', method: 'GET')
 
-    "/"(controller:"login")
-    "500"(view:'/error')
+    //////////
+    // sale //
+    //////////
+    '/sales' (controller: 'sale', action: 'index', method: 'GET')
+    '/sales' (controller: 'sale', action: 'save', method: 'POST')
+    '/sales/create' (controller: 'sale', action: 'create', method: 'GET')
+    "/sales/$id" (controller: 'sale', action: 'show', method: 'GET')
+
+    '/' (controller: 'login')
+    '500' (view: '/error')
     }
 }

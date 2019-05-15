@@ -6,7 +6,7 @@
         <g:link controller="order" action="list">Pedidos</g:link>
     </li>
     <li class="${controllerName == 'sale' ? 'active' : ''}">
-        <g:link controller="sale" action="list">Ventas</g:link>
+        <g:link controller="sale">Ventas</g:link>
     </li>
     <li class="${controllerName in ['provider', 'merchandiseSupplier', 'providerMedicine', 'providerBrandBranded'] ? 'active' : ''}">
         <g:link controller="provider" action="list">Proveedores</g:link>

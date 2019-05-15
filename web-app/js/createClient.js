@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusTd = document.createElement('td');
         const a = document.createElement('a');
 
-        a.href = `show/${client.id}`;
+        a.href = `clients/${client.id}`;
         a.textContent = client.fullName;
 
         fullNameTd.appendChild(a);

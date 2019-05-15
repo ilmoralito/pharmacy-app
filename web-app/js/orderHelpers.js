@@ -187,6 +187,14 @@ function makeHelper() {
         for (const key in order) {
             if (!form[key]) continue;
 
+            if (form[key].nodeName === 'SELECT') {
+                const option = Array.from(form[key].options).find(
+                    option => option.value === order[key]
+                );
+
+                option.setAttribute('selected', 'selected');
+            }
+
             form[key].value = order[key];
         }
     }

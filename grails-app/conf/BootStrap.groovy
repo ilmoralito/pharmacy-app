@@ -42,7 +42,27 @@ class BootStrap {
     JSON.registerObjectMarshaller(Inventory) {
       Map output = [:]
 
-      output['product'] = [id: it.product.id, name: it.product.name]
+      if (it.product.instanceOf(ni.sb.Medicine)) {
+        output['product'] = [
+          id: it.id,
+          name: "${it.product.name} ${it.product.presentation.name} ${it.product.quantity} ${it.product.measure.abbreviation} ${it.product.genericName ?: ''}"
+        ]
+      }
+      
+      if (it.product.instanceOf(ni.sb.BrandBranded)) {
+        output['product'] = [
+          id: it.product.id,
+          name: it.product.name
+        ]
+      }
+
+      if (it.product.instanceOf(ni.sb.Merchandise)) {
+        output['product'] = [
+          id: it.product.id,
+          name: it.product.name
+        ]
+      }
+
       output['stock'] = it.stock
       output['salePrice'] = it.salePrice
       output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd')
@@ -58,8 +78,6 @@ class BootStrap {
 
       output['id'] = it.id
       output['firstName'] = it.firstName
-      output['middleName'] = it.middleName
-      output['surname'] = it.surname
       output['lastName'] = it.lastName
       output['fullName'] = it.toString()
       output['address'] = it.address
@@ -164,11 +182,13 @@ class BootStrap {
       Map output = [:]
 
       output['id'] = it.id
-      output['user'] = [id: it.user.id, fullName: fullNameToShortName(it.user.fullName)]
-      output['hour'] = it.dateCreated.format('HH:mm')
-      output['balance'] = it.balance
-      output['canceled'] = it.canceled
-      output['typeOfPurchase'] = 'Contado'
+      output['client'] = it.client
+      output['registeredBy'] = [id: it.registeredBy.id, fullName: it.registeredBy.fullName]
+      output['cashReceived'] = it.cashReceived
+      output['turned'] = it.turned
+      output['totalBalance'] = it.totalBalance
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd')
+      output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd')
 
       output
     }

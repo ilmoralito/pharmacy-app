@@ -1,18 +1,18 @@
 package ni.sb
 
-import  grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 import grails.converters.JSON
 
 @Secured(['ROLE_ADMIN'])
 class ClientController {
+
+  ClientService clientService
+
   static defaultAction = 'list'
   static allowedMethods = [
     save: 'POST',
     update: 'POST'
   ]
-
-  SpringSecurityService springSecurityService
 
   def list() {
     List<Client> clientList = Client.list()
@@ -24,9 +24,7 @@ class ClientController {
   }
 
   def save() {
-    params.createdBy = springSecurityService.currentUser
-
-    Client client = new Client(params)
+    Client client = new Client(request.JSON ?: params)
 
     if (client.save()) {
       render(contentType: 'application/json') {
@@ -60,5 +58,9 @@ class ClientController {
 
   def register(Client client) {
     [client: client]
+  }
+
+  def listEnabled() {
+    render clientService.listEnabled() as JSON
   }
 }

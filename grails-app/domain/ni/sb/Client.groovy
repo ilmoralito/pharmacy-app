@@ -2,11 +2,16 @@ package ni.sb
 
 import org.grails.databinding.BindUsing
 
-class Client implements Serializable {
+class Client {
 
+  @BindUsing({ obj, source ->
+    source['firstName']?.capitalize()
+  })
   String firstName
-  String middleName
-  String surname
+
+  @BindUsing({ obj, source ->
+    source['lastName']?.capitalize()
+  })
   String lastName
   String address
   @BindUsing({ obj, source ->
@@ -15,15 +20,16 @@ class Client implements Serializable {
   String identificationCard
   String phones
   Boolean status = true
-
   User createdBy
   Date dateCreated
   Date lastUpdated
 
+  transient springSecurityService
+
+  static transients = ['springSecurityService']
+
   static constraints = {
     firstName blank: false
-    middleName nullable: true
-    surname blank: false
     lastName blank: false
     address blank: false
     identificationCard blank: false, unique: true, maxSize: 16, minSize: 16
@@ -34,5 +40,9 @@ class Client implements Serializable {
     version false
   }
 
-  String toString() { "$firstName ${middleName ? middleName : ''} $surname $lastName" }
+  def beforeValidate() {
+    createdBy = springSecurityService.currentUser
+  }
+
+  String toString() { "$firstName $lastName" }
 }

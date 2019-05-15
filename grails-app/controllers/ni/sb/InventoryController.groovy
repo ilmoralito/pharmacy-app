@@ -23,6 +23,10 @@ class InventoryController {
     
   }
 
+  def enabled() {
+    render inventoryService.listEnabled() as JSON
+  }
+
   def changeEnableStatus() {
     Inventory inventory = inventoryService.get(params.id)
 

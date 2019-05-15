@@ -16,43 +16,43 @@ class NotificationsController {
 
   @Secured(['ROLE_ADMIN','ROLE_USER'])
   def quantity() {
-    def today = new Date()
+    // def today = new Date()
 
-    def quantity = generalService.quantity()
-    def expire = generalService.expire()
-    // def expired = generalService.expired()
-    // def pendingOrders = generalService.pendingOrders()
-    def clientPayments = generalService.clientPayments()
+    // def quantity = generalService.quantity()
+    // def expire = generalService.expire()
+    // // def expired = generalService.expired()
+    // // def pendingOrders = generalService.pendingOrders()
+    // def clientPayments = generalService.clientPayments()
 
-    session["q"] = (quantity)?quantity.size():0
-    session["ex"] = (expire)?expire.size():0
-    // session["exd"] = (expired)?expired.size():0
-    // session["po"] = (pendingOrders)?pendingOrders.size():0
-    session["cp"] = (clientPayments)?clientPayments.size():0
+    // session["q"] = (quantity)?quantity.size():0
+    // session["ex"] = (expire)?expire.size():0
+    // // session["exd"] = (expired)?expired.size():0
+    // // session["po"] = (pendingOrders)?pendingOrders.size():0
+    // session["cp"] = (clientPayments)?clientPayments.size():0
 
-    if (session.q > 0 || session.ex > 0 || session.exd > 0 || session.po > 0 || session.cp > 0) {
-      session["notif"] = "OK"
-    }
+    // if (session.q > 0 || session.ex > 0 || session.exd > 0 || session.po > 0 || session.cp > 0) {
+    //   session["notif"] = "OK"
+    // }
 
-    params.format = params.f
+    // params.format = params.f
 
-    if(params?.format && params.format != "html"){
+    // if(params?.format && params.format != "html"){
 
-      response.contentType = grailsApplication.config.grails.mime.types[params.format]
-      response.setHeader("Content-disposition", "attachment; filename=Productos-bajos-en-existencias-${today.format("dd-MM-yyyy")}")
-      List fields = ["product","product.provider.name", "quantity"]
-      Map labels = ["product": "Producto", "product.provider.name": "Proveedor", "quantity": "Existencia"]
+    //   response.contentType = grailsApplication.config.grails.mime.types[params.format]
+    //   response.setHeader("Content-disposition", "attachment; filename=Productos-bajos-en-existencias-${today.format("dd-MM-yyyy")}")
+    //   List fields = ["product","product.provider.name", "quantity"]
+    //   Map labels = ["product": "Producto", "product.provider.name": "Proveedor", "quantity": "Existencia"]
 
-      Map parameters = [title: "Productos con baja existencia", "title.font.size": "18",
-      "column.widths": [0.3, 0.3,0.1], "header.font.size": "11", "text.font.size": "11",
-      "separator.color": "color.RED" ]
-
-
-      exportService.export(params.format, response.outputStream,quantity, fields, labels,[:],parameters)
-    }
+    //   Map parameters = [title: "Productos con baja existencia", "title.font.size": "18",
+    //   "column.widths": [0.3, 0.3,0.1], "header.font.size": "11", "text.font.size": "11",
+    //   "separator.color": "color.RED" ]
 
 
-    [infoInstance:quantity]
+    //   exportService.export(params.format, response.outputStream,quantity, fields, labels,[:],parameters)
+    // }
+
+
+    // [infoInstance:quantity]
   }
 
   def expire(){

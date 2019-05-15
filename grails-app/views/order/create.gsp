@@ -31,7 +31,6 @@
         </div>
 
         <div id="products" class="products-list"></div>
-
         <div id="items"></div>
     </body>
 </html>

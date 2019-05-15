@@ -1,31 +1,36 @@
 package ni.sb
 
-class Sale implements Serializable {
-  User user
-  BigDecimal balance = 0
-  Boolean canceled = false
+class Sale {
+  transient springSecurityService
 
-	Date dateCreated
-	Date lastUpdated
+  User registeredBy
+  BigDecimal cashReceived
+  BigDecimal turned
+  BigDecimal totalBalance
+  Date dateCreated
+  Date lastUpdated
+  List salesDetail
+
+  static transients = ['springSecurityService']
 
   static constraints = {
-    user nullable:false
-    balance scale:2
+    registeredBy nullable: false
+    cashReceived nullable: false
+    turned nullable: false
+    totalBalance nullable: false, scale: 2
   }
 
   static mapping = {
-  	version false
-    sort dateCreated: "desc"
+    version false
+    sort dateCreated: 'asc'
   }
 
-  static namedQueries = {
-    fromTo { from = new Date(), to = new Date() +1 ->
-      ge "dateCreated", from.clearTime()
-      le "dateCreated", to.clearTime()
-    }
-  }
+  static hasMany = [ salesDetail: SaleDetail ]
 
-  static hasMany = [saleDetails:SaleDetail]
+  def beforeValidate() {
+    registeredBy = springSecurityService.currentUser
+    totalBalance = (salesDetail.total.sum() * 0.15) + salesDetail.total.sum()
+  }
 
   String toString() { dateCreated }
 }

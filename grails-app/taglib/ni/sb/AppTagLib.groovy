@@ -30,6 +30,14 @@ class AppTagLib {
         }
     }
 
+    def saleType = { attrs ->
+        if (attrs.sale.instanceOf(ni.sb.CashSale)) {
+            out << 'Contado'
+        } else {
+            out << 'Credito'
+        }
+    }
+
     def getSaleBalance = { attrs ->
         def medicinesToSale = attrs.medicinesToSale
         def productsToSale = attrs.productsToSale

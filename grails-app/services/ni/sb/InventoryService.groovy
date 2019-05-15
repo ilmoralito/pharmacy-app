@@ -13,8 +13,12 @@ class InventoryService {
     Inventory.list()
   }
 
+  List<Inventory> listEnabled() {
+    Inventory.where { enabled == true }.list()
+  }
+
   List<Inventory> getInventoryWithLowStock() {
-    Inventory.where { stock <= 20 }.list()
+    Inventory.where { stock <= 20 }.list(sort: 'stock')
   }
 
   void update(List<Item> items) {
@@ -29,6 +33,18 @@ class InventoryService {
     }
   }
 
+  void updateInventoryStock(final List<SaleDetail> salesDetail) {
+    salesDetail.each { SaleDetail saleDetail ->
+      Inventory inventory = Inventory.findByProduct(saleDetail.product)
+
+      if (saleDetail) {
+        inventory.stock -= saleDetail.quantity
+      }
+
+      inventory.save(flush: true, insert: true)
+    }
+  }
+
   Inventory save(final Product product, final Integer stock, final BigDecimal salePrice) {
     new Inventory (
       product: product,
@@ -37,7 +53,7 @@ class InventoryService {
     ).save(flush: true, insert: true)
   }
 
-  Inventory update(Inventory inventory, final Integer stock, final BigDecimal salePrice) {
+  Inventory update(final Inventory inventory, final Integer stock, final BigDecimal salePrice) {
     inventory.stock += stock
     inventory.salePrice = salePrice
 
