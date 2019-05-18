@@ -21,6 +21,7 @@ class UrlMappings {
     '/clients' (controller: 'client', action: 'save', method: 'POST')
     "/clients/$id" (controller: 'client', action: 'show', method: 'GET')
     "/clients/$id/register" (controller: 'client', action: 'register', method: 'GET')
+    "/clients/$id/history" (controller: 'client', action: 'history', method: 'GET')
     '/clients/enabled' (controller: 'client', action: 'listEnabled', method: 'GET')
 
     ///////////////

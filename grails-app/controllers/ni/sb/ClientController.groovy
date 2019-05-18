@@ -7,6 +7,7 @@ import grails.converters.JSON
 class ClientController {
 
   ClientService clientService
+  SaleService saleService
 
   static defaultAction = 'list'
   static allowedMethods = [
@@ -54,6 +55,10 @@ class ClientController {
 
     flash.message = 'Datos del cliente actualizado'
     redirect action: 'show', id: client.id
+  }
+
+  def history(Client client) {
+    [sales: saleService.summary(client)]
   }
 
   def register(Client client) {
