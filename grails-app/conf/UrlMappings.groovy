@@ -128,6 +128,7 @@ class UrlMappings {
     '/sales' (controller: 'sale', action: 'save', method: 'POST')
     '/sales/create' (controller: 'sale', action: 'create', method: 'GET')
     "/sales/$id" (controller: 'sale', action: 'show', method: 'GET')
+    "/sales/cancel" (controller: 'sale', action: 'cancel', method: 'POST')
 
     '/' (controller: 'login')
     '500' (view: '/error')

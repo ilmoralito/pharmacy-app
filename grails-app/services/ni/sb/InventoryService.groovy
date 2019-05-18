@@ -45,6 +45,18 @@ class InventoryService {
     }
   }
 
+  void restoreInventoryStock(final List<SaleDetail> salesDetail) {
+    salesDetail.each { SaleDetail saleDetail ->
+      Inventory inventory = Inventory.findByProduct(saleDetail.product)
+
+      if (inventory) {
+        inventory.stock += saleDetail.quantity
+      }
+
+      inventory.save(flush: true, insert: true)
+    }
+  }
+
   Inventory save(final Product product, final Integer stock, final BigDecimal salePrice) {
     new Inventory (
       product: product,

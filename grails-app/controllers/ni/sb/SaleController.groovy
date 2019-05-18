@@ -11,10 +11,13 @@ class SaleController {
   ClientService clientService
   SaleService saleService
 
-  static allowedMethods = [ save: 'POST' ]
+  static allowedMethods = [ save: 'POST', cancel: 'POST' ]
 
   def index() {
-    [sales: saleService.todaySales()]
+    [
+      sales: saleService.todaySales(),
+      canceledSales: saleService.todaySalesCancelations()
+    ]
   }
 
   def create() {}
@@ -65,5 +68,27 @@ class SaleController {
 
   def show(Sale sale) {
     [sale: sale]
+  }
+
+  @Secured(['ROLE_ADMIN'])
+  def cancel() {
+    Sale sale = saleService.get(params.id)
+
+    sale.canceled = new Date()
+    sale.reasonForCancellation = params.reasonForCancellation
+
+    if (!sale.save()) {
+      render(contentType: 'application/json') {
+          [ok: false, errors: sale.errors]
+      }
+
+      return
+    }
+
+    inventoryService.restoreInventoryStock(sale.salesDetail)
+
+    render(contentType: 'application/json') {
+        [ok: true, sale: sale]
+    }
   }
 }

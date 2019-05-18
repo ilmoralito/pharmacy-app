@@ -316,4 +316,9 @@ modules = {
     resource url: 'js/salesFetchInventory.js'
     resource url: 'js/salesSaveInstance.js'
   }
+
+  saleDetail {
+    dependsOn 'app'
+    resource url: 'js/saleDetailToCancel.js'
+  }
 }

@@ -114,6 +114,8 @@ body#background {
 
 textarea {
     resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
 }
 
 .nav-tabs {
