@@ -2,8 +2,12 @@ package ni.sb
 
 class CreditSale extends Sale {
   Client client
-  
+  Date cancellationDate
+  List payments
+
   static constraints = {
-    client nullable: false
+    cancellationDate nullable: true
   }
+
+  static hasMany = [ payments: Payment ]
 }

@@ -126,4 +126,18 @@ class SaleService {
 
     results
   }
+
+  List<CreditSale> creditSales(final Client client) {
+    CreditSale.where { client == client && canceled == null  }.list()
+  }
+
+  List<CreditSale> getCredits() {
+    CreditSale.where { canceled == null }.list()
+  }
+
+  CreditSale markDebtAsCanceled(final CreditSale creditSale) {
+    creditSale.cancellationDate = new Date()
+
+    creditSale.save(flush: true)
+  }
 }

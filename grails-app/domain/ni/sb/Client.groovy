@@ -13,11 +13,13 @@ class Client {
     source['lastName']?.capitalize()
   })
   String lastName
-  String address
+
   @BindUsing({ obj, source ->
     source['identificationCard']?.toUpperCase()
   })
   String identificationCard
+
+  String address
   String phones
   Boolean status = true
   User createdBy
@@ -29,9 +31,6 @@ class Client {
   static transients = ['springSecurityService']
 
   static constraints = {
-    firstName blank: false
-    lastName blank: false
-    address blank: false
     identificationCard blank: false, unique: true, maxSize: 16, minSize: 16
     phones nullable: true
   }
@@ -41,7 +40,9 @@ class Client {
   }
 
   def beforeValidate() {
-    createdBy = springSecurityService.currentUser
+    if (springSecurityService.isLoggedIn()) {
+      createdBy = springSecurityService.currentUser
+    }
   }
 
   String toString() { "$firstName $lastName" }

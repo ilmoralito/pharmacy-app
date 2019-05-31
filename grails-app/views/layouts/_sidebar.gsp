@@ -70,6 +70,9 @@
         </div>
     </div>
 
+    <li class="${controllerName == 'payment' ? 'active' : ''}">
+        <g:link controller="payment">Creditos</g:link>
+    </li>
     <li class="${controllerName == 'inventory' ? 'active' : ''}">
         <g:link controller="inventory">Inventario</g:link>
     </li>

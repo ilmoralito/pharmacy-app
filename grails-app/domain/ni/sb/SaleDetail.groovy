@@ -20,5 +20,5 @@ class SaleDetail {
 
   static belongsTo = [ sale: Sale ]
 
-  String toString() { item.product.name }
+  String toString() { product.name }
 }

@@ -1,5 +1,6 @@
 function makeHelper() {
     const salesDetailRoot = document.querySelector('#salesDetail');
+    const currentPaymentType = document.querySelector('#paymentType');
 
     function updateSalesDetail(dataset) {
         saleDetailList = [...saleDetailList, dataset];
@@ -75,7 +76,13 @@ function makeHelper() {
                 </tbody>
             </table>
 
-            <table class="table table-hover table-bordered">
+            ${currentPaymentType.checked && renderPaymentForm(saler)}
+
+            <button class="btn btn-primary" data-toggle="modal">Pagar</button>`;
+    }
+
+    function renderPaymentForm(saler) {
+        return `<table class="table table-hover table-bordered">
                 <col width="80%">
                 <col width="20%">
 
@@ -94,9 +101,7 @@ function makeHelper() {
                         <td>${saler.getChange()}</td>
                     </tr>
                 </tbody>
-            </table>
-
-            <button class="btn btn-primary" data-toggle="modal">Pagar</button>`;
+            </table>`;
     }
 
     function getSaleDetail(id) {

@@ -22,6 +22,11 @@ modules = {
     resource url: 'js/i18n/datepicker.es.js'
   }
 
+  toggleButton {
+    resource url: 'js/bootstrap-toggle.min.js'
+    resource url: 'css/bootstrap2-toggle.css'
+  }
+
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
@@ -87,10 +92,6 @@ modules = {
 
   adding {
     resource url:"js/adding.js"
-  }
-
-  pay{
-    resource url:"js/pay.js"
   }
 
   filterStock {
@@ -307,6 +308,7 @@ modules = {
 
   sales {
     dependsOn 'app'
+    dependsOn 'toggleButton'
     resource url: 'js/salesDetail.js'
     resource url: 'js/salesHelper.js'
     resource url: 'js/saleClients.js'
@@ -320,5 +322,10 @@ modules = {
   saleDetail {
     dependsOn 'app'
     resource url: 'js/saleDetailToCancel.js'
+  }
+
+  payment {
+    dependsOn 'app'
+    resource url: 'js/payment.js'
   }
 }

@@ -18,10 +18,9 @@ class Item {
       }
     }
     salePrice nullable: false, min: 0.1, scale: 2
-    totalBalance nullable:false
   }
 
-  def beforeInsert() {
+  def beforeValidate() {
     totalBalance = salePrice * quantity
   }
 

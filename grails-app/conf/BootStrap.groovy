@@ -17,7 +17,7 @@ class BootStrap {
             email: 'me@gmail.com',
             fullName: 'Arnulfo Blandon'
         ).save(failOnError: true)
-        
+
         User user1 = new User(
             username: 'testuser@email.com',
             password: '123',
@@ -33,12 +33,144 @@ class BootStrap {
 
         assert User.count() == 2
         assert Role.count() == 2
+
+        /////////////
+        // clients //
+        /////////////
+        Client juanPerez = new Client(
+          firstName: 'Juan',
+          lastName: 'Perez',
+          address: 'Mina el limon',
+          identificationCard: '291-290280-0001W',
+          phones: '8888 4444',
+          createdBy: user0
+        ).save(failOnError: true)
+
+        Client johnDoe = new Client(
+          firstName: 'John',
+          lastName: 'Doe',
+          address: 'Santa pancha',
+          identificationCard: '291-290980-0001W',
+          phones: '8888 4874',
+          createdBy: user0
+        ).save(failOnError: true)
+
+        Client adaKing = new Client(
+          firstName: 'Ada',
+          lastName: 'King',
+          address: 'Mimba',
+          identificationCard: '291-290981-0001W',
+          phones: '8888 4884',
+          createdBy: user0
+        ).save(failOnError: true)
+
+        //////////////////
+        // Merchandises //
+        //////////////////
+        Merchandise thermometer = new Merchandise(name: 'Termometro', location: 'E1-1').save(failOnError: true)
+        Merchandise stethoscope = new Merchandise(name: 'Estetoscopio', location: 'E1-2').save(failOnError: true)
+        Merchandise cottonBuds = new Merchandise(name: 'Isopos', location: 'E1-3').save(failOnError: true)
+        Merchandise scalpel = new Merchandise(name: 'Escalpelo', location: 'E1-4').save(failOnError: true)
+
+        ///////////////
+        // providers //
+        ///////////////
+        Provider umbrella = new Provider(
+          name: 'Umbrella',
+          address: 'Raccoon City, Arklay County',
+          phone: '2406 1998',
+          contact: new Contact(
+              firstName: 'Albert',
+              lastName: 'Wesker',
+              email: 'albert.wesker@umbrella.com',
+              telephoneNumber: '2406 1998'
+            )
+        ).save(failOnError: true)
+
+        MerchandiseSupplier.create(thermometer, umbrella)
+        MerchandiseSupplier.create(stethoscope, umbrella)
+        MerchandiseSupplier.create(cottonBuds, umbrella)
+        MerchandiseSupplier.create(scalpel, umbrella)
+
+        ////////////
+        // Orders //
+        ////////////
+        CashPaymentPurchaseOrder cashPaymentPurchaseOrder = new CashPaymentPurchaseOrder(
+          provider: umbrella,
+          invoiceNumber: '0001',
+          registeredBy: user0,
+          updatedBy: user0
+        )
+
+        cashPaymentPurchaseOrder
+          .addToItems(new Item(
+            product: thermometer,
+            quantity: 25,
+            purchasePrice: 20,
+            salePrice: 25,
+            totalBalance: 625
+          ))
+          .addToItems(new Item(
+            product: stethoscope,
+            quantity: 5,
+            purchasePrice: 400,
+            salePrice: 500,
+            totalBalance: 2500
+          ))
+          .addToItems(new Item(
+            product: cottonBuds,
+            quantity: 25,
+            purchasePrice: 30,
+            salePrice: 45,
+            totalBalance: 1125
+          ))
+          .addToItems(new Item(
+            product: scalpel,
+            quantity: 15,
+            purchasePrice: 120,
+            salePrice: 150,
+            totalBalance: 2250
+          ))
+          .save(flush: true, insert: true, failOnError: true)
+
+        ///////////////
+        // inventory //
+        ///////////////
+        cashPaymentPurchaseOrder.items.each { Item item ->
+          new Inventory(
+            product: item.product,
+            stock: item.quantity,
+            salePrice: item.salePrice,
+            registeredBy: user0,
+            updatedBy: user0
+          ).save(failOnError: true)
+        }
     }
   }
   def destroy = {
   }
 
   def registerregisterObjectMarshaller() {
+    JSON.registerObjectMarshaller(Payment) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['createdBy'] = [
+        id: it.createdBy.id,
+        fullName: it.createdBy.fullName
+      ]
+      output['updatedBy'] = [
+        id: it.updatedBy.id,
+        fullName: it.updatedBy.fullName
+      ]
+      output['amountPaid'] = it.amountPaid
+      output['balanceToDate'] = it.balanceToDate
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd')
+      output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd')
+
+      output
+    }
+
     JSON.registerObjectMarshaller(Inventory) {
       Map output = [:]
 
@@ -48,7 +180,7 @@ class BootStrap {
           name: "${it.product.name} ${it.product.presentation.name} ${it.product.quantity} ${it.product.measure.abbreviation} ${it.product.genericName ?: ''}"
         ]
       }
-      
+
       if (it.product.instanceOf(ni.sb.BrandBranded)) {
         output['product'] = [
           id: it.product.id,
@@ -193,19 +325,24 @@ class BootStrap {
       output
     }
 
-    JSON.registerObjectMarshaller(SaleToClient) {
+    JSON.registerObjectMarshaller(CreditSale) {
       Map output = [:]
 
       output['id'] = it.id
-      output['user'] = [id: it.user.id, fullName: fullNameToShortName(it.user.fullName)]
-      output['hour'] = it.dateCreated.format('HH:mm')
-      output['balance'] = it.balance
+      output['client'] = it.client
+      output['registeredBy'] = [id: it.registeredBy.id, fullName: it.registeredBy.fullName]
+      output['cashReceived'] = it.cashReceived
+      output['turned'] = it.turned
+      output['totalBalance'] = it.totalBalance
       output['canceled'] = it.canceled
-      output['client'] = [id: it.client.id, fullName: it.client.fullName]
-      output['typeOfPurchase'] = it.typeOfPurchase
-      output['status'] = it.status
+      output['canceledBy'] = it.canceledBy
+      output['reasonForCancellation'] = it.reasonForCancellation
+      output['cancellationDate'] = it.cancellationDate
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd')
+      output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd')
 
       output
+
     }
 
     JSON.registerObjectMarshaller(Provider) {
@@ -274,13 +411,5 @@ class BootStrap {
 
       output
     }
-  }
-
-  def fullNameToShortName(final String fullName) {
-    List<String> names = fullName.tokenize(' ')
-    final String firstName = names[0]
-    final String lastName = names[1]
-
-    "${firstName[0].toUpperCase()}. ${lastName}"
   }
 }

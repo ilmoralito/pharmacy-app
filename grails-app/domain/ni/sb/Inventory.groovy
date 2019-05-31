@@ -26,7 +26,13 @@ class Inventory {
   }
 
   def beforeValidate() {
-    registeredBy = springSecurityService.currentUser
+    if (springSecurityService.isLoggedIn()) {
+      registeredBy = springSecurityService.currentUser
+      updatedBy = springSecurityService.currentUser
+    }
+  }
+
+  def beforeUpdate() {
     updatedBy = springSecurityService.currentUser
   }
 

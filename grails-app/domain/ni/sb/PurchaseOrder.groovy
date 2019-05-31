@@ -30,8 +30,15 @@ class PurchaseOrder {
   static hasMany = [items: Item]
 
   def beforeValidate() {
-    registeredBy = springSecurityService.currentUser
-    updatedBy = springSecurityService.currentUser
+    if (springSecurityService.isLoggedIn()) {
+      registeredBy = springSecurityService.currentUser
+      updatedBy = springSecurityService.currentUser
+    }
+
+    balanceToPay = 1.0
+  }
+
+  def afterInsert() {
     balanceToPay = items.totalBalance.sum()
   }
 

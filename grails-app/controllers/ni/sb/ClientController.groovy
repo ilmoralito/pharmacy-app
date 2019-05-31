@@ -27,21 +27,21 @@ class ClientController {
   def save() {
     Client client = new Client(request.JSON ?: params)
 
-    if (client.save()) {
+    if (!client.save()) {
       render(contentType: 'application/json') {
-        [status: 'ok', client: client]
+        [status: 'fail', errors: client.errors]
       }
 
       return
     }
 
     render(contentType: 'application/json') {
-      [status: 'fail', errors: client.errors]
+      [status: 'ok', client: client]
     }
   }
 
   def show(Client client) {
-    [client:client]
+    [client: client]
   }
 
   def update(Client client) {
@@ -54,11 +54,20 @@ class ClientController {
     }
 
     flash.message = 'Datos del cliente actualizado'
+
     redirect action: 'show', id: client.id
   }
 
   def history(Client client) {
     [sales: saleService.summary(client)]
+  }
+
+  def creditHistory(Client client) {
+    [sales: saleService.creditSales(client)]
+  }
+
+  def saleDetail(Sale sale) {
+    [sale: sale]
   }
 
   def register(Client client) {

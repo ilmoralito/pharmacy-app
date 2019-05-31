@@ -15,24 +15,29 @@
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="paymentType">Tipo de venta</label>
-                    <select name="paymentType" id="paymentType" class="form-control">
-                        <option value="cash payment">Contado</option>
-                        <option value="credit payment">Credito</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label for="client">Cliente</label>
-                    <select name="client" id="client" class="form-control"></select>
+                    <select
+                        name="client"
+                        id="client"
+                        class="form-control"
+                    ></select>
                 </div>
 
-                <button id="toggleForm" class="btn btn-default btn-xs">Agregar cliente</button>
+                <button id="toggleForm" class="btn btn-default btn-xs">
+                    Agregar cliente
+                </button>
 
-                <form name="form" class="hide" style="margin-top: 10px;" autocomplete="off">
+                <form
+                    name="form"
+                    class="hide"
+                    style="margin-top: 10px;"
+                    autocomplete="off"
+                >
                     <g:render template="/client/form" />
 
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="submit" class="btn btn-primary">
+                        Enviar
+                    </button>
                 </form>
             </div>
 

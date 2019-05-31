@@ -20,6 +20,8 @@ class Contact {
     version false
   }
 
+  static belongsTo = [provider: Provider]
+
   String toString() {
     "${firstName} ${lastName}"
   }

@@ -1,6 +1,7 @@
 package ni.sb
 
-class Sale {
+class Sale implements Serializable {
+
   transient springSecurityService
 
   User registeredBy
@@ -17,10 +18,7 @@ class Sale {
   static transients = ['springSecurityService']
 
   static constraints = {
-    registeredBy nullable: false
-    cashReceived nullable: false
-    turned nullable: false
-    totalBalance nullable: false, scale: 2
+    totalBalance scale: 2
     canceled nullable: true
     canceledBy nullable: true
     reasonForCancellation maxSize: 10000, nullable: true, validator: { reasonForCancellation, obj ->
@@ -39,13 +37,23 @@ class Sale {
 
   def beforeValidate() {
     registeredBy = springSecurityService.currentUser
-    totalBalance = (salesDetail.total.sum() * 0.15) + salesDetail.total.sum()
+    totalBalance = getBalance()
   }
 
   def beforeUpdate() {
     if (canceled) {
       canceledBy = springSecurityService.currentUser
     }
+  }
+
+  def getBalance() {
+    BigDecimal total = getSubtotal()
+
+    total + (total * 0.15)
+  }
+
+  def getSubtotal() {
+    salesDetail.total.sum()
   }
 
   String toString() { dateCreated }
