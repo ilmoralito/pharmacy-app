@@ -7,13 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleSubmit(event) {
         event.preventDefault();
 
-        const formData = new FormData(event.target);
-        const options = {
-            method: 'POST',
-            body: formData
-        };
+        const formData = new FormData(this);
 
-        fetch('providers', options)
+        fetch('providers', { method: 'POST', body: formData })
             .then(response => response.json())
             .then(json => {
                 fetchProviders().then(providers => {

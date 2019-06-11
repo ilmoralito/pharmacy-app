@@ -42,7 +42,7 @@ class ProviderController {
       telephoneNumber: params.telephoneNumber
     )
 
-    if (!contact.save()) {
+    if (!contact.validate(['firstName', 'lastName', 'email', 'telephoneNumber'])) {
       render(contentType: 'application/json') {
         [status: 'fail', errors: contact.errors]
       }
