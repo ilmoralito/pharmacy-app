@@ -7,30 +7,10 @@
         <r:require modules="bootstrap-css, bootstrap-collapse, createOrder" />
     </head>
     <body>
-        <g:render template="/toddler/toddler" />
+        <input type="hidden" id="providerId" value="${params.providerId}" />
+        <input type="hidden" id="paymentType" value="${params.paymentType}" />
 
-        <div class="row" style="margin-bottom: 10px;">
-            <div class="col-md-6">
-                <a href="#" id="trigger" class="btn btn-default">Editar orden</a>
-            </div>
-            <div class="col-md-6">
-                <div class="pull-right">
-                    <a href="#" id="remove" class="btn btn-warning">Eliminar orden</a>
-                    <a href="#" id="toConfirm" class="btn btn-primary">Confirmar</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <input
-                type="text"
-                id="filter"
-                class="form-control"
-                placeholder="Filtrar..."
-            />
-        </div>
-
-        <div id="products" class="products-list"></div>
+        <div id="products"></div>
         <div id="items"></div>
     </body>
 </html>

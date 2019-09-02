@@ -23,42 +23,9 @@
                 <td>${order.invoiceNumber}</td>
             </tr>
             <tr>
-                <td>Saldo</td>
-                <td>
-                    <g:formatNumber number="${order.balanceToPay}" type="number" maxFractionDigits="2" />
-                </td>
-            </tr>
-            <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
-                <tr>
-                    <td>Fecha de pago</td>
-                    <td>
-                        <g:formatDate date="${order.paymentDate}" format="yyyy-MM-dd" />
-                    </td>
-                </tr>
-                <g:if test="${!order.canceled}">
-                    <tr>
-                        <td>Dias para paga</td>
-                        <td>
-                            <pharmacyApp:daysToPay paymentDate="${order.paymentDate}" />
-                        </td>
-                    </tr>
-                </g:if>
-                <tr>
-                    <td>Cancelado</td>
-                    <td>
-                        <g:if test="${!order.canceled}">
-                            <button id="cancel" data-order-id="${order.id}" class="btn btn-primary btn-xs">Cancelar</button>
-                        </g:if>
-                        <g:else>
-                            <g:formatDate date="${order.canceled}" format="yyyy-MM-dd hh:mm" />
-                        </g:else>
-                    </td>
-                </tr>
-            </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
-            <tr>
                 <td>Fecha de creación</td>
                 <td>
-                    <g:formatDate date="${order.dateCreated}" format="yyyy-MM-dd" />
+                    <g:formatDate date="${order.dateCreated}" format="yyyy-MM-dd hh:mm" />
                 </td>
             </tr>
             <tr>
@@ -75,16 +42,57 @@
                 <td>Actualizado por</td>
                 <td>${order.updatedBy.fullName}</td>
             </tr>
-            <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
+        </tbody>
+    </table>
+
+    <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
+        <table class="table table-hover table-bordered">
+            <caption>Datos de cancelacion</caption>
+
+            <col width="25%">
+            <col width="75%">
+
+            <tbody>
+                <tr>
+                    <td>Saldo a pagar</td>
+                    <td>
+                        <g:formatNumber number="${order.balanceToPay}" type="number" maxFractionDigits="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha de pago</td>
+                    <td>
+                        <g:formatDate date="${order.paymentDate}" format="yyyy-MM-dd" />
+                    </td>
+                </tr>
+                <g:if test="${!order.canceled}">
+                    <tr>
+                        <td>Dias para pagar</td>
+                        <td>
+                            <pharmacyApp:daysToPay paymentDate="${order.paymentDate}" />
+                        </td>
+                    </tr>
+                </g:if>
+                <tr>
+                    <td style="vertical-align: middle;">Fecha de cancelación</td>
+                    <td>
+                        <g:if test="${!order.canceled}">
+                            <button id="cancel" data-order-id="${order.id}" class="btn btn-primary">Cancelar</button>
+                        </g:if>
+                        <g:else>
+                            <g:formatDate date="${order.canceled}" format="yyyy-MM-dd hh:mm" />
+                        </g:else>
+                    </td>
+                </tr>
                 <g:if test="${order.canceled}">
                     <tr>
                         <td>Cancelado por</td>
                         <td>${order.canceledBy.fullName}</td>
                     </tr>
                 </g:if>
-            </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
 
     <table class="table table-hover table-bordered">
         <caption>Artículos</caption>

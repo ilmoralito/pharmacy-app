@@ -92,6 +92,21 @@ class BootStrap {
         MerchandiseSupplier.create(cottonBuds, umbrella)
         MerchandiseSupplier.create(scalpel, umbrella)
 
+        Provider ramos = new Provider(
+          name: 'Ramos',
+          address: 'Managua',
+          phone: '2486 1998',
+          contact: new Contact(
+              firstName: 'Ada',
+              lastName: 'Wong',
+              email: 'ada.wong@ramos.com',
+              telephoneNumber: '2486 1998'
+            )
+        ).save(failOnError: true)
+
+        MerchandiseSupplier.create(thermometer, umbrella)
+        MerchandiseSupplier.create(scalpel, umbrella)
+
         ////////////
         // Orders //
         ////////////
@@ -234,7 +249,7 @@ class BootStrap {
       output['balanceToPay'] = it.balanceToPay
       output['paymentDate'] = it.paymentDate
       output['canceled'] = it.canceled
-      output['canceledBy'] = [id: it.canceledBy.id, fullName: it.canceledBy.fullName]
+      output['canceledBy'] = [id: it?.canceledBy?.id, fullName: it?.canceledBy?.fullName]
       output['dateCreated'] = it.dateCreated
       output['lastUpdated'] = it.lastUpdated
 
@@ -249,7 +264,6 @@ class BootStrap {
       output['registeredBy'] = [id: it.registeredBy.id, fullName: it.registeredBy.fullName]
       output['updatedBy'] = [id: it.updatedBy.id, fullName: it.updatedBy.fullName]
       output['invoiceNumber'] = it.invoiceNumber
-      output['balanceToPay'] = it.balanceToPay
       output['dateCreated'] = it.dateCreated
       output['lastUpdated'] = it.lastUpdated
 

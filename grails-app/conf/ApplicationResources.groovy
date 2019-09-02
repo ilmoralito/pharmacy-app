@@ -72,7 +72,7 @@ modules = {
     resource url:"js/chosenLib.js"
   }
 
-  chosen { 
+  chosen {
     resource url:"js/chosen.js"
     resource url:"css/chosen.css"
   }
@@ -267,32 +267,15 @@ modules = {
 
   orders {
     dependsOn 'app'
-    dependsOn 'toddler'
-    dependsOn 'datepicker'
-    resource url: 'js/orderHelpers.js'
-    resource url: 'js/orderToggleType.js'
-    resource url: 'js/orders.js'
-    resource url: 'js/orderDatepicker.js'
+    resource url: 'js/selectOrderProvider.js'
+    resource url: 'js/orderFilter.js';
   }
 
   createOrder {
     dependsOn 'app'
-    dependsOn 'helper'
-    dependsOn 'toddler'
-    dependsOn 'notifier'
     dependsOn 'datepicker'
-    resource url: 'js/orderHelpers.js'
-    resource url: 'js/orderToggleType.js'
-    resource url: 'js/orderSetProducts.js'
-    resource url: 'js/orderUpdate.js'
-    resource url: 'js/orderRemove.js'
-    resource url: 'js/orderConfirm.js'
-    resource url: 'js/orderSetForm.js'
-    resource url: 'js/orderSetItems.js'
+    resource url: 'js/orderProducts.js'
     resource url: 'js/orderDatepicker.js'
-    resource url: 'js/orderFilter.js'
-    resource url: 'js/orderItem.js'
-    resource url: 'js/orderActions.js'
   }
 
   orderShow {

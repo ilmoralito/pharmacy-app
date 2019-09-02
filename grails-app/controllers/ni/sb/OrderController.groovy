@@ -19,7 +19,7 @@ class OrderController {
   def list() {
     [
       orders: orderService.list(),
-      orderForm: createOrderForm()
+      providers: providerService.providersWithAtLeastOneProduct()
     ]
   }
 
@@ -28,26 +28,18 @@ class OrderController {
   }
 
   def cancel() {
-    CreditPaymentPurchaseOrder creditPaymentPurchaseOrder = orderService.get(params.long('id'))
+    CreditPaymentPurchaseOrder order = orderService.get(params.long('id'))
 
-    creditPaymentPurchaseOrder.canceled = new Date()
+    order.canceled = new Date()
 
-    creditPaymentPurchaseOrder.save()
+    order.save()
 
     render(contentType: 'application/json') {
-        [ok: true, creditPaymentPurchaseOrder: creditPaymentPurchaseOrder]
+        [ok: true, order: order]
     }
   }
 
-  def create() {
-    Provider provider = providerService.get(params.long('provider'))
-    List<Product> products = providerService.getProducts(provider)
-
-    request.withFormat {
-      html { [ orderForm: createOrderForm() ] }
-      json { render products as JSON }
-    }
-  }
+  def create() {}
 
   def save() {
     JSONObject order = request.JSON.order
@@ -72,7 +64,7 @@ class OrderController {
         quantity: item.quantity,
         purchasePrice: item.purchasePrice,
         salePrice: item.salePrice,
-        totalBalance: item.balanceToPay
+        totalBalance: item.totalBalance
       )
     }
 
@@ -94,20 +86,5 @@ class OrderController {
         [ok: true, purchaseOrder: purchaseOrder]
     }
   }
-
-  def orderByInvoiceNumber() {
-    render(contentType: 'application/json') {
-        [order: orderService.byInvoiceNumber(params.invoiceNumber)]
-    }
-  }
-
-  private OrderForm createOrderForm() {
-    new OrderForm (
-      providers: providerService.list()
-    )
-  }
 }
 
-class OrderForm {
-  List<Provider> providers
-}

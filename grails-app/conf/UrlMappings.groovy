@@ -36,6 +36,7 @@ class UrlMappings {
     "/providers/$id/medicines" (controller: 'providerMedicine', action: 'save', method: 'POST')
     "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'list', method: 'GET')
     "/providers/$id/branders" (controller: 'providerBrandBranded', action: 'save', method: 'POST')
+    "/providers/$id/products" (controller: 'provider', action: 'fetchProviderProducts', method: 'GET')
 
     ///////////////////
     // presentations //
@@ -109,11 +110,10 @@ class UrlMappings {
     // order //
     ///////////
     '/orders' (controller: 'order', action: 'list', method: 'GET')
+    '/orders' (controller: 'order', action: 'save', method: 'POST')
     "/orders/$id" (controller: 'order', action: 'show', method: 'GET')
     "/orders/$id/cancel" (controller: 'order', action: 'cancel', method: 'GET')
-    "/orders/$provider/create" (controller: 'order', action: 'create', method: 'GET')
-    '/orders' (controller: 'order', action: 'save', method: 'POST')
-    "/order/by/${invoiceNumber}" (controller: 'order', action: 'orderByInvoiceNumber', method: 'GET')
+    "/orders/create/$providerId/type/$paymentType" (controller: 'order', action: 'create', method: 'GET')
 
     ///////////////
     // inventory //

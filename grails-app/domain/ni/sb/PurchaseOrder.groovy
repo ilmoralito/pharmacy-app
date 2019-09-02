@@ -7,7 +7,6 @@ class PurchaseOrder {
   User registeredBy
   User updatedBy
   String invoiceNumber
-  BigDecimal balanceToPay
   Date dateCreated
   Date lastUpdated
   List items
@@ -18,7 +17,6 @@ class PurchaseOrder {
     provider nullable: false
     registeredBy nullable: false
     invoiceNumber blank: false, unique: true
-    balanceToPay blank: false, min: 1.0
   }
 
   static mapping = {
@@ -34,20 +32,11 @@ class PurchaseOrder {
       registeredBy = springSecurityService.currentUser
       updatedBy = springSecurityService.currentUser
     }
-
-    balanceToPay = 1.0
-  }
-
-  def afterInsert() {
-    balanceToPay = items.totalBalance.sum()
   }
 
   def beforeUpdate() {
     updatedBy = springSecurityService.currentUser
-    balanceToPay = items.totalBalance.sum()
   }
 
-  String toString() {
-    invoiceNumber
-  }
+  String toString() { invoiceNumber }
 }

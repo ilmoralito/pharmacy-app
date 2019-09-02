@@ -7,14 +7,14 @@
     <r:require modules="bootstrap-css, bootstrap-collapse, orders"/>
 </head>
 <body>
-    <g:render template="/toddler/toddler" />
-
     <div class="row">
-        <div class="col-md-12">
-            <div class="pull-right">
-                <a href="#" id="filter" class="btn btn-default">Filtrar</a>
-                <a href="#" id="trigger" class="btn btn-primary">Crear orden</a>
-            </div>
+        <div class="col-md-6">
+            <input id="filter" class="form-control" placeholder="Filtrar por nombre, tipo o factura..." />
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#providersModal">
+                Crear orden
+            </button>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
                     <th>Tipo</th>
                     <th>Factura</th>
                     <th>Fecha de pago</th>
-                    <th>Saldo</th>
+                    <th>Saldo a pagar</th>
                     <th>Cancelado</th>
                     <th></th>
                 </tr>
@@ -53,14 +53,16 @@
                             </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
                         </td>
                         <td>
-                            <g:formatNumber number="${order.balanceToPay}" type="number" maxFractionDigits="2" />
+                            <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
+                                <g:formatNumber number="${order.balanceToPay}" type="number" maxFractionDigits="2" />
+                            </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
                         </td>
                         <td>
                             <pharmacyApp:isCreditPaymentPurchaseOrderInstance order="${order}">
-                                <formatDate date="${order.canceled}" format="yyyy-MM-dd" />
+                                <g:formatDate date="${order.canceled}" format="yyyy-MM-dd" />
                             </pharmacyApp:isCreditPaymentPurchaseOrderInstance>
                         </td>
-                        <td class="text-center">
+                        <td data-id="${order.id}" class="text-center">
                             <g:link action="show" id="${order.id}">Ver</g:link>
                         </td>
                     </tr>

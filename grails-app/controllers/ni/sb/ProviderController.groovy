@@ -5,6 +5,9 @@ import grails.converters.JSON
 
 @Secured(['ROLE_ADMIN'])
 class ProviderController {
+
+  ProviderService providerService
+
   static defaultAction = 'list'
   static allowedMethods = [
     update: 'POST',
@@ -75,5 +78,13 @@ class ProviderController {
 
     flash.message = 'Datos de proveedor actualizados'
     redirect action: 'show', id: provider.id
+  }
+
+  def fetchProviderProducts(Provider provider) {
+    List<Product> products = providerService.fetchProducts(provider)
+
+    render(contentType: 'application/json') {
+      products
+    }
   }
 }

@@ -1,14 +1,4 @@
 <div class="form-group">
-    <label for="provider">Proveedor</label>
-    <g:select
-        name="provider"
-        from="${orderForm.providers}"
-        optionKey="id"
-        class="form-control"
-    />
-</div>
-
-<div class="form-group">
     <label for="type">Tipo de compra</label>
     <g:select
         name="type"

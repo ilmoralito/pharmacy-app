@@ -12,8 +12,4 @@ class OrderService {
   PurchaseOrder get(Serializable id) {
     PurchaseOrder.get(id)
   }
-
-  PurchaseOrder byInvoiceNumber(String invoiceNumber) {
-    PurchaseOrder.findByInvoiceNumber(invoiceNumber)
-  }
 }
