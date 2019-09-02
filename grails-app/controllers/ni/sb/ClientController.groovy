@@ -25,6 +25,9 @@ class ClientController {
   }
 
   def save() {
+    println '>' * 100
+    println request.JSON
+    println '<' * 100
     Client client = new Client(request.JSON ?: params)
 
     if (!client.save()) {

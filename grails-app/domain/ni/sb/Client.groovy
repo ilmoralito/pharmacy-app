@@ -31,8 +31,11 @@ class Client {
   static transients = ['springSecurityService']
 
   static constraints = {
+    firstName blank: false
+    lastName blank: false
     identificationCard blank: false, unique: true, maxSize: 16, minSize: 16
-    phones nullable: true
+    address blank: false
+    phones blank: true
   }
 
   static mapping = {
@@ -40,10 +43,12 @@ class Client {
   }
 
   def beforeValidate() {
-    if (springSecurityService.isLoggedIn()) {
+    if (springSecurityService.isLoggedIn() && !createdBy) {
       createdBy = springSecurityService.currentUser
     }
   }
+
+  String getFullName() { "$firstName $lastName" }
 
   String toString() { "$firstName $lastName" }
 }

@@ -4,12 +4,12 @@
         <meta charset="UTF-8" />
         <meta name="layout" content="main" />
         <title>Ventas</title>
-        <r:require modules="bootstrap-css, bootstrap-collapse, app" />
+        <r:require modules="bootstrap-css, bootstrap-collapse, saleList" />
     </head>
     <body>
         <div class="row">
             <div class="col-md-12">
-                <a href="/pharmacyApp/sales/create" class="btn btn-primary pull-right">Vender</a>
+                <a href="#" class="btn btn-primary pull-right" data-toggle="modal" data-target="#saleModal">Vender</a>
             </div>
         </div>
 

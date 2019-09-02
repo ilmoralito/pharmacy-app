@@ -289,6 +289,11 @@ modules = {
     resource url: 'js/inventory.js'
   }
 
+  saleList {
+    dependsOn 'app'
+    resource url: 'js/saleList.js'
+  }
+
   sales {
     dependsOn 'app'
     dependsOn 'toggleButton'

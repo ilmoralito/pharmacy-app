@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="firstName">Primer nombre</label>
+    <label for="firstName">Nombres</label>
     <g:textField
         name="firstName"
         value="${client?.firstName}"
@@ -9,22 +9,12 @@
 </div>
 
 <div class="form-group">
-    <label for="lastName">Segundo apellido</label>
+    <label for="lastName">Apellidos</label>
     <g:textField
         name="lastName"
         value="${client?.lastName}"
         class="form-control"
         autofocus="true"
-    />
-</div>
-
-<div class="form-group">
-    <label for="address">Dirección</label>
-    <g:textArea
-        name="address"
-        value="${client?.address}"
-        class="form-control"
-        placeholder="Ej. Mina el limón, Arlen Siu, dirección..."
     />
 </div>
 
@@ -35,7 +25,7 @@
         name="identificationCard"
         value="${client?.identificationCard}"
         class="form-control"
-        placeholder="Ej. 291-170180-0001W"
+        placeholder="Formato: xxx-xxxxxx-xxxxx"
         maxLength="16"
         minLength="16"
     />
@@ -48,6 +38,16 @@
         class="form-control"
         value="${client?.phones}"
         placeholder="Ej. (c)8888 7777, (m)9898 8888, ..."
+    />
+</div>
+
+<div class="form-group">
+    <label for="address">Dirección</label>
+    <g:textArea
+        name="address"
+        value="${client?.address}"
+        class="form-control"
+        placeholder="Ej. Mina el limón, Arlen Siu, dirección..."
     />
 </div>
 

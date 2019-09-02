@@ -1,7 +1,6 @@
 package ni.sb
 
 class CreditSale extends Sale {
-  Client client
   Date cancellationDate
   List payments
 

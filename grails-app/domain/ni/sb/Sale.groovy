@@ -4,6 +4,7 @@ class Sale implements Serializable {
 
   transient springSecurityService
 
+  Client client
   User registeredBy
   BigDecimal cashReceived
   BigDecimal turned

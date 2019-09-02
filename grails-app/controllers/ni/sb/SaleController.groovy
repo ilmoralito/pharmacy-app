@@ -16,6 +16,7 @@ class SaleController {
   def index() {
     [
       sales: saleService.todaySales(),
+      clients: clientService.listEnabled(),
       canceledSales: saleService.todaySalesCancelations()
     ]
   }
