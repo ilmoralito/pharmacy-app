@@ -57,6 +57,14 @@ const InventoryComponent = {
     const rows = this.inventory.map(this.itemToRow).join("");
 
     this.root.innerHTML = `<table class="table table-hover">
+      <thead>
+          <tr>
+              <th>
+                  <input class="form-control" placeholder="Filtrar...">
+              </th>
+          </tr>
+      </thead>
+
       <tbody>${rows}</tbody>
     </table>`;
   },
@@ -95,6 +103,24 @@ const InventoryComponent = {
     SaleDetailComponent.setSaleDetail(item);
   },
 
+  handleKeyUp(event) {
+    const inventory = this.filter(event.target.value);
+
+    this.sync(inventory);
+  },
+
+  filter(criteria) {
+    return this.inventory.filter(item =>
+      item.product.name.toLowerCase().includes(criteria.toLowerCase())
+    );
+  },
+
+  sync(inventory) {
+    const items = inventory.map(this.itemToRow).join("");
+
+    this.root.querySelector("tbody").innerHTML = items;
+  },
+
   removeItem(productId) {
     const inventory = Array.from(this.inventory);
     const index = inventory.findIndex(item => item.product.id === +productId);
@@ -126,6 +152,8 @@ const InventoryComponent = {
       .catch(error => console.error(error.message));
 
     this.root.addEventListener("click", this.handleClick.bind(this));
+
+    this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
   }
 };
 
