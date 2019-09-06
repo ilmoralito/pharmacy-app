@@ -27,36 +27,24 @@
             <col width="25%">
             <col width="75%">
 
-            <caption>Venta</caption>
+            <caption>Detalle de registro</caption>
 
             <tbody>
                 <tr>
-                    <td>Cliente</td>
-                    <td>${sale.client}</td>
+                    <td>Atendido por</td>
+                    <td>${sale.registeredBy}</td>
                 </tr>
                 <tr>
-                    <td>Tipo</td>
+                    <td>Fecha de creación</td>
                     <td>
-                        <pharmacyApp:saleType sale="${sale}" />
+                        <g:formatDate date="${sale.dateCreated}" format="yyyy-MM-dd hh:mm" />
                     </td>
                 </tr>
-                <g:if test="${sale.instanceOf(ni.sb.CashSale)}">
-                    <tr>
-                        <td>Efectivo recibido</td>
-                        <td>${sale.cashReceived}</td>
-                    </tr>
-                    <tr>
-                        <td>Vuelto</td>
-                        <td>${sale.turned}</td>
-                    </tr>
-                </g:if>
                 <tr>
-                    <td>IVA</td>
-                    <td>15%</td>
-                </tr>
-                <tr>
-                    <td>Saldo</td>
-                    <td>${sale.totalBalance}</td>
+                    <td>Actualización mas reciente</td>
+                    <td>
+                        <g:formatDate date="${sale.lastUpdated}" format="yyyy-MM-dd hh:mm" />
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -87,28 +75,41 @@
             </table>
         </g:if>
 
+
         <table class="table table-hover table-bordered">
             <col width="25%">
             <col width="75%">
 
-            <caption>Detalle de registro</caption>
+            <caption>Venta</caption>
 
             <tbody>
                 <tr>
-                    <td>Atendido por</td>
-                    <td>${sale.registeredBy}</td>
+                    <td>Cliente</td>
+                    <td>${sale.client}</td>
                 </tr>
                 <tr>
-                    <td>Fecha de creación</td>
+                    <td>Tipo</td>
                     <td>
-                        <g:formatDate date="${sale.dateCreated}" format="yyyy-MM-dd hh:mm" />
+                        <pharmacyApp:saleType sale="${sale}" />
                     </td>
                 </tr>
+                <g:if test="${sale.instanceOf(ni.sb.CashSale)}">
+                    <tr>
+                        <td>Efectivo recibido</td>
+                        <td>${sale.cashReceived}</td>
+                    </tr>
+                    <tr>
+                        <td>Vuelto</td>
+                        <td>${sale.turned}</td>
+                    </tr>
+                </g:if>
                 <tr>
-                    <td>Actualización mas reciente</td>
-                    <td>
-                        <g:formatDate date="${sale.lastUpdated}" format="yyyy-MM-dd hh:mm" />
-                    </td>
+                    <td>IVA</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>Saldo</td>
+                    <td>${sale.totalBalance}</td>
                 </tr>
             </tbody>
         </table>
