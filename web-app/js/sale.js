@@ -82,11 +82,38 @@ const InventoryComponent = {
   handleClick(event) {
     event.preventDefault();
 
-    if (event.target.nodeName !== "A") return false;
+    const target = event.target;
 
-    const item = Object.assign({}, event.target.dataset);
+    if (target.nodeName !== "A") return false;
+
+    // Update inventory list
+    this.removeItem(target.dataset.productId);
+
+    // Update sale details
+    const item = Object.assign({}, target.dataset);
 
     SaleDetailComponent.setSaleDetail(item);
+  },
+
+  removeItem(productId) {
+    const inventory = Array.from(this.inventory);
+    const index = inventory.findIndex(item => item.product.id === +productId);
+
+    inventory.splice(index, 1);
+
+    this.inventory = inventory;
+
+    this.render();
+  },
+
+  restoreItem(item) {
+    const inventory = Array.from(this.inventory);
+
+    const newInventory = inventory.concat(item);
+
+    this.inventory = newInventory;
+
+    this.render();
   },
 
   init() {
@@ -177,6 +204,8 @@ const SaleDetailComponent = {
     if (target.nodeName !== "BUTTON") return false;
 
     if (target.textContent === "Eliminar") {
+      this.restoreProductToInventory(target.dataset.id);
+
       this.removeItem(target.dataset.id);
     }
 
@@ -196,6 +225,19 @@ const SaleDetailComponent = {
     this.saleDetail = saleDetail;
 
     this.render();
+  },
+
+  restoreProductToInventory(productId) {
+    const saleDetail = Array.from(this.saleDetail);
+    const item = saleDetail.find(item => item.productId === productId);
+    const product = {
+      product: { id: item.productId, name: item.productName },
+      stock: item.stock,
+      salePrice: item.salePrice,
+      quantity: item.quantity
+    };
+
+    InventoryComponent.restoreItem(product);
   },
 
   handleInput(event) {
