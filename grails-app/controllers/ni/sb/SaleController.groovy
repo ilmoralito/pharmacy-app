@@ -63,9 +63,7 @@ class SaleController {
     }
 
     inventoryService.updateInventoryStock(sale.salesDetail)
-println '>' * 100
-println sale
-println '>' * 100
+
     render(contentType: 'application/json') {
       [ok: true, sale: sale]
     }
