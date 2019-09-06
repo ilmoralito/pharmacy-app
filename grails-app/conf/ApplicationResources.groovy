@@ -284,11 +284,6 @@ modules = {
     resource url: 'js/inventory.js'
   }
 
-  sales {
-    dependsOn 'app'
-    resource url: 'js/sales.js'
-  }
-
   sale {
     dependsOn 'app'
     resource url: 'js/sale.js'
@@ -301,6 +296,11 @@ modules = {
     // resource url: 'js/salesFilter.js'
     // resource url: 'js/salesFetchInventory.js'
     // resource url: 'js/salesSaveInstance.js'
+  }
+
+  sales {
+    dependsOn 'app'
+    resource url: 'js/sales.js'
   }
 
   saleDetail {
