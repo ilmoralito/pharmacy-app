@@ -158,6 +158,7 @@ const SaleDetailComponent = {
           max="${item.stock}"
           value="${item.quantity}"
           data-product-id="${item.productId}"
+          data-product-stock="${item.stock}"
           class="form-control"
         />
       </td>
@@ -200,11 +201,24 @@ const SaleDetailComponent = {
   handleInput(event) {
     const target = event.target;
     const saleDetail = [...this.saleDetail];
-    const productId = target.dataset.productId;
+    const { productId, productStock } = Object.assign({}, target.dataset);
     const item = this.saleDetail.find(item => item.productId === productId);
     const index = this.saleDetail.findIndex(
       item => item.productId === productId
     );
+
+    if (+target.value > productStock) {
+      const message = `
+        Cantidad excede existencias del producto\n
+        Existencias actuales ${productStock}`;
+
+      alert(message);
+
+      this.render();
+
+      return false;
+    }
+
     const newItem = Object.assign({}, item, {
       quantity: target.value,
       total: target.value * item.salePrice
