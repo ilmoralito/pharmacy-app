@@ -1,21 +1,99 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const inventory = document.querySelector('#inventory');
+const SaleComponent = {
+  root: document.querySelector("#root"),
 
-    if (!inventory) return;
+  form: this.root.querySelector("form"),
 
-    inventory.addEventListener('click', handleClick);
+  client: document.querySelector("#client"),
 
-    function handleClick(event) {
-        event.preventDefault();
+  trigger: document.querySelector(".help-block a"),
 
-        const target = event.target;
+  confirm: document.querySelector(".modal-footer button"),
 
-        if (target.nodeName !== 'A') return;
+  init() {
+    this.trigger.addEventListener("click", this.handleClick.bind(this));
 
-        const helper = makeHelper();
-        const inventoryHelper = makeInventoryHelper();
+    this.form.addEventListener("submit", this.handleSubmit.bind(this));
 
-        helper.updateSalesDetail({ ...target.dataset });
-        inventoryHelper.updateInventoryList();
+    this.confirm.addEventListener("click", this.handleConfirm.bind(this));
+  },
+
+  handleClick(event) {
+    event.preventDefault();
+
+    this.toggle();
+  },
+
+  handleCancelClick(event) {
+    event.preventDefault();
+
+    const target = event.target;
+
+    if (target.nodeName !== "A") return false;
+
+    this.root.innerHTML = "";
+  },
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    fetch("/pharmacyApp/clients", {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(formData))
+    })
+      .then(response => response.json())
+      .then(json => {
+        if (json.status !== "ok") {
+          alert(json.errors.errors.map(error => error.message).join("\n"));
+
+          return false;
+        }
+
+        const { id, fullName } = json.client;
+        const option = new Option(fullName, id, true, true);
+
+        this.client.appendChild(option);
+        this.form.reset();
+        this.toggle();
+      });
+  },
+
+  handleConfirm(event) {
+    event.preventDefault();
+
+    const typeOfSale = document.querySelector("#typeOfSale");
+    const client = document.querySelector("#client");
+
+    if (!typeOfSale.value) {
+      alert("El tipo de venta es requerido");
+
+      return false;
     }
-});
+
+    if (!client.value) {
+      alert("El cliente requerido");
+
+      return false;
+    }
+
+    if (location.pathname.includes("create")) {
+      NewSaleComponent.setTypeOfSale(typeOfSale.value);
+      NewSaleComponent.setClientId(client.value);
+
+      $("#saleModal").modal("hide");
+
+      return false;
+    }
+
+    location.replace(
+      `/pharmacyApp/sales/create/${typeOfSale.value}/${client.value}`
+    );
+  },
+
+  toggle() {
+    this.root.classList.toggle("show");
+  }
+};
+
+SaleComponent.init();

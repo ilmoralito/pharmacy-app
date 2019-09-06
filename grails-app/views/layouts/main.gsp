@@ -31,8 +31,12 @@
             <g:render template="/partials/purchaseOrderModal" model="[paymentType: params.paymentType, title: 'Selecciona datos de orden']" />
         </g:if>
 
-        <g:if test="${controllerName == 'sale' && actionName == 'index'}">
+        <g:if test="${controllerName == 'sale' && actionName in ['index', 'create']}">
             <g:render template="/partials/saleModal" model="[clients: clients, title: 'Selecciona datos de venta']" />
+        </g:if>
+
+        <g:if test="${controllerName == 'sale' && actionName == 'create'}">
+            <g:render template="/partials/sale" />
         </g:if>
         <r:layoutResources />
     </body>

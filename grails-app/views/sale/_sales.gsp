@@ -29,8 +29,8 @@
                 <td>
                     <pharmacyApp:saleType sale="${sale}" />
                 </td>
-                <td>${sale.cashReceived}</td>
-                <td>${sale.turned}</td>
+                <td>${sale.instanceOf(ni.sb.CashSale) ? sale.cashReceived : ''}</td>
+                <td>${sale.instanceOf(ni.sb.CashSale) ? sale.turned : ''}</td>
                 <td>${sale.totalBalance}</td>
                 <td class="text-center">
                     <g:link action="show" id="${sale.id}">Detalle</g:link>

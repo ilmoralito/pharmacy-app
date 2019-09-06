@@ -22,11 +22,6 @@ modules = {
     resource url: 'js/i18n/datepicker.es.js'
   }
 
-  toggleButton {
-    resource url: 'js/bootstrap-toggle.min.js'
-    resource url: 'css/bootstrap2-toggle.css'
-  }
-
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
@@ -289,22 +284,23 @@ modules = {
     resource url: 'js/inventory.js'
   }
 
-  saleList {
-    dependsOn 'app'
-    resource url: 'js/saleList.js'
-  }
-
   sales {
     dependsOn 'app'
-    dependsOn 'toggleButton'
-    resource url: 'js/salesDetail.js'
-    resource url: 'js/salesHelper.js'
-    resource url: 'js/saleClients.js'
     resource url: 'js/sales.js'
-    resource url: 'js/salesDetailActions.js'
-    resource url: 'js/salesFilter.js'
-    resource url: 'js/salesFetchInventory.js'
-    resource url: 'js/salesSaveInstance.js'
+  }
+
+  sale {
+    dependsOn 'app'
+    resource url: 'js/sale.js'
+    resource url: 'js/sales.js'
+    // resource url: 'js/salesDetail.js'
+    // resource url: 'js/salesHelper.js'
+    // resource url: 'js/saleClients.js'
+    // resource url: 'js/salesBKU.js'
+    // resource url: 'js/salesDetailActions.js'
+    // resource url: 'js/salesFilter.js'
+    // resource url: 'js/salesFetchInventory.js'
+    // resource url: 'js/salesSaveInstance.js'
   }
 
   saleDetail {

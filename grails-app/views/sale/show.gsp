@@ -42,14 +42,16 @@
                         <pharmacyApp:saleType sale="${sale}" />
                     </td>
                 </tr>
-                <tr>
-                    <td>Efectivo recibido</td>
-                    <td>${sale.cashReceived}</td>
-                </tr>
-                <tr>
-                    <td>Vuelto</td>
-                    <td>${sale.turned}</td>
-                </tr>
+                <g:if test="${sale.instanceOf(ni.sb.CashSale)}">
+                    <tr>
+                        <td>Efectivo recibido</td>
+                        <td>${sale.cashReceived}</td>
+                    </tr>
+                    <tr>
+                        <td>Vuelto</td>
+                        <td>${sale.turned}</td>
+                    </tr>
+                </g:if>
                 <tr>
                     <td>IVA</td>
                     <td>15%</td>

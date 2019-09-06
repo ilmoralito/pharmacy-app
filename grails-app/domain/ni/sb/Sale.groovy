@@ -6,8 +6,6 @@ class Sale implements Serializable {
 
   Client client
   User registeredBy
-  BigDecimal cashReceived
-  BigDecimal turned
   BigDecimal totalBalance
   Date dateCreated
   Date lastUpdated

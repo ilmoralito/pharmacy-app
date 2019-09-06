@@ -345,8 +345,6 @@ class BootStrap {
       output['id'] = it.id
       output['client'] = it.client
       output['registeredBy'] = [id: it.registeredBy.id, fullName: it.registeredBy.fullName]
-      output['cashReceived'] = it.cashReceived
-      output['turned'] = it.turned
       output['totalBalance'] = it.totalBalance
       output['canceled'] = it.canceled
       output['canceledBy'] = it.canceledBy

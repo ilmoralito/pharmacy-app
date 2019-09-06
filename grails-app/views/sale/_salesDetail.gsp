@@ -24,21 +24,5 @@
                 <td>${saleDetail.total}</td>
             </tr>
         </g:each>
-        <tr>
-            <td colspan="3">IVA</td>
-            <td>15%</td>
-        </tr>
-        <tr>
-            <td colspan="3">SUBTOTAL</td>
-            <td>
-                <g:formatNumber number="${sale.subtotal}" type="number" maxFractionDigits="2" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">TOTAL</td>
-            <td>
-                <g:formatNumber number="${sale.balance}" type="number" maxFractionDigits="2" />
-            </td>
-        </tr>
     </tbody>
 </table>

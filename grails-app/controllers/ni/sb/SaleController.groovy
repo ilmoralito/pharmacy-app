@@ -21,24 +21,26 @@ class SaleController {
     ]
   }
 
-  def create() {}
+  def create() {
+    [ clients: clientService.listEnabled() ]
+  }
 
   def save() {
     JSONObject json = request.JSON
 
     Sale sale
-    Client client = clientService.get(json.sale.client)
+    Client client = clientService.get(json.client)
 
-    if (json.sale.paymentType == 'cash payment') {
+    if (json.paymentType == 'cash') {
       sale = new CashSale (
-        cashReceived: json.sale.cashReceived,
-        turned: json.sale.change,
+        cashReceived: json.cashReceived,
+        turned: json.change,
         client: client,
       )
     } else {
       sale = new CreditSale (
-        cashReceived: json.sale.cashReceived,
-        turned: json.sale.change,
+        cashReceived: json.cashReceived,
+        turned: json.change,
         client: client,
       )
     }
@@ -47,7 +49,7 @@ class SaleController {
       sale.addToSalesDetail(new SaleDetail (
         product: saleDetail.productId,
         quantity: saleDetail.quantity,
-        salePrice: saleDetail.saleprice,
+        salePrice: saleDetail.salePrice,
         total: saleDetail.total
       ))
     }
@@ -61,7 +63,9 @@ class SaleController {
     }
 
     inventoryService.updateInventoryStock(sale.salesDetail)
-
+println '>' * 100
+println sale
+println '>' * 100
     render(contentType: 'application/json') {
       [ok: true, sale: sale]
     }
