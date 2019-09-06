@@ -21,7 +21,7 @@
             <g:render template="sales" model="[sales: sales, showTotal: true, caption: 'Ventas del dia']" />
         </g:if>
         <g:else>
-            <p>Sin datos que mostra</p>
+            <p>Sin datos que mostrar</p>
         </g:else>
     </body>
 </html>
