@@ -7,8 +7,6 @@
         <r:require modules="bootstrap-css, bootstrap-collapse, saleDetail" />
     </head>
     <body>
-        <g:render template="modalCancellation" />
-
         <sec:ifAllGranted roles="ROLE_ADMIN">
             <g:if test="${!sale.canceled}">
                 <div class="row">
