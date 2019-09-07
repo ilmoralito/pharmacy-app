@@ -301,7 +301,7 @@ const SaleDetailComponent = {
     this.render();
   },
 
-  getTotalToPay() {
+  getSubtotal() {
     return this.saleDetail.reduce((accumulator, currentValue) => {
       accumulator += +currentValue.total;
 
@@ -328,13 +328,13 @@ const SalesSummaryComponent = {
   change: 0,
 
   setTotalToPay() {
-    const totalToPay = SaleDetailComponent.getTotalToPay();
+    const totalToPay = this.subtotal * 0.15 + this.subtotal;
 
     this.totalToPay = totalToPay;
   },
 
   setSubtotal() {
-    const subtotal = this.totalToPay - this.totalToPay * 0.15;
+    const subtotal = SaleDetailComponent.getSubtotal();
 
     this.subtotal = subtotal;
   },
@@ -446,9 +446,9 @@ const SalesSummaryComponent = {
   },
 
   handler() {
-    this.setTotalToPay();
-
     this.setSubtotal();
+
+    this.setTotalToPay();
 
     const typeOfSale = NewSaleComponent.typeOfSale;
 
