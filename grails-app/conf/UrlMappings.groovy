@@ -139,6 +139,11 @@ class UrlMappings {
     '/payments' (controller: 'payment', action: 'save', method: 'POST')
     "/payments/$id" (controller: 'payment', action: 'show', method: 'GET')
 
+    ////////////////
+    // dashboard //
+    ///////////////
+    '/dashboard' (controller: 'dashboard', action: 'index', method: 'GET')
+
     '/' (controller: 'login')
     '500' (view: '/error')
     }

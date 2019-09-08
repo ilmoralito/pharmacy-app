@@ -12,9 +12,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <g:link class="navbar-brand" controller="${controllerName}"
-        >Farmacia Santa Barbara</g:link
-      >
+      <g:link controller="dashboard" class="navbar-brand">Farmacia Santa Barbara</g:link>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">

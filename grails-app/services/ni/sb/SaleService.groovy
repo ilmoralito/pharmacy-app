@@ -103,6 +103,68 @@ class SaleService {
     builder(query, client)
   }
 
+  // Dashboard
+  List<CreditSale> getUnpaidCreditSales() {
+    final session = sessionFactory.currentSession
+    final String query = '''
+      select
+        sale.id saleId,
+        client.id clientId,
+        sale.date_created dateCreated,
+        datediff(date(date_add(sale.date_created, INTERVAL 30 DAY)), date(curdate())) dateDiff,
+        concat(client.first_name, ' ', client.last_name) client,
+        (select count(*) from payment where payment.credit_sale_id = sale.id) payments
+      from
+        sale
+          inner join
+        client on sale.client_id = client.id
+      where
+        class = 'ni.sb.CreditSale' and
+          sale.cancellation_date is null and
+            datediff(date(date_add(sale.date_created, INTERVAL 30 DAY)), date(curdate())) > 30
+      order by dateDiff desc;
+    '''
+    final sqlQuery = session.createSQLQuery(query)
+    final result = sqlQuery.with {
+      resultTransformer = AliasToEntityMapResultTransformer.INSTANCE
+
+      list()
+    }
+
+    result
+  }
+
+  List<CreditSale> getCreditSalesWithoutPaymentsIn30Days() {
+    final session = sessionFactory.currentSession
+    final String query = '''
+      select
+        sale.id saleId,
+        client.id clientId,
+        sale.date_created dateCreated,
+        datediff(date(date_add(sale.date_created, INTERVAL 30 DAY)), date(curdate())) dateDiff,
+        concat(client.first_name, ' ', client.last_name) client,
+        (select count(*) from payment where payment.credit_sale_id = sale.id) payments
+      from
+        sale
+          inner join
+        client on sale.client_id = client.id
+      where
+        class = 'ni.sb.CreditSale' and
+          sale.cancellation_date is null and
+            datediff(date(date_add(sale.date_created, INTERVAL 30 DAY)), date(curdate())) > 30
+      having payments = 0
+      order by dateDiff desc;
+    '''
+    final sqlQuery = session.createSQLQuery(query)
+    final result = sqlQuery.with {
+      resultTransformer = AliasToEntityMapResultTransformer.INSTANCE
+
+      list()
+    }
+
+    result
+  }
+
   Map summary(final Client client) {
     [
       numberOfPurchases: getNumberOfPurchases(client),
