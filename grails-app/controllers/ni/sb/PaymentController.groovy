@@ -24,25 +24,54 @@ class PaymentController {
 
   def save() {
     CreditSale creditSale = saleService.get(params.id)
-    Payment payment = new Payment(amountPaid: params.amountPaid, creditSale: creditSale)
+    BigDecimal amountPaid = params.double('amountPaid')
+    BigDecimal balanceToDate = getBalanceToDate(creditSale, amountPaid)
+    BigDecimal currentBalance = getCurrentBalance(creditSale, amountPaid)
 
-    if (!payment.save()) {
+    if (amountToBePaidExceedsBalanceToDate(amountPaid, currentBalance)) {
       render(contentType: 'application/json') {
-          [ok: false, errors: payment.errors]
+        [ok: false, errors: [errors: [[message: 'Cantidad a pagar excede saldo a la fecha']]]]
       }
 
       return
     }
 
-    Boolean readyToCancel = paymentService.readyToCancel(creditSale.totalBalance, creditSale.payments)
+    Payment payment = new Payment(
+      amountPaid: amountPaid,
+      balanceToDate: balanceToDate,
+      creditSale: creditSale
+    )
 
-    if (readyToCancel) {
-      println 'si'
+    if (!payment.save()) {
+      render(contentType: 'application/json') {
+        [ok: false, errors: payment.errors]
+      }
+    }
+
+    Boolean isReadyToBeCanceled = isReadyToBeCanceled(creditSale.totalBalance, creditSale.payments)
+
+    if (isReadyToBeCanceled) {
       saleService.markDebtAsCanceled(creditSale)
     }
 
     render(contentType: 'application/json') {
-        [ok: true, payment: payment, canceled: readyToCancel]
+      [ok: true, payments: creditSale.payments + payment, canceled: isReadyToBeCanceled]
     }
+  }
+
+  private BigDecimal getBalanceToDate(final CreditSale creditSale, final BigDecimal amountPaid) {
+    !creditSale.payments ? creditSale.totalBalance.minus(amountPaid) : creditSale.payments.last().balanceToDate.minus(amountPaid)
+  }
+
+  private BigDecimal getCurrentBalance(final CreditSale creditSale, final BigDecimal amountPaid) {
+    !creditSale.payments ? creditSale.totalBalance : creditSale.payments.last().balanceToDate
+  }
+
+  private Boolean amountToBePaidExceedsBalanceToDate(final BigDecimal amountPaid, final BigDecimal balanceToDate) {
+    amountPaid > balanceToDate
+  }
+
+  private Boolean isReadyToBeCanceled(final BigDecimal totalBalance, final List<Payment> payments) {
+    totalBalance == payments.amountPaid.sum()
   }
 }
