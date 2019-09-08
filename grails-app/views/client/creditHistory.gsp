@@ -9,6 +9,6 @@
     <body>
         <g:render template="nav"/>
 
-        <g:render template="/includes/credits" modal="[sale: sale]" />
+        <g:render template="/includes/credits" modal="[sales: sales]" />
     </body>
 </html>

@@ -66,7 +66,7 @@ class ClientController {
   }
 
   def creditHistory(Client client) {
-    [sales: saleService.creditSales(client)]
+    [sales: saleService.getCredits(client)]
   }
 
   def saleDetail(Sale sale) {

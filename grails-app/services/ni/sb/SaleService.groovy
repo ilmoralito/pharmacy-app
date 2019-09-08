@@ -189,12 +189,12 @@ class SaleService {
     results
   }
 
-  List<CreditSale> creditSales(final Client client) {
-    CreditSale.where { client == client && canceled == null  }.list()
-  }
-
   List<CreditSale> getCredits() {
     CreditSale.where { canceled == null }.list()
+  }
+
+  List<CreditSale> getCredits(final Client client) {
+    CreditSale.where { client == client && canceled == null  }.list()
   }
 
   CreditSale markDebtAsCanceled(final CreditSale creditSale) {
