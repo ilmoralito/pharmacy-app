@@ -24,8 +24,8 @@
         </sec:ifAllGranted>
 
         <table class="table table-hover table-bordered">
-            <col width="25%">
-            <col width="75%">
+            <col width="40%">
+            <col width="60%">
 
             <caption>Detalle de registro</caption>
 
@@ -51,8 +51,8 @@
 
         <g:if test="${sale.canceled}">
             <table class="table table-hover table-bordered">
-                <col width="25%" />
-                <col width="75%" />
+                <col width="40%" />
+                <col width="60%" />
 
                 <caption>Detalle de anulación</caption>
 
@@ -77,8 +77,8 @@
 
 
         <table class="table table-hover table-bordered">
-            <col width="25%">
-            <col width="75%">
+            <col width="40%">
+            <col width="60%">
 
             <caption>Venta</caption>
 
@@ -114,6 +114,33 @@
             </tbody>
         </table>
 
-        <g:render template="salesDetail" model="[sales: sale]" />
+        <table class="table table-hover table-bordered">
+            <col width="40%" />
+            <col width="20%" />
+            <col width="20%" />
+            <col width="20%" />
+
+            <caption>Detalle de venta</caption>
+
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio venta</th>
+                    <th>Cantidad</th>
+                    <th>Total compra</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <g:each in="${sale.salesDetail}" var="saleDetail">
+                    <tr>
+                        <td>${saleDetail.product}</td>
+                        <td>${saleDetail.salePrice}</td>
+                        <td>${saleDetail.quantity}</td>
+                        <td>${saleDetail.total}</td>
+                    </tr>
+                </g:each>
+            </tbody>
+        </table>
     </body>
 </html>

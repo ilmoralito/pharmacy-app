@@ -19,6 +19,7 @@ class SaleService {
       ge 'dateCreated', today
       lt 'dateCreated', today.plus(1)
       isNull 'canceled'
+      order('dateCreated', 'desc')
     }
   }
 
@@ -29,6 +30,7 @@ class SaleService {
       ge 'dateCreated', today
       lt 'dateCreated', today.plus(1)
       isNotNull 'canceled'
+      order('dateCreated', 'desc')
     }
   }
 
