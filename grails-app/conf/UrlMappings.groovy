@@ -22,7 +22,8 @@ class UrlMappings {
     "/clients/$id" (controller: 'client', action: 'show', method: 'GET')
     "/clients/$id/register" (controller: 'client', action: 'register', method: 'GET')
     "/clients/$id/history" (controller: 'client', action: 'history', method: 'GET')
-    "/clients/$id/credit/history" (controller: 'client', action: 'creditHistory', method: 'GET')
+    "/clients/$id/credits" (controller: 'client', action: 'creditHistory', method: 'GET')
+    "/clients/$id/archived/credits" (controller: 'client', action: 'archivedCredits', method: 'GET')
     "/clients/$id/sale/$saleId/detail" (controller: 'client', action: 'saleDetail', method: 'GET')
     '/clients/enabled' (controller: 'client', action: 'listEnabled', method: 'GET')
 
@@ -133,13 +134,13 @@ class UrlMappings {
     "/sales/$id" (controller: 'sale', action: 'show', method: 'GET')
     "/sales/cancel" (controller: 'sale', action: 'cancel', method: 'POST')
 
-
     /////////////
     // payment //
     /////////////
     '/payments' (controller: 'payment', action: 'index', method: 'GET')
     '/payments' (controller: 'payment', action: 'save', method: 'POST')
     "/payments/$id" (controller: 'payment', action: 'show', method: 'GET')
+    "/payments/archived/credits" (controller: 'payment', action: 'archivedCredits', method: 'GET')
 
     ////////////////
     // dashboard //

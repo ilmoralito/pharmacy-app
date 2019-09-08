@@ -7,7 +7,7 @@
         <r:require modules="bootstrap-css, bootstrap-collapse, payment" />
     </head>
     <body>
-        <g:link action="index" class="btn btn-default">Regresar</g:link>
+        <a href="${request.getHeader('referer')}" class="btn btn-default">Regresar</a>
 
         <g:render template="/includes/payments" model="[sale: sale]" />
     </body>

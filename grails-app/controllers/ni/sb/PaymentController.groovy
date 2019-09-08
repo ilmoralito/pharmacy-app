@@ -14,6 +14,10 @@ class PaymentController {
     [sales: saleService.getCredits()]
   }
 
+  def archivedCredits() {
+    [sales: saleService.getArchivedCredits()]
+  }
+
   def show(Sale sale) {
     [sale: sale]
   }

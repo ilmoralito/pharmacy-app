@@ -3,9 +3,12 @@ package ni.sb
 import groovy.xml.MarkupBuilder
 
 class AppTagLib {
-    def saleService
+
+    SaleService saleService
+    ClientService clientService
 
     static defaultEncodeAs = [providerMenu: 'raw']
+
     static namespace = 'pharmacyApp'
 
     def daysToPay = { attrs ->
@@ -48,7 +51,7 @@ class AppTagLib {
 
     def calcReceiptNumber = { attrs ->
         def payInstance = Pay.list(sort: 'receiptNumber', order: 'asd'), lastPay, receiptNumber
-        
+
         if (payInstance.size() > 0) {
             lastPay = payInstance.last()
             receiptNumber = lastPay.receiptNumber + 1
@@ -86,6 +89,20 @@ class AppTagLib {
                     }
                 }
             }
+        }
+    }
+
+    def areThereArchivedCredits = { attrs, body ->
+        if (saleService.areThereArchivedCredits()) {
+            out << body()
+        }
+    }
+
+    def areThereCreditsFiledForThisCustomer = { attrs, body ->
+        Client client = clientService.get(attrs.clientId)
+
+        if (saleService.areThereArchivedCredits(client)) {
+            out << body()
         }
     }
 }

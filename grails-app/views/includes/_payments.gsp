@@ -1,8 +1,8 @@
 <table class="table table-hover table-bordered">
     <caption>Venta</caption>
 
-    <col width="25%">
-    <col width="75%">
+    <col width="40%">
+    <col width="60%">
 
     <tbody>
         <tr>
@@ -23,16 +23,22 @@
                 <g:formatDate date="${sale.dateCreated}" format="yyyy-MM-dd hh:mm" />
             </td>
         </tr>
+        <g:if test="${sale.cancellationDate}">
+            <tr>
+                <td>Dias en cancelar</td>
+                <td>${sale.cancellationDate.clearTime() - sale.dateCreated.clearTime()}</td>
+            </tr>
+        </g:if>
     </tbody>
 </table>
 
 <table class="table table-hover table-bordered">
     <caption>Detalle de venta</caption>
 
-    <col width="70%" />
-    <col width="10%" />
-    <col width="10%" />
-    <col width="10%" />
+    <col width="40%" />
+    <col width="20%" />
+    <col width="20%" />
+    <col width="20%" />
 
     <thead>
         <tr>
@@ -63,8 +69,7 @@
     <table class="table table-hover table-bordered">
         <caption>Abonos</caption>
 
-        <col width="20%">
-        <col width="20%">
+        <col width="40%">
         <col width="15%">
         <col width="15%">
         <col width="12%">
@@ -74,7 +79,6 @@
         <thead>
             <tr>
                 <th>Registrado por</th>
-                <th>Actualizado por</th>
                 <th>Creación</th>
                 <th>Actualización</th>
                 <th>Monto recibido</th>
@@ -84,10 +88,9 @@
         </thead>
 
         <tbody>
-            <g:each in="${payments}" var="payment">
+            <g:each in="${sale.payments}" var="payment">
                 <tr>
                     <td>${payment.createdBy}</td>
-                    <td>${payment.updatedBy}</td>
                     <td>
                         <g:formatDate date="${payment.dateCreated}" format="yyyy-MM-dd hh:mm" />
                     </td>

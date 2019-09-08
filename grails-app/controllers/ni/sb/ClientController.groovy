@@ -69,8 +69,12 @@ class ClientController {
     [sales: saleService.getCredits(client)]
   }
 
-  def saleDetail(Sale sale) {
-    [sale: sale]
+  def archivedCredits(Client client) {
+    [sales: saleService.getArchivedCredits(client)]
+  }
+
+  def saleDetail() {
+    [sale: saleService.get(params.saleId)]
   }
 
   def register(Client client) {

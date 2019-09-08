@@ -9,6 +9,8 @@
     <body>
         <g:render template="nav" />
 
+        <a href="${request.getHeader('referer')}" class="btn btn-default">Regresar</a>
+
         <g:render template="/includes/payments" model="[sale: sale]" />
     </body>
 </html>

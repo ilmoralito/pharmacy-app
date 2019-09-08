@@ -190,11 +190,27 @@ class SaleService {
   }
 
   List<CreditSale> getCredits() {
-    CreditSale.where { canceled == null }.list()
+    CreditSale.where { cancellationDate == null }.list()
   }
 
   List<CreditSale> getCredits(final Client client) {
-    CreditSale.where { client == client && canceled == null  }.list()
+    CreditSale.where { client == client && cancellationDate == null  }.list()
+  }
+
+  List<CreditSale> getArchivedCredits() {
+    CreditSale.where { cancellationDate != null }.list()
+  }
+
+  List<CreditSale> getArchivedCredits(final Client client) {
+    CreditSale.where { client == client && cancellationDate != null }.list()
+  }
+
+  Boolean areThereArchivedCredits() {
+    CreditSale.where { cancellationDate != null }.count() > 0
+  }
+
+  Boolean areThereArchivedCredits(final Client client) {
+    CreditSale.where { cancellationDate != null && client == client }.count() > 0
   }
 
   CreditSale markDebtAsCanceled(final CreditSale creditSale) {

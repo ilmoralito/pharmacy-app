@@ -58,5 +58,5 @@
     </table>
 </g:if>
 <g:else>
-    <p>Sin datos que mostrar</p>
+    <p>Sin creditos que mostrar</p>
 </g:else>

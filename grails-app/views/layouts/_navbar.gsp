@@ -73,12 +73,19 @@
         </li>
         <li class="dropdown ${controllerName in ['payment', 'inventory', 'reports'] ? 'active' : ''}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            Sumarios <span class="caret"></span>
+            Sumario <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="${controllerName == 'payment' ? 'active' : ''}">
+            <li class="${controllerName == 'payment' && actionName == 'index' ? 'active' : ''}">
               <g:link controller="payment">Creditos</g:link>
             </li>
+            <pharmacyApp:areThereArchivedCredits>
+              <li role="separator" class="divider"></li>
+              <li class="${controllerName == 'payment' && actionName == 'archivedCredits' ? 'active' : ''}">
+                <g:link controller="payment" action="archivedCredits">Creditos archivados</g:link>
+              </li>
+              <li role="separator" class="divider"></li>
+            </pharmacyApp:areThereArchivedCredits>
             <li class="${controllerName == 'inventory' ? 'active' : ''}">
               <g:link controller="inventory">Inventario</g:link>
             </li>
