@@ -50,6 +50,10 @@
     <g:if test="${controllerName == 'sale' && actionName == 'show'}">
       <g:render template="/partials/salesCancellationModal" />
     </g:if>
+
+    <g:if test="${controllerName == 'client' && actionName == 'saleDetail' || controllerName == 'payment' && actionName == 'show'}">
+      <g:render template="/partials/paymentModal" model="[sale: sale]" />
+    </g:if>
     <r:layoutResources />
   </body>
 </html>
