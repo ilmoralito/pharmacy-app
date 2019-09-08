@@ -12,13 +12,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <g:link controller="dashboard" class="navbar-brand">Farmacia Santa Barbara</g:link>
+      <g:link controller="dashboard" class="navbar-brand">FSB</g:link>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li
-          class="dropdown ${(controllerName == 'notifications') ? 'active' : ''}"
-        >
+        <li class="${controllerName == 'sale' ? 'active' : ''}">
+          <g:link controller="sale">Ventas</g:link>
+        </li>
+        <li class="dropdown ${(controllerName == 'notifications') ? 'active' : ''}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <g:if test="${(session.notif)}">
               <span class="badge notifications"
@@ -70,7 +71,79 @@
             </li>
           </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown ${controllerName in ['payment', 'inventory', 'reports'] ? 'active' : ''}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Sumarios <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="${controllerName == 'payment' ? 'active' : ''}">
+              <g:link controller="payment">Creditos</g:link>
+            </li>
+            <li class="${controllerName == 'inventory' ? 'active' : ''}">
+              <g:link controller="inventory">Inventario</g:link>
+            </li>
+            <li class="${controllerName == 'reports' ? 'active' : ''}">
+              <g:link controller="reports" action="sales">Reportes</g:link>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown ${controllerName in ['client', 'order', 'laboratory', 'presentation', 'measure', 'medicine', 'brand', 'brandProduct', 'brandBranded', 'merchandise', 'provider', 'merchandiseSupplier', 'providerMedicine', 'providerBrandBranded'] ? 'active' : ''}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Recursos <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="${controllerName == 'client' ? 'active' : ''}">
+              <g:link controller="client" action="list">Clientes</g:link>
+            </li>
+            <li class="${controllerName == 'order' ? 'active' : ''}">
+              <g:link controller="order" action="list">Pedidos</g:link>
+            </li>
+            <li class="${controllerName in ['provider', 'merchandiseSupplier', 'providerMedicine', 'providerBrandBranded'] ? 'active' : ''}">
+              <g:link controller="provider" action="list">Proveedores</g:link>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li class="${controllerName == 'laboratory' ? 'active' : ''}">
+              <g:link controller="laboratory" action="list">Laboratorios</g:link>
+            </li>
+            <li class="${controllerName == 'presentation' ? 'active' : ''}">
+              <g:link controller="presentation" action="list">Presentaciones</g:link>
+            </li>
+            <li class="${controllerName == 'measure' ? 'active' : ''}">
+              <g:link controller="measure" action="list">Medidas</g:link>
+            </li>
+            <li class="${controllerName == 'medicine' ? 'active' : ''}">
+              <g:link controller="medicine" action="list">Medicinas</g:link>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li class="${controllerName == 'brand' ? 'active' : ''}">
+              <g:link controller="brand" action="list">Marcas</g:link>
+            </li>
+            <li class="${controllerName == 'brandProduct' ? 'active' : ''}">
+              <g:link controller="brandProduct" action="list">Productos</g:link>
+            </li>
+            <li class="${controllerName == 'brandBranded' ? 'active' : ''}">
+              <g:link controller="brandBranded" action="list">Productos y Marcas</g:link>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li class="${controllerName == 'merchandise' ? 'active' : ''}">
+              <g:link controller="merchandise" action="list">Articulos</g:link>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown ${controllerName == 'diarySpend' ? 'active' : ''}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Gastos diarios <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="${controllerName == 'diarySpend' && actionName != 'resume' ? 'active' : ''}">
+                <g:link controller="diarySpend" action="list">Gasto diario</g:link>
+            </li>
+            <li class="${controllerName == 'diarySpend' && actionName == 'resume' ? 'active' : ''}">
+                <g:link controller="diarySpend" action="resume">Resumen gasto diario</g:link>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown ${controllerName == 'user' ? 'active' : ''}">
           <g:set
             var="userName"
             value="${applicationContext.springSecurityService.currentUser?.fullName}"
