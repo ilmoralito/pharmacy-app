@@ -4,7 +4,7 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.codehaus.groovy.grails.web.json.JSONObject
 import grails.converters.JSON
 
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_ADMIN', 'ROLE_USER'])
 class OrderController {
 
   OrderService orderService
@@ -35,7 +35,7 @@ class OrderController {
     order.save()
 
     render(contentType: 'application/json') {
-        [ok: true, order: order]
+      [ok: true, order: order]
     }
   }
 
@@ -74,17 +74,26 @@ class OrderController {
 
     if (!purchaseOrder.save(flush: true, insert: true)) {
       render(contentType: 'application/json') {
-          [ok: false, errors: purchaseOrder.errors]
+        [ok: false, errors: purchaseOrder.errors]
       }
 
       return
     }
 
-    inventoryService.update(items)
-
     render(contentType: 'application/json') {
-        [ok: true, purchaseOrder: purchaseOrder]
+      [ok: true, purchaseOrder: purchaseOrder]
     }
+  }
+
+  @Secured(['ROLE_ADMIN'])
+  def approve(PurchaseOrder order) {
+    order.approvalDate = new Date()
+
+    order.save(flush: true, failOnError: true)
+
+    inventoryService.update(order.items)
+
+    redirect action: 'show', id: order.id
   }
 }
 

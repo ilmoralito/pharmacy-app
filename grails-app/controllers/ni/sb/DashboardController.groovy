@@ -14,7 +14,8 @@ class DashboardController {
       unpaidSales: saleService.getUnpaidCreditSales(),
       unpaidSalesIn30Days: saleService.getCreditSalesWithoutPaymentsIn30Days(),
       lowStockProducts: inventoryService.getInventoryWithLowStock(),
-      ordersWithPaymentDateCloseToExpire: orderService.getPurchaseOrdersWithPaymentDateCloseToExpire()
+      ordersWithPaymentDateCloseToExpire: orderService.getPurchaseOrdersWithPaymentDateCloseToExpire(),
+      ordersPendingApproval: orderService.getOrdersPendingApproval(),
     ]
   }
 }

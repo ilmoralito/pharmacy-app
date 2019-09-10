@@ -7,6 +7,8 @@ class PurchaseOrder {
   User registeredBy
   User updatedBy
   String invoiceNumber
+  Date approvalDate
+  User approvedBy
   Date dateCreated
   Date lastUpdated
   List items
@@ -17,6 +19,12 @@ class PurchaseOrder {
     provider nullable: false
     registeredBy nullable: false
     invoiceNumber blank: false, unique: true
+    approvalDate nullable: true
+    approvedBy nullable: true, validator: { User approvedBy, PurchaseOrder purchaseOrder ->
+      if (purchaseOrder.approvalDate && !approvedBy) {
+        return 'approvedBy.is.required'
+      }
+    }
   }
 
   static mapping = {
@@ -31,6 +39,10 @@ class PurchaseOrder {
     if (springSecurityService.isLoggedIn()) {
       registeredBy = springSecurityService.currentUser
       updatedBy = springSecurityService.currentUser
+
+      if (isDirty('approvalDate')) {
+        approvedBy = springSecurityService.currentUser
+      }
     }
   }
 

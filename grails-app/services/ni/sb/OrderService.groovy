@@ -42,4 +42,8 @@ class OrderService {
 
     result
   }
+
+  List<PurchaseOrder> getOrdersPendingApproval() {
+    PurchaseOrder.where { approvalDate == null }.list()
+  }
 }

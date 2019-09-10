@@ -143,6 +143,11 @@
     <div class="panel-body">
       <g:if test="${ordersWithPaymentDateCloseToExpire}">
         <table class="table table-hover table-bordered">
+          <col width="55%">
+          <col width="15%">
+          <col width="15%">
+          <col width="15%">
+
           <thead>
             <tr>
               <th>Proveedor</th>
@@ -176,5 +181,43 @@
       </g:else>
     </div>
   </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Órdenes pendientes de ser aprobadas</div>
+      <div class="panel-body">
+        <g:if test="${ordersPendingApproval}">
+          <table class="table table-hover table-bordered">
+            <col width="55%">
+            <col width="45%">
+
+            <thead>
+              <tr>
+                <th>Número de factura</th>
+                <th>Proveedor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <g:each in="${ordersPendingApproval}" var="order">
+                <tr>
+                  <td>
+                    <g:link
+                      controller="order"
+                      action="show"
+                      id="${order.id}"
+                    >
+                      ${order.invoiceNumber}
+                    </g:link>
+                  </td>
+                  <td>${order.provider.name}</td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </g:if>
+        <g:else>
+          <p>Sin datos que mostrar</p>
+        </g:else>
+      </div>
+    </div>
 </body>
 </html>

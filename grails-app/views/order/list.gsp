@@ -20,7 +20,8 @@
 
     <g:if test="${orders}">
         <table class="table table-hover table-bordered">
-            <col width="38%">
+            <col width="28%">
+            <col width="10%">
             <col width="10%">
             <col width="10%">
             <col width="12%">
@@ -31,6 +32,7 @@
             <thead>
                 <tr>
                     <th>Proveedor</th>
+                    <th>Aprobado</th>
                     <th>Tipo</th>
                     <th>Factura</th>
                     <th>Fecha de pago</th>
@@ -43,6 +45,7 @@
                 <g:each in="${orders}" var="order">
                     <tr>
                         <td>${order.provider.name}</td>
+                        <td>${order.approvalDate ? 'Si' : ''}</td>
                         <td>
                             <pharmacyApp:paymentType order="${order}" />
                         </td>

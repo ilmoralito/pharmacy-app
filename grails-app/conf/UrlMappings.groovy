@@ -117,6 +117,7 @@ class UrlMappings {
     "/orders/$id" (controller: 'order', action: 'show', method: 'GET')
     "/orders/$id/cancel" (controller: 'order', action: 'cancel', method: 'GET')
     "/orders/create/$providerId/type/$paymentType" (controller: 'order', action: 'create', method: 'GET')
+    "/orders/$id/approve" (controller: 'order', action: 'approve', method: 'GET')
 
     ///////////////
     // inventory //
