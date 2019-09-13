@@ -78,7 +78,6 @@ const ProductsComponent = {
     },
 
     render() {
-        console.log(this.products)
         const products = this.products.map(this.productToRowView).join("");
 
         this.root.innerHTML = `
@@ -133,19 +132,19 @@ const ItemsComponent = {
         if (target.nodeName !== "A" && target.nodeName !== "BUTTON")
             return false;
 
-        if (target.textContent === "Confirmar") {
+        if (target.textContent.trim() === "Confirmar") {
             this.handleConfirm(target, target.dataset.id);
 
             return false;
         }
 
-        if (target.textContent === "Editar") {
+        if (target.textContent.trim() === "Editar") {
             this.handleEdit(target, target.dataset.id);
 
             return false;
         }
 
-        if (target.textContent === "Eliminar") {
+        if (target.textContent.trim() === "Eliminar") {
             this.handleDelete(target.dataset.id);
         }
 
@@ -210,6 +209,11 @@ const ItemsComponent = {
         items.splice(index, 1, updatedItem);
 
         this.items = items;
+
+        // update total balance
+        const balance = this.getBalance();
+
+        this.root.querySelector("td#totalBalance").textContent = balance;
 
         // update dom
         quantityNode.innerHTML = updatedItem.quantity;
@@ -307,7 +311,14 @@ const ItemsComponent = {
                     <th></th>
                 </tr>
             </thead>
-            <tbody>${items}</tbody>
+            <tbody>
+                ${items}
+                <tr>
+                    <td colspan="4">TOTAL</td>
+                    <td id="totalBalance">${this.getBalance()}</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tbody>
         </table>
 
         <div class="form-group">
@@ -347,7 +358,9 @@ const ItemsComponent = {
             </td>
             <td style="vertical-align: middle;">${item.totalBalance}</td>
             <td style="vertical-align: middle;" class="text-center">
-                <a href="#" data-id="${item.id}">Confirmar</a>
+                <a href="#" data-id="${item.id}">
+                    ${item.confirmed ? "Editar" : "Confirmar"}
+                </a>
             </td>
             <td style="vertical-align: middle;" class="text-center">
                 <a href="#" data-id="${item.id}">Eliminar</a>
@@ -401,6 +414,14 @@ const ItemsComponent = {
             salePriceNode,
             totalBalanceNode
         ] = [...target.closest("tr").cells]);
+    },
+
+    getBalance() {
+        const balance = this.items.reduce((accumulator, currentValue) => {
+            return (accumulator += currentValue.totalBalance);
+        }, 0);
+
+        return balance;
     }
 };
 
@@ -417,7 +438,8 @@ const OrderComponent = {
         this.trigger.addEventListener("click", this.handleClick.bind(this));
 
         this.order = {
-          invoiceNumber: document.querySelector(".modal-body #invoiceNumber").value
+            invoiceNumber: document.querySelector(".modal-body #invoiceNumber")
+                .value
         };
     },
 
