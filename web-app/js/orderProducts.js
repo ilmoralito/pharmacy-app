@@ -438,8 +438,7 @@ const OrderComponent = {
         this.trigger.addEventListener("click", this.handleClick.bind(this));
 
         this.order = {
-            invoiceNumber: document.querySelector(".modal-body #invoiceNumber")
-                .value
+            invoiceNumber: this.invoiceNumberNode.value
         };
     },
 
