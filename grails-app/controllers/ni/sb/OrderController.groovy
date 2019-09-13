@@ -13,7 +13,8 @@ class OrderController {
 
   static defaultAction = 'list'
   static allowedMethods = [
-    save: 'POST'
+    save: 'POST',
+    update: 'PUT'
   ]
 
   def list() {
@@ -32,11 +33,15 @@ class OrderController {
 
     order.canceled = new Date()
 
-    order.save()
+    if (!order.save()) {
+      flash.message = 'No se puede marcar orden como cancelada sin articulos asociados'
 
-    render(contentType: 'application/json') {
-      [ok: true, order: order]
+      redirect action: 'show', id: order.id
+
+      return
     }
+
+    redirect action: 'show', id: order.id
   }
 
   def create() {}
@@ -85,11 +90,39 @@ class OrderController {
     }
   }
 
+  def update() {
+    PurchaseOrder purchaseOrder = PurchaseOrder.get(params.long('id'))
+
+    purchaseOrder.properties = request.JSON
+
+    if (!purchaseOrder.save()) {
+      render(contentType: 'application/json') {
+        [ok: false, errors: purchaseOrder.errors]
+      }
+    }
+
+    render(contentType: 'application/json') {
+      [ok: true, purchaseOrder: purchaseOrder]
+    }
+  }
+
+  def getItems(PurchaseOrder order) {
+    render(contentType: 'application/json') {
+      [ok: true, items: order.items]
+    }
+  }
+
   @Secured(['ROLE_ADMIN'])
   def approve(PurchaseOrder order) {
     order.approvalDate = new Date()
 
-    order.save(flush: true, failOnError: true)
+    if (!order.save()) {
+      flash.message = 'No se puede aprobar sin articulos asociados'
+
+      redirect action: 'show', id: order.id
+
+      return
+    }
 
     inventoryService.update(order.items)
 

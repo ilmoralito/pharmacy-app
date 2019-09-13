@@ -21,7 +21,9 @@ class Item {
   }
 
   def beforeValidate() {
-    totalBalance = salePrice * quantity
+    if (salePrice && quantity) {
+      totalBalance = salePrice * quantity
+    }
   }
 
   def beforeUpdate() {

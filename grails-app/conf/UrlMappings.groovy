@@ -118,6 +118,15 @@ class UrlMappings {
     "/orders/$id/cancel" (controller: 'order', action: 'cancel', method: 'GET')
     "/orders/create/$providerId/type/$paymentType" (controller: 'order', action: 'create', method: 'GET')
     "/orders/$id/approve" (controller: 'order', action: 'approve', method: 'GET')
+    "/orders/$id" (controller: 'order', action: 'update', method: 'PUT')
+    "/orders/$id/items" (controller: 'order', action: 'getItems', method: 'GET')
+
+    ///////////
+    // item ///
+    ///////////
+    "/items" (controller: 'item', action: 'save', method: 'POST')
+    "/items/$id" (controller: 'item', action: 'update', method: 'PUT')
+    "/items/$id/in/order/$orderId/delete" (controller: 'item', action: 'remove', method: 'GET')
 
     ///////////////
     // inventory //

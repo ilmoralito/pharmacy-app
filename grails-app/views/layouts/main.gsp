@@ -54,6 +54,12 @@
     <g:if test="${controllerName == 'client' && actionName == 'saleDetail' || controllerName == 'payment' && actionName == 'show'}">
       <g:render template="/partials/paymentModal" model="[sale: sale]" />
     </g:if>
+
+    <g:if test="${!order?.approvalDate && !object?.canceled}">
+      <g:if test="${controllerName == 'order' && actionName == 'show'}">
+        <g:render template="/partials/addItemModal" model="[order: order]" />
+      </g:if>
+    </g:if>
     <r:layoutResources />
   </body>
 </html>

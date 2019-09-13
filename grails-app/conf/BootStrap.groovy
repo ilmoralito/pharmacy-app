@@ -411,6 +411,20 @@ class BootStrap {
       output
     }
 
+    JSON.registerObjectMarshaller(Item) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['product'] = [id: it.product.id, name: it.product.name]
+      output['quantity'] = it.quantity
+      output['purchasePrice'] = it.purchasePrice
+      output['salePrice'] = it.salePrice
+      output['totalBalance'] = it.totalBalance
+      output['purchaseOrder'] = [id: it.purchaseOrder.id]
+
+      output
+    }
+
     JSON.registerObjectMarshaller(User) {
       Map output = [:]
 

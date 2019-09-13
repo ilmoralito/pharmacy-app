@@ -273,9 +273,9 @@ modules = {
     resource url: 'js/orderDatepicker.js'
   }
 
-  orderShow {
+  order {
     dependsOn 'app'
-    resource url: 'js/orderCancel.js'
+    resource url: 'js/order.js'
   }
 
   inventory {

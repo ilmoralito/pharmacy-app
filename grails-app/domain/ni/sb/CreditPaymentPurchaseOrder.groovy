@@ -7,7 +7,11 @@ class CreditPaymentPurchaseOrder extends PurchaseOrder {
   BigDecimal balanceToPay
 
   static constraints = {
-    canceled nullable: true
+    canceled nullable: true, validator: { Date cancel, CreditPaymentPurchaseOrder purchaseOrder ->
+      if (cancel && !purchaseOrder.items) {
+        return 'items.are.required'
+      }
+    }
     canceledBy nullable: true
     balanceToPay min: 1.0
   }

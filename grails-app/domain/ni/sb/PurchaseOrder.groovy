@@ -19,7 +19,11 @@ class PurchaseOrder {
     provider nullable: false
     registeredBy nullable: false
     invoiceNumber blank: false, unique: true
-    approvalDate nullable: true
+    approvalDate nullable: true, validator: { Date approvalDate, PurchaseOrder purchaseOrder ->
+      if (approvalDate && !purchaseOrder.items) {
+        return 'items.are.required'
+      }
+    }
     approvedBy nullable: true, validator: { User approvedBy, PurchaseOrder purchaseOrder ->
       if (purchaseOrder.approvalDate && !approvedBy) {
         return 'approvedBy.is.required'
