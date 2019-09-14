@@ -10,7 +10,9 @@ const ProductsComponent = {
 
         this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
 
-        this.renderProviderProducts();
+        if (!localStorage.getItem("order")) {
+            this.renderProviderProducts();
+        }
     },
 
     handleClick(event) {
@@ -41,6 +43,8 @@ const ProductsComponent = {
 
         this.products = updatedProducts;
 
+        OrderLocalStorageComponent.syncProducts(this.products);
+
         this.render();
     },
 
@@ -66,6 +70,8 @@ const ProductsComponent = {
     restoreProduct(dummyProduct) {
         this.products = [...this.products, dummyProduct];
 
+        OrderLocalStorageComponent.syncProducts(this.products);
+
         this.render();
     },
 
@@ -77,8 +83,8 @@ const ProductsComponent = {
         });
     },
 
-    render() {
-        const products = this.products.map(this.productToRowView).join("");
+    render(products = this.products) {
+        const productList = products.map(this.productToRowView).join("");
 
         this.root.innerHTML = `
         <table class="table table-hover table-bordered">
@@ -93,7 +99,7 @@ const ProductsComponent = {
             </thead>
 
             <tbody>
-                ${products}
+                ${productList}
             </tbody>
         </table>`;
     },
@@ -146,6 +152,10 @@ const ItemsComponent = {
 
         if (target.textContent.trim() === "Eliminar") {
             this.handleDelete(target.dataset.id);
+
+            OrderLocalStorageComponent.syncItems(this.items);
+
+            return false;
         }
 
         if (target.textContent === "Continuar") {
@@ -209,6 +219,9 @@ const ItemsComponent = {
         items.splice(index, 1, updatedItem);
 
         this.items = items;
+
+        // Sync this.items with storage
+        OrderLocalStorageComponent.syncItems(this.items);
 
         // update total balance
         const balance = this.getBalance();
@@ -278,17 +291,19 @@ const ItemsComponent = {
     addItem(item) {
         this.items = this.items.concat(item);
 
+        OrderLocalStorageComponent.syncItems(this.items);
+
         this.render();
     },
 
-    render() {
-        if (this.items.length === 0) {
+    render(items = this.items) {
+        if (items.length === 0) {
             this.root.innerHTML = "";
 
             return false;
         }
 
-        const items = this.items.map(this.itemToRowView).join("");
+        const itemList = items.map(this.itemToRowView).join("");
 
         this.root.innerHTML = `
         <table class="table table-hover table-bordered">
@@ -312,10 +327,10 @@ const ItemsComponent = {
                 </tr>
             </thead>
             <tbody>
-                ${items}
+                ${itemList}
                 <tr>
                     <td colspan="4">TOTAL</td>
-                    <td id="totalBalance">${this.getBalance()}</td>
+                    <td id="totalBalance">${this.getBalance(items)}</td>
                     <td colspan="2"></td>
                 </tr>
             </tbody>
@@ -416,8 +431,8 @@ const ItemsComponent = {
         ] = [...target.closest("tr").cells]);
     },
 
-    getBalance() {
-        const balance = this.items.reduce((accumulator, currentValue) => {
+    getBalance(items = this.items) {
+        const balance = items.reduce((accumulator, currentValue) => {
             return (accumulator += currentValue.totalBalance);
         }, 0);
 
@@ -505,12 +520,95 @@ const OrderComponent = {
             alert(errors);
         }
 
+        OrderLocalStorageComponent.clearLocalStorage();
+
         location.replace(`/pharmacyApp/orders/${json.purchaseOrder.id}`);
     }
 };
 
-OrderComponent.init();
+const OrderLocalStorageComponent = {
+    _items: [],
+
+    _order: {},
+
+    _products: [],
+
+    _syncLocalStorage() {
+        const state = {
+            order: this._order,
+            items: this._items,
+            products: this._products
+        };
+
+        localStorage.setItem("order", JSON.stringify(state));
+    },
+
+    _setOrder() {
+        const [, , , providerId, , paymentType] = location.pathname
+            .split("/")
+            .filter(token => token);
+
+        this._order = {
+            providerId,
+            paymentType
+        };
+    },
+
+    syncItems(items) {
+        this._items = items;
+
+        this._syncLocalStorage();
+    },
+
+    syncProducts(products) {
+        this._products = products;
+
+        this._syncLocalStorage();
+    },
+
+    clearLocalStorage() {
+        localStorage.removeItem("order");
+    },
+
+    init() {
+        this._setOrder();
+
+        if (!localStorage.getItem("order")) return false;
+
+        const { order, products, items } = JSON.parse(
+            localStorage.getItem("order")
+        );
+
+        if (
+            order.providerId !== this._order.providerId ||
+            order.paymentType !== this._order.paymentType
+        ) {
+            this.clearLocalStorage();
+
+            return false;
+        }
+
+        if (!confirm("¿Desea cargar desde los datos respaldados?")) {
+            this.clearLocalStorage();
+
+            return false;
+        }
+
+        ProductsComponent.products = products;
+        ProductsComponent.render(products);
+
+        ItemsComponent.items = items;
+        ItemsComponent.render(items);
+
+        this._products = products;
+        this._items = items;
+    }
+};
+
+OrderLocalStorageComponent.init();
 
 ProductsComponent.init();
+
+OrderComponent.init();
 
 ItemsComponent.init();
