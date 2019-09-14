@@ -41,6 +41,7 @@ const FilterOrdersComponent = {
     const dataset = rows.map(row => {
       const [
         nameNode,
+        approvedNode,
         typeNode,
         invoiceNode,
         paymentDateNode,
@@ -51,6 +52,7 @@ const FilterOrdersComponent = {
 
       return {
         name: nameNode.textContent,
+        approved: approvedNode.textContent,
         type: typeNode.textContent.replace(/\n/g, "").trim(),
         invoice: invoiceNode.textContent,
         paymentDate: paymentDateNode.textContent.replace(/\n/g, "").trim(),
@@ -67,12 +69,13 @@ const FilterOrdersComponent = {
     return `
         <tr>
           <td>${provider.name}</td>
+          <td>${provider.approved}</td>
           <td>${provider.type}</td>
           <td>${provider.invoice}</td>
           <td>${provider.paymentDate}</td>
           <td>${provider.balanceToPay}</td>
           <td>${provider.canceled}</td>
-          <td>
+          <td class="text-center">
             <a href="/pharmacyApp/orders/${provider.id}" data-id="${provider.id}">Ver</a>
           </td>
         </tr>
