@@ -288,14 +288,6 @@ modules = {
     dependsOn 'app'
     resource url: 'js/sale.js'
     resource url: 'js/sales.js'
-    // resource url: 'js/salesDetail.js'
-    // resource url: 'js/salesHelper.js'
-    // resource url: 'js/saleClients.js'
-    // resource url: 'js/salesBKU.js'
-    // resource url: 'js/salesDetailActions.js'
-    // resource url: 'js/salesFilter.js'
-    // resource url: 'js/salesFetchInventory.js'
-    // resource url: 'js/salesSaveInstance.js'
   }
 
   sales {
