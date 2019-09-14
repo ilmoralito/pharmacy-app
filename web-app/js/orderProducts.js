@@ -88,12 +88,10 @@ const ProductsComponent = {
 
         this.root.innerHTML = `
         <table class="table table-hover table-bordered">
-            <caption>Productos</caption>
-
             <thead>
                 <tr>
                     <th>
-                        <input class="form-control" placeholder="Filtrar...">
+                        <input class="form-control" placeholder="Filtrar productos" style="font-weight: normal;">
                     </th>
                 </tr>
             </thead>
@@ -527,9 +525,9 @@ const OrderComponent = {
 };
 
 const OrderLocalStorageComponent = {
-    _items: [],
-
     _order: {},
+
+    _items: [],
 
     _products: [],
 
@@ -541,17 +539,6 @@ const OrderLocalStorageComponent = {
         };
 
         localStorage.setItem("order", JSON.stringify(state));
-    },
-
-    _setOrder() {
-        const [, , , providerId, , paymentType] = location.pathname
-            .split("/")
-            .filter(token => token);
-
-        this._order = {
-            providerId,
-            paymentType
-        };
     },
 
     syncItems(items) {
@@ -571,7 +558,7 @@ const OrderLocalStorageComponent = {
     },
 
     init() {
-        this._setOrder();
+        this._order = OrderHelper.getOrder();
 
         if (!localStorage.getItem("order")) return false;
 
@@ -604,6 +591,76 @@ const OrderLocalStorageComponent = {
         this._items = items;
     }
 };
+
+const OrderDetailComponent = {
+    _root: document.querySelector("div#order-detail"),
+
+    _order: {},
+
+    _dictionary: {
+        cash: "Contado",
+        credit: "Credito"
+    },
+
+    async _fetchProviderName() {
+        const endpoint = `/pharmacyApp/providers/${this._order.providerId}`;
+        const response = await fetch(endpoint, {
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        });
+
+        return await response.json();
+    },
+
+    _render({ provider }) {
+        const name = provider.name;
+        const paymentType = this._dictionary[this._order.paymentType];
+        const output = `Proveedor: ${name}, Tipo de pago: ${paymentType}`;
+
+        this._root.innerHTML = `
+            <div class="row">
+                <div class="col-md-3 col-md-offset-9">
+                    <div class="text-center" style="border: 1px solid #ddd; padding: 10px;">
+                        ${output}
+                    </div">
+                </div>
+            </div>`;
+    },
+
+    init() {
+        this._order = OrderHelper.getOrder();
+
+        this._fetchProviderName().then(provider => this._render({ provider }));
+    }
+};
+
+const OrderHelper = {
+    _order: {},
+
+    _setOrder({ providerId, paymentType }) {
+        this._order = {
+            providerId,
+            paymentType
+        };
+    },
+
+    getOrder() {
+        return this._order;
+    },
+
+    init() {
+        const [, , , providerId, , paymentType] = location.pathname
+            .split("/")
+            .filter(token => token);
+
+        this._setOrder({ providerId, paymentType });
+    }
+};
+
+OrderHelper.init();
+
+OrderDetailComponent.init();
 
 OrderLocalStorageComponent.init();
 

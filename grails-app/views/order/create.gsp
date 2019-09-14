@@ -10,6 +10,7 @@
         <input type="hidden" id="providerId" value="${params.providerId}" />
         <input type="hidden" id="paymentType" value="${params.paymentType}" />
 
+        <div id="order-detail"></div>
         <div id="products"></div>
         <div id="items"></div>
     </body>

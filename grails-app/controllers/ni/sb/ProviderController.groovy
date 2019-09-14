@@ -63,7 +63,10 @@ class ProviderController {
   }
 
   def show(Provider provider) {
-    [provider: provider]
+    request.withFormat {
+      html 'provider': provider
+      json { render provider as JSON }
+    }
   }
 
   def update(Provider provider) {
