@@ -4,38 +4,28 @@
     <meta charset="UTF-8">
     <title>Clientes</title>
     <meta name="layout" content="main">
-    <r:require modules="bootstrap-css, bootstrap-collapse, ${clients ? 'client' : 'clientFirst'}"/>
+    <r:require modules="bootstrap-css, bootstrap-collapse, clients"/>
 </head>
 <body>
+    <g:render template="/toddler/toddler" model="[status: clients ? 'close' : 'open']" />
+
     <g:if test="${clients}">
-        <div class="toddler">
-            <div class="panel-body">
-                <form name="form" autocomplete="off">
-                    <g:render template="form"/>
-
-                    <button type="submit" id="confirm" class="btn btn-primary">Confirmar</button>
-                </form>
-
-                <div id="notification"></div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-6">
-                <input type="text" id="filterTrigger" class="form-control" placeholder="Filtrar por Nombre, Direccion o Cedula">
+                <input type="text" id="input" class="form-control" placeholder="Filtrar por Nombre, Direccion, Cedula o telefono" />
             </div>
 
             <div class="col-md-6">
-                <a href="#" id="createClient" class="btn btn-primary pull-right">Crear cliente</a>
+                <a href="#" id="trigger" class="btn btn-primary pull-right">Crear cliente</a>
             </div>
         </div>
 
         <table class="table table-hover table-bordered">
             <col width="20%">
-            <col width="41%">
+            <col width="40%">
+            <col width="15%">
+            <col width="15%">
             <col width="10%">
-            <col width="20%">
-            <col width="9%">
 
             <thead>
                 <th>Nombre</th>
@@ -61,19 +51,7 @@
         </table>
     </g:if>
     <g:else>
-        <div class="row">
-            <div class="col-md-6">
-                <form name="form" autocomplete="off">
-                    <g:render template="form"/>
-                
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Agregar primer cliente</button>
-                    </div>
-                
-                    <div id="errors"></div>
-                </form>
-            </div>
-        </div>
+        <p>Sin clientes que mostrar</p>
     </g:else>
 </body>
 </html>
