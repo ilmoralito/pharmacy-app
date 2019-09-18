@@ -157,6 +157,11 @@ class UrlMappings {
     ///////////////
     '/dashboard' (controller: 'dashboard', action: 'index', method: 'GET')
 
+    /////////////////////
+    // notfoundproduct //
+    /////////////////////
+    '/notfoundproduct' (controller: 'notFoundProduct', action: 'save', method: 'POST')
+
     '/' (controller: 'login')
     '500' (view: '/error')
     }

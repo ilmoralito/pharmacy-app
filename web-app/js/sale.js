@@ -1,62 +1,64 @@
 const NewSaleComponent = {
-  typeOfSale: "",
+    typeOfSale: "",
 
-  clientId: "",
+    clientId: "",
 
-  setTypeOfSale(typeOfSale) {
-    this.typeOfSale = typeOfSale;
-  },
+    setTypeOfSale(typeOfSale) {
+        this.typeOfSale = typeOfSale;
+    },
 
-  setClientId(clientId) {
-    this.clientId = clientId;
-  },
+    setClientId(clientId) {
+        this.clientId = clientId;
+    },
 
-  init() {
-    this.setSaleDataset();
-  },
+    init() {
+        this.setSaleDataset();
+    },
 
-  setSaleDataset() {
-    const [typeOfSale, clientId] = location.pathname
-      .split("/")
-      .filter(Boolean)
-      .slice(3);
+    setSaleDataset() {
+        const [typeOfSale, clientId] = location.pathname
+            .split("/")
+            .filter(Boolean)
+            .slice(3);
 
-    this.setTypeOfSale(typeOfSale);
-    this.setClientId(clientId);
-  }
+        this.setTypeOfSale(typeOfSale);
+        this.setClientId(clientId);
+    }
 };
 
 const SaleModalComponent = {
-  init() {
-    const modalBody = document.querySelector("#saleModal .modal-body");
+    init() {
+        const modalBody = document.querySelector("#saleModal .modal-body");
 
-    const typeOfSale = modalBody.querySelector("#typeOfSale");
-    const client = modalBody.querySelector("#client");
+        const typeOfSale = modalBody.querySelector("#typeOfSale");
+        const client = modalBody.querySelector("#client");
 
-    typeOfSale.value = NewSaleComponent.typeOfSale;
-    client.value = NewSaleComponent.clientId;
-  }
+        typeOfSale.value = NewSaleComponent.typeOfSale;
+        client.value = NewSaleComponent.clientId;
+    }
 };
 
 const InventoryComponent = {
-  root: document.querySelector("#inventory"),
+    root: document.querySelector("#inventory"),
 
-  inventory: [],
+    inventory: [],
 
-  async fetchInventory() {
-    const response = await fetch("/pharmacyApp/inventory", {
-      headers: {
-        "Content-Type": "application/json;charset=utf-8"
-      }
-    });
+    timerID: undefined,
 
-    return await response.json();
-  },
+    async fetchInventory() {
+        const response = await fetch("/pharmacyApp/inventory", {
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        });
 
-  render() {
-    const rows = this.inventory.map(this.itemToRow).join("");
+        return await response.json();
+    },
 
-    this.root.innerHTML = `<table class="table table-hover">
+    render() {
+        const rows = this.inventory.map(this.itemToRow).join("");
+
+        this.root.innerHTML = `<table class="table table-hover">
       <thead>
           <tr>
               <th>
@@ -67,10 +69,10 @@ const InventoryComponent = {
 
       <tbody>${rows}</tbody>
     </table>`;
-  },
+    },
 
-  itemToRow(item) {
-    return `<tr>
+    itemToRow(item) {
+        return `<tr>
       <td>
         <a
           href="#"
@@ -85,99 +87,110 @@ const InventoryComponent = {
         </a>
       </td>
     </tr>`;
-  },
+    },
 
-  handleClick(event) {
-    event.preventDefault();
+    handleClick(event) {
+        event.preventDefault();
 
-    const target = event.target;
+        const target = event.target;
 
-    if (target.nodeName !== "A") return false;
+        if (target.nodeName !== "A") return false;
 
-    // Update inventory list
-    this.removeItem(target.dataset.productId);
+        // Update inventory list
+        this.removeItem(target.dataset.productId);
 
-    // Update sale details
-    const item = Object.assign({}, target.dataset);
+        // Update sale details
+        const item = Object.assign({}, target.dataset);
 
-    SaleDetailComponent.setSaleDetail(item);
-  },
+        SaleDetailComponent.setSaleDetail(item);
+    },
 
-  handleKeyUp(event) {
-    const inventory = this.filter(event.target.value);
+    handleKeyUp(event) {
+        const target = event.target;
 
-    this.sync(inventory);
-  },
+        const inventory = this.filter(target.value);
+        this.sync(inventory);
 
-  filter(criteria) {
-    return this.inventory.filter(item =>
-      item.product.name.toLowerCase().includes(criteria.toLowerCase())
-    );
-  },
+        clearTimeout(this.timerID);
 
-  sync(inventory) {
-    const items = inventory.map(this.itemToRow).join("");
+        if (target.value && !inventory.length) {
+            this.timerID = setTimeout(() => {
+                NotFoundProductComponent.store(target.value);
+            }, 4000);
+        }
+    },
 
-    this.root.querySelector("tbody").innerHTML = items;
-  },
+    filter(criteria) {
+        return this.inventory.filter(item =>
+            item.product.name.toLowerCase().includes(criteria.toLowerCase())
+        );
+    },
 
-  removeItem(productId) {
-    const inventory = Array.from(this.inventory);
-    const index = inventory.findIndex(item => item.product.id === +productId);
+    sync(inventory) {
+        const items = inventory.map(this.itemToRow).join("");
 
-    inventory.splice(index, 1);
+        this.root.querySelector("tbody").innerHTML = items;
+    },
 
-    this.inventory = inventory;
+    removeItem(productId) {
+        const inventory = Array.from(this.inventory);
+        const index = inventory.findIndex(
+            item => item.product.id === +productId
+        );
 
-    this.render();
-  },
+        inventory.splice(index, 1);
 
-  restoreItem(item) {
-    const inventory = Array.from(this.inventory);
-
-    const newInventory = inventory.concat(item);
-
-    this.inventory = newInventory;
-
-    this.render();
-  },
-
-  init() {
-    this.fetchInventory()
-      .then(inventry => {
-        this.inventory = this.inventory.concat(inventry);
+        this.inventory = inventory;
 
         this.render();
-      })
-      .catch(error => console.error(error.message));
+    },
 
-    this.root.addEventListener("click", this.handleClick.bind(this));
+    restoreItem(item) {
+        const inventory = Array.from(this.inventory);
 
-    this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
-  }
+        const newInventory = inventory.concat(item);
+
+        this.inventory = newInventory;
+
+        this.render();
+    },
+
+    init() {
+        this.fetchInventory()
+            .then(inventry => {
+                this.inventory = this.inventory.concat(inventry);
+
+                this.render();
+            })
+            .catch(error => console.error(error.message));
+
+        this.root.addEventListener("click", this.handleClick.bind(this));
+
+        this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
+    }
 };
 
 const SaleDetailComponent = {
-  saleDetail: [],
+    saleDetail: [],
 
-  root: document.querySelector("#salesDetail"),
+    root: document.querySelector("#salesDetail"),
 
-  setSaleDetail(item) {
-    this.saleDetail = this.saleDetail.concat(item);
+    setSaleDetail(item) {
+        this.saleDetail = this.saleDetail.concat(item);
 
-    this.render();
-  },
+        this.render();
+    },
 
-  render() {
-    if (this.saleDetail.length === 0) {
-      this.root.innerHTML = "";
+    render() {
+        if (this.saleDetail.length === 0) {
+            this.root.innerHTML = "";
 
-      return false;
-    }
+            return false;
+        }
 
-    const rows = this.saleDetail.map(this.itemToRow).join("");
+        const rows = this.saleDetail.map(this.itemToRow).join("");
 
-    this.root.innerHTML = `<table class="table table-hover table-bordered">
+        this.root.innerHTML = `<table class="table table-hover table-bordered">
       <col width="60%" />
       <col width="10%" />
       <col width="10%" />
@@ -200,10 +213,10 @@ const SaleDetailComponent = {
     </table>
 
     <button class="btn btn-primary" data-toggle="modal" data-target="#mySale">Continuar</button>`;
-  },
+    },
 
-  itemToRow(item) {
-    return `<tr>
+    itemToRow(item) {
+        return `<tr>
       <td style="vertical-align: middle;">${item.productName}</td>
       <td style="vertical-align: middle;">${item.salePrice}</td>
       <td>
@@ -222,135 +235,135 @@ const SaleDetailComponent = {
         <button class="btn btn-default" data-id="${item.productId}">Eliminar</button>
       </td>
     </tr>`;
-  },
+    },
 
-  handleClick(event) {
-    event.preventDefault();
+    handleClick(event) {
+        event.preventDefault();
 
-    const target = event.target;
+        const target = event.target;
 
-    if (target.nodeName !== "BUTTON") return false;
+        if (target.nodeName !== "BUTTON") return false;
 
-    if (target.textContent === "Eliminar") {
-      this.restoreProductToInventory(target.dataset.id);
+        if (target.textContent === "Eliminar") {
+            this.restoreProductToInventory(target.dataset.id);
 
-      this.removeItem(target.dataset.id);
-    }
+            this.removeItem(target.dataset.id);
+        }
 
-    if (target.textContent === "Continuar") {
-      SalesSummaryComponent.handler();
-    }
-  },
+        if (target.textContent === "Continuar") {
+            SalesSummaryComponent.handler();
+        }
+    },
 
-  removeItem(productId) {
-    const saleDetail = [...this.saleDetail];
-    const index = this.saleDetail.findIndex(
-      item => item.productId === productId
-    );
+    removeItem(productId) {
+        const saleDetail = [...this.saleDetail];
+        const index = this.saleDetail.findIndex(
+            item => item.productId === productId
+        );
 
-    saleDetail.splice(index, 1);
+        saleDetail.splice(index, 1);
 
-    this.saleDetail = saleDetail;
+        this.saleDetail = saleDetail;
 
-    this.render();
-  },
+        this.render();
+    },
 
-  restoreProductToInventory(productId) {
-    const saleDetail = Array.from(this.saleDetail);
-    const item = saleDetail.find(item => item.productId === productId);
-    const product = {
-      product: { id: item.productId, name: item.productName },
-      stock: item.stock,
-      salePrice: item.salePrice,
-      quantity: item.quantity
-    };
+    restoreProductToInventory(productId) {
+        const saleDetail = Array.from(this.saleDetail);
+        const item = saleDetail.find(item => item.productId === productId);
+        const product = {
+            product: { id: item.productId, name: item.productName },
+            stock: item.stock,
+            salePrice: item.salePrice,
+            quantity: item.quantity
+        };
 
-    InventoryComponent.restoreItem(product);
-  },
+        InventoryComponent.restoreItem(product);
+    },
 
-  handleInput(event) {
-    const target = event.target;
-    const saleDetail = [...this.saleDetail];
-    const { productId, productStock } = Object.assign({}, target.dataset);
-    const item = this.saleDetail.find(item => item.productId === productId);
-    const index = this.saleDetail.findIndex(
-      item => item.productId === productId
-    );
+    handleInput(event) {
+        const target = event.target;
+        const saleDetail = [...this.saleDetail];
+        const { productId, productStock } = Object.assign({}, target.dataset);
+        const item = this.saleDetail.find(item => item.productId === productId);
+        const index = this.saleDetail.findIndex(
+            item => item.productId === productId
+        );
 
-    if (+target.value > productStock) {
-      const message = `
+        if (+target.value > productStock) {
+            const message = `
         Cantidad excede existencias del producto\n
         Existencias actuales ${productStock}`;
 
-      alert(message);
+            alert(message);
 
-      this.render();
+            this.render();
 
-      return false;
+            return false;
+        }
+
+        const newItem = Object.assign({}, item, {
+            quantity: target.value,
+            total: target.value * item.salePrice
+        });
+
+        saleDetail.splice(index, 1, newItem);
+
+        this.saleDetail = saleDetail;
+
+        this.render();
+    },
+
+    getSubtotal() {
+        return this.saleDetail.reduce((accumulator, currentValue) => {
+            accumulator += +currentValue.total;
+
+            return accumulator;
+        }, 0);
+    },
+
+    init() {
+        this.root.addEventListener("click", this.handleClick.bind(this));
+
+        this.root.addEventListener("input", this.handleInput.bind(this));
     }
-
-    const newItem = Object.assign({}, item, {
-      quantity: target.value,
-      total: target.value * item.salePrice
-    });
-
-    saleDetail.splice(index, 1, newItem);
-
-    this.saleDetail = saleDetail;
-
-    this.render();
-  },
-
-  getSubtotal() {
-    return this.saleDetail.reduce((accumulator, currentValue) => {
-      accumulator += +currentValue.total;
-
-      return accumulator;
-    }, 0);
-  },
-
-  init() {
-    this.root.addEventListener("click", this.handleClick.bind(this));
-
-    this.root.addEventListener("input", this.handleInput.bind(this));
-  }
 };
 
 const SalesSummaryComponent = {
-  root: document.querySelector("div#mySale #root"),
+    root: document.querySelector("div#mySale #root"),
 
-  totalToPay: 0,
+    totalToPay: 0,
 
-  moneyReceived: 0,
+    moneyReceived: 0,
 
-  subtotal: 0,
+    subtotal: 0,
 
-  change: 0,
+    change: 0,
 
-  setTotalToPay() {
-    const totalToPay = this.subtotal * 0.15 + this.subtotal;
+    setTotalToPay() {
+        const totalToPay = this.subtotal * 0.15 + this.subtotal;
 
-    this.totalToPay = totalToPay;
-  },
+        this.totalToPay = totalToPay;
+    },
 
-  setSubtotal() {
-    const subtotal = SaleDetailComponent.getSubtotal();
+    setSubtotal() {
+        const subtotal = SaleDetailComponent.getSubtotal();
 
-    this.subtotal = subtotal;
-  },
+        this.subtotal = subtotal;
+    },
 
-  setMoneyReceived(moneyReceived) {
-    this.moneyReceived = moneyReceived;
-  },
+    setMoneyReceived(moneyReceived) {
+        this.moneyReceived = moneyReceived;
+    },
 
-  setChange(moneyReceived) {
-    this.change = moneyReceived - this.totalToPay;
+    setChange(moneyReceived) {
+        this.change = moneyReceived - this.totalToPay;
 
-    document.querySelector("#change").innerHTML = this.change; // I realy do not like this solution. Could it be done with a proxy?
-  },
+        document.querySelector("#change").innerHTML = this.change; // I realy do not like this solution. Could it be done with a proxy?
+    },
 
-  renderCreditSummary() {
-    this.root.innerHTML = `<table class="table table-hover table-bordered">
+    renderCreditSummary() {
+        this.root.innerHTML = `<table class="table table-hover table-bordered">
       <tbody>
         <tr>
           <td>IVA</td>
@@ -366,10 +379,10 @@ const SalesSummaryComponent = {
         </tr>
       </tbody>
     </table>`;
-  },
+    },
 
-  renderCashSummary() {
-    this.root.innerHTML = `<table class="table table-hover table-bordered">
+    renderCashSummary() {
+        this.root.innerHTML = `<table class="table table-hover table-bordered">
       <tbody>
         <tr>
           <td>IVA</td>
@@ -395,130 +408,189 @@ const SalesSummaryComponent = {
         </tr>
       </tbody>
     </table>`;
-  },
+    },
 
-  handleKeyUp(event) {
-    const target = event.target;
+    handleKeyUp(event) {
+        const target = event.target;
 
-    this.setChange(+target.value);
+        this.setChange(+target.value);
 
-    this.setMoneyReceived(+target.value);
-  },
+        this.setMoneyReceived(+target.value);
+    },
 
-  handleClick(event) {
-    event.preventDefault();
+    handleClick(event) {
+        event.preventDefault();
 
-    const target = event.target;
+        const target = event.target;
 
-    if (target.nodeName !== "BUTTON") return false;
+        if (target.nodeName !== "BUTTON") return false;
 
-    if (NewSaleComponent.typeOfSale === "cash") {
-      const validator = this.validate();
+        if (NewSaleComponent.typeOfSale === "cash") {
+            const validator = this.validate();
 
-      if (!validator.ok) {
-        alert(validator.message);
+            if (!validator.ok) {
+                alert(validator.message);
 
-        return;
-      }
+                return;
+            }
 
-      StoreSaleComponent.storeCashSale();
+            StoreSaleComponent.storeCashSale();
 
-      return false;
+            return false;
+        }
+
+        StoreSaleComponent.storeCreditSale();
+    },
+
+    validate() {
+        if (isNaN(this.totalToPay) || this.totalToPay <= 0) {
+            return { ok: false, message: "Total a pagar es invalido" };
+        }
+
+        if (isNaN(this.subtotal) || this.subtotal <= 0) {
+            return { ok: false, message: "Sub total es invalido" };
+        }
+
+        if (isNaN(this.change) || this.change < 0) {
+            return { ok: false, message: "Vuelto es invalido" };
+        }
+
+        return { ok: true };
+    },
+
+    handler() {
+        this.setSubtotal();
+
+        this.setTotalToPay();
+
+        const typeOfSale = NewSaleComponent.typeOfSale;
+
+        if (typeOfSale === "credit") {
+            this.renderCreditSummary();
+        }
+
+        if (typeOfSale === "cash") {
+            this.renderCashSummary();
+        }
+    },
+
+    init() {
+        this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
+
+        document
+            .querySelector("#mySale .modal-footer button")
+            .addEventListener("click", this.handleClick.bind(this));
     }
-
-    StoreSaleComponent.storeCreditSale();
-  },
-
-  validate() {
-    if (isNaN(this.totalToPay) || this.totalToPay <= 0) {
-      return { ok: false, message: "Total a pagar es invalido" };
-    }
-
-    if (isNaN(this.subtotal) || this.subtotal <= 0) {
-      return { ok: false, message: "Sub total es invalido" };
-    }
-
-    if (isNaN(this.change) || this.change < 0) {
-      return { ok: false, message: "Vuelto es invalido" };
-    }
-
-    return { ok: true };
-  },
-
-  handler() {
-    this.setSubtotal();
-
-    this.setTotalToPay();
-
-    const typeOfSale = NewSaleComponent.typeOfSale;
-
-    if (typeOfSale === "credit") {
-      this.renderCreditSummary();
-    }
-
-    if (typeOfSale === "cash") {
-      this.renderCashSummary();
-    }
-  },
-
-  init() {
-    this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
-
-    document
-      .querySelector("#mySale .modal-footer button")
-      .addEventListener("click", this.handleClick.bind(this));
-  }
 };
 
 const StoreSaleComponent = {
-  storeCashSale() {
-    const { typeOfSale: paymentType, clientId: client } = NewSaleComponent;
-    const { saleDetail: salesDetail } = SaleDetailComponent;
-    const {
-      totalToPay,
-      moneyReceived: cashReceived,
-      change
-    } = SalesSummaryComponent;
+    storeCashSale() {
+        const { typeOfSale: paymentType, clientId: client } = NewSaleComponent;
+        const { saleDetail: salesDetail } = SaleDetailComponent;
+        const {
+            totalToPay,
+            moneyReceived: cashReceived,
+            change
+        } = SalesSummaryComponent;
 
-    const sale = Object.assign(
-      {},
-      { paymentType, client },
-      { salesDetail },
-      { totalToPay, cashReceived, change }
-    );
+        const sale = Object.assign(
+            {},
+            { paymentType, client },
+            { salesDetail },
+            { totalToPay, cashReceived, change }
+        );
 
-    this.store(sale);
-  },
+        this.store(sale);
+    },
 
-  storeCreditSale() {
-    const { typeOfSale: paymentType, clientId: client } = NewSaleComponent;
-    const { saleDetail: salesDetail } = SaleDetailComponent;
+    storeCreditSale() {
+        const { typeOfSale: paymentType, clientId: client } = NewSaleComponent;
+        const { saleDetail: salesDetail } = SaleDetailComponent;
 
-    const sale = Object.assign({}, { paymentType, client }, { salesDetail });
+        const sale = Object.assign(
+            {},
+            { paymentType, client },
+            { salesDetail }
+        );
 
-    this.store(sale);
-  },
+        this.store(sale);
+    },
 
-  store(sale) {
-    fetch("/pharmacyApp/sales", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8"
-      },
-      body: JSON.stringify(sale)
-    })
-      .then(response => response.json())
-      .then(json => {
-        if (!json.ok) {
-          alert(json.errors.errors.map(error => error.message).join("\n"));
+    store(sale) {
+        fetch("/pharmacyApp/sales", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(sale)
+        })
+            .then(response => response.json())
+            .then(json => {
+                if (!json.ok) {
+                    alert(
+                        json.errors.errors
+                            .map(error => error.message)
+                            .join("\n")
+                    );
 
-          return false;
+                    return false;
+                }
+
+                location.replace("/pharmacyApp/sales");
+            })
+            .catch(error => console.error(error.message));
+    }
+};
+
+const NotFoundProductComponent = {
+    store(criteria) {
+        const { typeOfSale, clientId: client } = NewSaleComponent;
+
+        fetch("/pharmacyApp/notfoundproduct", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify({
+                typeOfSale,
+                criteria,
+                client
+            })
+        })
+            .then(response => response.json())
+            .then(json => {
+                if (!json.ok) {
+                    const message = json.errors.errors
+                        .map(error => error.message)
+                        .join("");
+
+                    this.notify(message);
+
+                    return;
+                }
+
+                this.notify(
+                    `${json.notFoundProduct.criteria} guardado como no encontrado`
+                );
+            })
+            .catch(error => console.error(error.message));
+    },
+
+    notify(message) {
+        if (window.Notification.permission === "granted") {
+            new window.Notification(message);
+
+            return false;
         }
 
-        location.replace("/pharmacyApp/sales");
-      })
-      .catch(error => console.error(error.message));
-  }
+        if (window.Notification.permission !== "denied") {
+            window.Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new window.Notification(message);
+                }
+            });
+        }
+    }
 };
 
 NewSaleComponent.init();

@@ -437,5 +437,19 @@ class BootStrap {
 
       output
     }
+
+    JSON.registerObjectMarshaller(NotFoundProduct) {
+      Map output = [:]
+
+      output['id'] = it.id
+      output['typeOfSale'] = it.typeOfSale
+      output['attendedBy'] = it.attendedBy.fullName
+      output['criteria'] = it.criteria
+      output['client'] = it.client.fullName
+      output['deleted'] = it.deleted
+      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
+
+      output
+    }
   }
 }
