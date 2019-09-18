@@ -298,4 +298,9 @@ modules = {
     dependsOn 'app'
     resource url: 'js/payment.js'
   }
+
+  notFoundProduct {
+    dependsOn 'app'
+    resource url: 'js/notFoundProduct.js'
+  }
 }

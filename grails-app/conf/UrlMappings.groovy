@@ -160,6 +160,8 @@ class UrlMappings {
     /////////////////////
     // notfoundproduct //
     /////////////////////
+    '/notfoundproducts' (controller: 'notFoundProduct', action: 'index', method: 'GET')
+    "/notfoundproducts/client/$id/dataset" (controller: 'notFoundProduct', action: 'fetchClientDataset', method: 'GET')
     '/notfoundproduct' (controller: 'notFoundProduct', action: 'save', method: 'POST')
 
     '/' (controller: 'login')

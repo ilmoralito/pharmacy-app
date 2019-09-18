@@ -11,6 +11,21 @@ class NotFoundProductController {
     save: 'POST'
   ]
 
+  NotFoundProductService notFoundProductService
+  ClientService clientService
+
+  def index() {
+    [clients: notFoundProductService.fetchCustomers()]
+  }
+
+  def fetchClientDataset(Client client) {
+    List<NotFoundProduct> dataset = notFoundProductService.fetchClientDataset(client)
+
+    render(contentType: 'application/json') {
+      [dataset: dataset]
+    }
+  }
+
   def save() {
     JSONObject json = request.JSON
 

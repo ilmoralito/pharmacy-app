@@ -71,7 +71,7 @@
             </li>
           </ul>
         </li>
-        <li class="dropdown ${controllerName in ['payment', 'inventory', 'reports'] ? 'active' : ''}">
+        <li class="dropdown ${controllerName in ['payment', 'inventory', 'reports', 'notFoundProduct'] ? 'active' : ''}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Sumario <span class="caret"></span>
           </a>
@@ -91,6 +91,10 @@
             </li>
             <li class="${controllerName == 'reports' ? 'active' : ''}">
               <g:link controller="reports" action="sales">Reportes</g:link>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li class="${controllerName == 'notFoundProduct' ? 'active' : ''}">
+              <g:link controller="notFoundProduct" action="index">Productos no encontrados</g:link>
             </li>
           </ul>
         </li>
