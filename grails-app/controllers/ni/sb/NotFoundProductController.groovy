@@ -18,6 +18,10 @@ class NotFoundProductController {
     [clients: notFoundProductService.fetchCustomers()]
   }
 
+  def criteria() {
+    [criterias: notFoundProductService.fetchCriterias()]
+  }
+
   def fetchClientDataset(Client client) {
     List<NotFoundProduct> dataset = notFoundProductService.fetchClientDataset(client)
 

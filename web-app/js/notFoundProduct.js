@@ -56,9 +56,11 @@ const App = {
     },
 
     init() {
-        document
-            .querySelector("select#client")
-            .addEventListener("change", this.handleChange.bind(this));
+        const clientDOM = document.querySelector("select#client");
+
+        if (!clientDOM) return false;
+
+        clientDOM.addEventListener("change", this.handleChange.bind(this));
     }
 };
 

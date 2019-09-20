@@ -160,6 +160,65 @@ class BootStrap {
             updatedBy: user0
           ).save(failOnError: true)
         }
+
+        /////////////////////
+        // notfoundproduct //
+        /////////////////////
+        new NotFoundProduct(
+          typeOfSale: 'credit',
+          attendedBy: user0,
+          criteria: 'item1',
+          client: juanPerez
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'credit',
+          attendedBy: user1,
+          criteria: 'item2',
+          client: adaKing
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'credit',
+          attendedBy: user0,
+          criteria: 'item1',
+          client: adaKing
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'cash',
+          attendedBy: user0,
+          criteria: 'item3',
+          client: johnDoe
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'cash',
+          attendedBy: user0,
+          criteria: 'item3',
+          client: johnDoe
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'cash',
+          attendedBy: user0,
+          criteria: 'item3',
+          client: johnDoe
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'cash',
+          attendedBy: user1,
+          criteria: 'item4',
+          client: johnDoe
+        ).save(failOnError: true)
+
+        new NotFoundProduct(
+          typeOfSale: 'credit',
+          attendedBy: user1,
+          criteria: 'item4',
+          client: johnDoe
+        ).save(failOnError: true)
     }
   }
   def destroy = {
@@ -446,7 +505,7 @@ class BootStrap {
       output['attendedBy'] = it.attendedBy.fullName
       output['criteria'] = it.criteria
       output['client'] = it.client.fullName
-      output['deleted'] = it.deleted
+      output['archived'] = it?.archived?.format('yyyy-MM-dd hh:mm')
       output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
 
       output

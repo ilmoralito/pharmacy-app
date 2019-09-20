@@ -17,7 +17,7 @@ class NotFoundProductService {
       from
         not_found_product
           inner join
-        client on client.id = not_found_product.client_id
+        client on client.id = not_found_product.client_id and not_found_product.archived is null
       order by full_name
     """
     final sqlQuery = session.createSQLQuery(query)
@@ -31,9 +31,19 @@ class NotFoundProductService {
   }
 
   List<NotFoundProduct> fetchClientDataset(final Client client) {
-    println '*' * 100
-    println client
-    println '*' * 100
-    NotFoundProduct.where { client == client }.list()
+    NotFoundProduct.where { client == client && archived == null }.list()
+  }
+
+  List<NotFoundProduct> fetchCriterias() {
+    final session = sessionFactory.currentSession
+    final String query = 'select criteria name, count(criteria) count from not_found_product where archived is null group by name order by count desc'
+    final sqlQuery = session.createSQLQuery(query)
+    final result = sqlQuery.with {
+      resultTransformer = AliasToEntityMapResultTransformer.INSTANCE
+
+      list()
+    }
+
+    result
   }
 }

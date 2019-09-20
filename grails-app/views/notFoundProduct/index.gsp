@@ -9,16 +9,21 @@
 <body>
     <g:render template="nav" />
 
-    <div class="form-group">
-        <g:select
-            name="client"
-            from="${clients}"
-            optionKey="id"
-            optionValue="full_name"
-            noSelection="['': 'Selecciona un cliente']"
-            class="form-control" />
-    </div>
+    <g:if test="${clients}">
+        <div class="form-group">
+            <g:select
+                name="client"
+                from="${clients}"
+                optionKey="id"
+                optionValue="full_name"
+                noSelection="['': 'Selecciona un cliente']"
+                class="form-control" />
+        </div>
 
-    <div id="root"></div>
+        <div id="root"></div>
+    </g:if>
+    <g:else>
+        <p>Sin criterios que mostrar</p>
+    </g:else>
 </body>
 </html>

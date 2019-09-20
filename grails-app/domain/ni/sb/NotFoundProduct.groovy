@@ -5,8 +5,9 @@ class NotFoundProduct {
   User attendedBy
   String criteria
   Client client
-  Boolean deleted = false
+  Date archived
   Date dateCreated
+  Date lastUpdated
 
   transient springSecurityService
 
@@ -17,6 +18,7 @@ class NotFoundProduct {
     client nullable: false
     criteria nullable: false
     attendedBy nullable: false
+    archived nullable: true
   }
 
   static mapping = {

@@ -14,6 +14,10 @@
         <div class="col-md-12">
           <div class="content">
             <g:layoutBody />
+
+            <g:if test="${flash.message}">
+              <div class="alert alert-info">${flash.message}</div>
+            </g:if>
           </div>
         </div>
       </div>
