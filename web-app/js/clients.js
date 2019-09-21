@@ -113,7 +113,7 @@ const ImportComponent = {
         const file = target.files[0];
 
         if (!["text/csv"].includes(file.type)) {
-            alert("Archvio invalido. Selecciona un archico con de tipo CSV");
+            alert("Archivo invalido. Selecciona un archico de tipo CSV");
 
             return false;
         }
@@ -121,22 +121,26 @@ const ImportComponent = {
         const fileReader = new FileReader();
 
         fileReader.onload = result => {
-            const clients = result.target.result
-                .split("\n")
-                .filter(token => token)
-                .map(item => item.split(","))
-                .map(client => ({
-                    firstName: client[0],
-                    lastName: client[1],
-                    identificationCard: client[2],
-                    address: client[3],
-                    phones: client[4]
-                }));
+            const clients = this.csvToArray(result);
 
             this.store(clients);
         };
 
         fileReader.readAsText(file);
+    },
+
+    csvToArray(dataset) {
+        return dataset.target.result
+            .split("\n")
+            .filter(token => token)
+            .map(item => item.split(","))
+            .map(client => ({
+                firstName: client[0],
+                lastName: client[1],
+                identificationCard: client[2],
+                address: client[3],
+                phones: client[4]
+            }));
     },
 
     async store(clients) {
@@ -151,30 +155,31 @@ const ImportComponent = {
         const response = await fetch(endpoint, options);
         const json = await response.json();
 
-        this.render(clients, json);
+        this.render(json);
     },
 
-    render(clients, json) {
-        ClientComponent.fetchClients().then(clientList => {
-            const clientsLength = json.created.length + json.updated.length;
-            if (clientList.length === clientsLength) {
+    render(json) {
+        if (!document.querySelector("table")) {
+            this.showSummary(json);
+
+            setTimeout(() => {
                 location.reload();
+            }, 4000);
+        }
 
-                return false;
-            }
+        ClientComponent.fetchClients().then(clients => {
+            ClientComponent.clients = clients;
 
-            ClientComponent.clients = clientList;
-
-            ClientComponent.render(clientList);
+            ClientComponent.render(clients);
 
             this.showSummary(json);
         });
     },
 
-    showSummary(json) {
-        const createdRows = json.created.map(this.clientToRowView).join("");
-        const updatedRows = json.updated.map(this.clientToRowView).join("");
-        const errorRows = json.errors.map(this.errorToRowView).join("");
+    showSummary({ created, updated, errors }) {
+        const createdRows = created.map(this.clientToRowView).join("");
+        const updatedRows = updated.map(this.clientToRowView).join("");
+        const errorRows = errors.map(this.errorToRowView).join("");
 
         const createdTable =
             createdRows &&
@@ -198,6 +203,17 @@ const ImportComponent = {
             errorRows &&
             `<table class="table table-bordered">
                 <caption>Errores</caption>
+
+                <col width="5%">
+                <col width="95%">
+
+                <thead>
+                    <tr>
+                        <th>Indice</th>
+                        <th>Errores</th>
+                    </tr>
+                </thead>
+
                 <tbody>
                     ${errorRows}
                 </tbody>
@@ -213,15 +229,15 @@ const ImportComponent = {
                 <tbody>
                     <tr>
                         <td>Creados</td>
-                        <td>${json.created.length}</td>
+                        <td>${created.length}</td>
                     </tr>
                     <tr>
                         <td>Editados</td>
-                        <td>${json.updated.length}</td>
+                        <td>${updated.length}</td>
                     </tr>
                     <tr>
                         <td>Errores</td>
-                        <td>${json.errors.length}</td>
+                        <td>${errors.length}</td>
                     </tr>
                 </tbody>
             </table>
@@ -243,7 +259,8 @@ const ImportComponent = {
 
     errorToRowView(error) {
         return `<tr>
-            <td>${error.errors.map(err => err.message).join("<br>")}</td>
+            <td>${error.index}</td>
+            <td>${error.errors.errors.map(err => err.message).join(", ")}</td>
         </tr>`;
     },
 

@@ -42,7 +42,7 @@ class ClientController {
   }
 
   def batch() {
-    List<Client> errors = []
+    List<Map> errors = []
     List<Client> created = []
     List<Client> updated = []
 
@@ -60,7 +60,7 @@ class ClientController {
       }
 
       if (!client.save(flush: true)) {
-        errors << client.errors
+        errors << [index: ++index, errors: client.errors]
       } else {
         if (action == 'create') {
           created << client
