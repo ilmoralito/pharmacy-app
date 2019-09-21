@@ -451,6 +451,15 @@ const SalesSummaryComponent = {
             return { ok: false, message: "Sub total es invalido" };
         }
 
+        if (
+            !this.moneyReceived ||
+            isNaN(this.moneyReceived) ||
+            this.moneyReceived <= 0 ||
+            this.moneyReceived < this.totalToPay
+        ) {
+            return { ok: false, message: "Efectivo recibido es invalido" };
+        }
+
         if (isNaN(this.change) || this.change < 0) {
             return { ok: false, message: "Vuelto es invalido" };
         }
