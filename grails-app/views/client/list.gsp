@@ -16,7 +16,11 @@
             </div>
 
             <div class="col-md-6">
-                <a href="#" id="trigger" class="btn btn-primary pull-right">Crear cliente</a>
+                <div class="pull-right">
+                    <label for="file" class="btn btn-default">Importar</label>
+                    <input type="file" name="file" id="file" class="hide">
+                    <a href="#" id="trigger" class="btn btn-primary">Crear cliente</a>
+                </div>
             </div>
         </div>
 
@@ -51,6 +55,10 @@
         </table>
     </g:if>
     <g:else>
+        <div class="pull-right">
+            <label for="file" class="btn btn-default">Importar</label>
+            <input type="file" name="file" id="file" class="hide">
+        </div>
         <p>Sin clientes que mostrar</p>
     </g:else>
 </body>

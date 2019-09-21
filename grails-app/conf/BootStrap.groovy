@@ -289,9 +289,9 @@ class BootStrap {
       output['address'] = it.address
       output['identificationCard'] = it.identificationCard
       output['phones'] = it.phones
-      output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd h:m')
-      output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd h:m')
-      output['createdBy'] = [id: it.createdBy.id, fullName: it.createdBy.fullName]
+      output['dateCreated'] = it?.dateCreated?.format('yyyy-MM-dd h:m')
+      output['lastUpdated'] = it?.lastUpdated?.format('yyyy-MM-dd h:m')
+      output['createdBy'] = [id: it?.createdBy?.id, fullName: it?.createdBy?.fullName]
       output['status'] = it.status ? 'Habilitado' : 'No habilitado'
 
       output

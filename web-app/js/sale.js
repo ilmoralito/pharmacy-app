@@ -546,7 +546,7 @@ const NotFoundProductComponent = {
     store(criteria) {
         const { typeOfSale, clientId: client } = NewSaleComponent;
 
-        fetch("/pharmacyApp/notfoundproduct", {
+        fetch("/pharmacyApp/notfoundproducts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8"

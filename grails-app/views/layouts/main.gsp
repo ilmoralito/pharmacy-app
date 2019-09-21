@@ -64,6 +64,14 @@
         <g:render template="/partials/addItemModal" model="[order: order]" />
       </g:if>
     </g:if>
+
+    <g:if test="${controllerName == 'client' && actionName == 'list'}">
+      <g:render template="/partials/clientsImportSummary" />
+    </g:if>
+
+    <g:if test="${controllerName == 'notFoundProduct'}">
+      <g:render template="/partials/notFoundProduct" />
+    </g:if>
     <r:layoutResources />
   </body>
 </html>

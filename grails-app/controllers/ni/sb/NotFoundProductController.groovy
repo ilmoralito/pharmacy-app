@@ -18,15 +18,9 @@ class NotFoundProductController {
     [clients: notFoundProductService.fetchCustomers()]
   }
 
-  def criteria() {
-    [criterias: notFoundProductService.fetchCriterias()]
-  }
-
-  def fetchClientDataset(Client client) {
-    List<NotFoundProduct> dataset = notFoundProductService.fetchClientDataset(client)
-
+  def show(NotFoundProduct notFoundProduct) {
     render(contentType: 'application/json') {
-      [dataset: dataset]
+      [notFoundProduct: notFoundProduct]
     }
   }
 
@@ -43,6 +37,18 @@ class NotFoundProductController {
 
     render(contentType: 'application/json') {
       [ok: true, notFoundProduct: notFoundProduct]
+    }
+  }
+
+  def criteria() {
+    [criterias: notFoundProductService.fetchCriterias()]
+  }
+
+  def fetchClientDataset(Client client) {
+    List<NotFoundProduct> dataset = notFoundProductService.fetchClientDataset(client)
+
+    render(contentType: 'application/json') {
+      [dataset: dataset]
     }
   }
 }

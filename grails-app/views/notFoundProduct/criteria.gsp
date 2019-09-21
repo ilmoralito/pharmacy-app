@@ -12,14 +12,12 @@
     <g:if test="${criterias}">
       <table class="table table-hover table-bordered">
         <col width="20%">
-        <col width="70%">
-        <col width="10%">
+        <col width="80%">
 
         <thead>
           <tr>
             <th>Criterio</th>
             <th>Cantidad</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -27,9 +25,6 @@
             <tr>
               <td>${criteria.name}</td>
               <td>${criteria.count}</td>
-              <td class="text-center">
-                <g:link action="archive" id="${criteria.id}">Archivar</g:link>
-              </td>
             </tr>
           </g:each>
         </tbody>

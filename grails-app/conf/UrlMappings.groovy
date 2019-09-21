@@ -26,6 +26,7 @@ class UrlMappings {
     "/clients/$id/archived/credits" (controller: 'client', action: 'archivedCredits', method: 'GET')
     "/clients/$id/sale/$saleId/detail" (controller: 'client', action: 'saleDetail', method: 'GET')
     '/clients/enabled' (controller: 'client', action: 'listEnabled', method: 'GET')
+    '/clients/batch' (controller: 'client', action: 'batch', method: 'POST')
 
     ///////////////
     // providers //
@@ -161,9 +162,10 @@ class UrlMappings {
     // notfoundproduct //
     /////////////////////
     '/notfoundproducts' (controller: 'notFoundProduct', action: 'index', method: 'GET')
+    "/notfoundproducts/$id" (controller: 'notFoundProduct', action: 'show', method: 'GET')
     "/notfoundproducts/client/$id/dataset" (controller: 'notFoundProduct', action: 'fetchClientDataset', method: 'GET')
     '/notfoundproducts/criterias' (controller: 'notFoundProduct', action: 'criteria', method: 'GET')
-    '/notfoundproduct' (controller: 'notFoundProduct', action: 'save', method: 'POST')
+    '/notfoundproducts' (controller: 'notFoundProduct', action: 'save', method: 'POST')
 
     '/' (controller: 'login')
     '500' (view: '/error')

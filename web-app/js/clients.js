@@ -103,8 +103,159 @@ const AddClientComponent = {
     }
 };
 
+const ImportComponent = {
+    file: document.querySelector("input#file"),
+
+    root: document.querySelector("div#summary-root"),
+
+    handleChange(event) {
+        const target = event.target;
+        const file = target.files[0];
+
+        if (!["text/csv"].includes(file.type)) {
+            alert("Archvio invalido. Selecciona un archico con de tipo CSV");
+
+            return false;
+        }
+
+        const fileReader = new FileReader();
+
+        fileReader.onload = result => {
+            const clients = result.target.result
+                .split("\n")
+                .filter(token => token)
+                .map(item => item.split(","))
+                .map(client => ({
+                    firstName: client[0],
+                    lastName: client[1],
+                    identificationCard: client[2],
+                    address: client[3],
+                    phones: client[4]
+                }));
+
+            this.store(clients);
+        };
+
+        fileReader.readAsText(file);
+    },
+
+    async store(clients) {
+        const endpoint = "/pharmacyApp/clients/batch";
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            body: JSON.stringify(clients)
+        };
+        const response = await fetch(endpoint, options);
+        const json = await response.json();
+
+        this.render(clients, json);
+    },
+
+    render(clients, json) {
+        ClientComponent.fetchClients().then(clientList => {
+            const clientsLength = json.created.length + json.updated.length;
+            if (clientList.length === clientsLength) {
+                location.reload();
+
+                return false;
+            }
+
+            ClientComponent.clients = clientList;
+
+            ClientComponent.render(clientList);
+
+            this.showSummary(json);
+        });
+    },
+
+    showSummary(json) {
+        const createdRows = json.created.map(this.clientToRowView).join("");
+        const updatedRows = json.updated.map(this.clientToRowView).join("");
+        const errorRows = json.errors.map(this.errorToRowView).join("");
+
+        const createdTable =
+            createdRows &&
+            `<table class="table table-bordered">
+                <caption>Creados</caption>
+                <tbody>
+                    ${createdRows}
+                </tbody>
+            </table>`;
+
+        const updatedTable =
+            updatedRows &&
+            `<table class="table table-bordered">
+                <caption>Editados</caption>
+                <tbody>
+                    ${updatedRows}
+                </tbody>
+            </table>`;
+
+        const errorsTable =
+            errorRows &&
+            `<table class="table table-bordered">
+                <caption>Errores</caption>
+                <tbody>
+                    ${errorRows}
+                </tbody>
+            </table>`;
+
+        this.root.innerHTML = `
+            <table class="table table-bordered">
+                <caption>Resumen</caption>
+
+                <col width="95%">
+                <col width="5%">
+
+                <tbody>
+                    <tr>
+                        <td>Creados</td>
+                        <td>${json.created.length}</td>
+                    </tr>
+                    <tr>
+                        <td>Editados</td>
+                        <td>${json.updated.length}</td>
+                    </tr>
+                    <tr>
+                        <td>Errores</td>
+                        <td>${json.errors.length}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            ${createdTable}
+
+            ${updatedTable}
+
+            ${errorsTable}`;
+
+        $("#summaryModal").modal();
+    },
+
+    clientToRowView(client) {
+        return `<tr>
+            <td>${client.fullName}</td>
+        </tr>`;
+    },
+
+    errorToRowView(error) {
+        return `<tr>
+            <td>${error.errors.map(err => err.message).join("<br>")}</td>
+        </tr>`;
+    },
+
+    init() {
+        this.file.addEventListener("change", this.handleChange.bind(this));
+    }
+};
+
 ClientComponent.init();
 
 FilterComponent.init();
 
 AddClientComponent.init();
+
+ImportComponent.init();

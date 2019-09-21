@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clientes</title>
+    <title>Productos sin encontrar</title>
     <meta name="layout" content="main">
     <r:require modules="bootstrap-css, bootstrap-collapse, notFoundProduct"/>
 </head>
