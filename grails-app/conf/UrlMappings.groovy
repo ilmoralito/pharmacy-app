@@ -167,6 +167,17 @@ class UrlMappings {
     '/notfoundproducts/criterias' (controller: 'notFoundProduct', action: 'criteria', method: 'GET')
     '/notfoundproducts' (controller: 'notFoundProduct', action: 'save', method: 'POST')
 
+    /////////////
+    // report ///
+    /////////////
+    "/$period/sales/report" {
+      controller = 'reports'
+      action = 'sales'
+      constraints {
+        period inList: ['daily', 'weekly', 'monthly', 'annual']
+      }
+    }
+
     '/' (controller: 'login')
     '500' (view: '/error')
     }

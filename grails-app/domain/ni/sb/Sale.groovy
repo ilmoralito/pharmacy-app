@@ -35,7 +35,10 @@ class Sale implements Serializable {
   static hasMany = [ salesDetail: SaleDetail ]
 
   def beforeValidate() {
-    registeredBy = springSecurityService.currentUser
+    if (springSecurityService.isLoggedIn()) {
+      registeredBy = springSecurityService.currentUser
+    }
+
     totalBalance = getBalance()
   }
 

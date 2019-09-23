@@ -4,66 +4,181 @@
   <meta charset="UTF-8">
   <meta name="layout" content="main">
   <title>Reporte de ventas</title>
-  <r:require modules="bootstrap-css, bootstrap-collapse, reports, jquery-ui"/>
+  <r:require modules="bootstrap-css, bootstrap-collapse, app"/>
 </head>
 <body>
-  <h1>Pendiente de hacerse</h1>
-  <p>Se necesita saber cuales son explicitamente los informes que se necesitan</p>
-  <%-- <div class="row">
+  <div class="row">
     <div class="col-md-10">
-      <!--Tabs-->
-      <ul class="nav nav-tabs" role="tablist" style="margin-bottom:10px;">
-        <li class="active">
-          <g:link action="sales">Reporte de ventas</g:link>
-        </li>
-      </ul>
+        <table class="table table-hover table-bordered">
+          <caption>Resumen</caption>
 
-      <g:if test="${results}">
-        <table class="table table-hover">
-          <colgroup>
-             <col span="1" style="width: 25%;">
-             <col span="1" style="width: 25%;">
-             <col span="1" style="width: 25%;">
-             <col span="1" style="width: 25%;">
-          </colgroup>
-          <thead>
-            <th>Fecha</th>
-            <th>Monto de venta</th>
-            <th>Monto de diario</th>
-            <th>Monto en caja</th>
-          </thead>
+          <col width="25%">
+          <col width="25%">
+          <col width="50%">
+
           <tbody>
-            <g:each in="${results}" var="date">
-              <tr>
-                <td>${date.key}</td>
-                <td>${date.value.salesAmount}</td>
-                <td>${date.value.expensesDailyAmount}</td>
-                <td>${(date.value.salesAmount ?: 0) - (date.value.expensesDailyAmount ?: 0)}</td>
-              </tr>
-            </g:each>
+            <tr>
+              <td>Ventas</td>
+              <td>${inBox.count}</td>
+              <td>${inBox.total}</td>
+            </tr>
+            <tr>
+              <td>Ventas contados</td>
+              <td>${cashInBox.count}</td>
+              <td>${cashInBox.total}</td>
+            </tr>
+            <tr>
+              <td>Ventas credito</td>
+              <td>${creditInBox.count}</td>
+              <td>${creditInBox.total}</td>
+            </tr>
+            <tr>
+              <td>Abonos</td>
+              <td>${paidInBox.count}</td>
+              <td>${paidInBox.total}</td>
+            </tr>
+            <tr>
+              <td>Gastos</td>
+              <td>${expenses.count}</td>
+              <td>${expenses.total}</td>
+            </tr>
+            <tr>
+              <td>Anulados</td>
+              <td>${voided.count}</td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
-      </g:if>
-      <g:else>
-        <p>Nada que mostrar</p>
-      </g:else>
+
+        <g:if test="${todayCreditSales}">
+          <table class="table table-hover table-bordered">
+            <caption>Creditos del dia</caption>
+
+            <col width="25%">
+            <col width="75%">
+
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <g:each in="${todayCreditSales}" var="detail">
+                <tr>
+                  <td>${detail.client}</td>
+                  <td>${detail.count}</td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </g:if>
+        <g:else>
+          <p style="border: 1px solid #ddd; padding: 10px;">Sin creditos</p>
+        </g:else>
+
+        <g:if test="${todayExpenses}">
+          <table class="table table-hover table-bordered">
+            <caption>Gastos del dia</caption>
+
+            <col width="25%">
+            <col width="25%">
+            <col width="50%">
+
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Monto</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <g:each in="${todayExpenses}" var="expense">
+                <tr>
+                  <td>${expense.user}</td>
+                  <td>${expense.amount}</td>
+                  <td>${expense.description}</td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </g:if>
+        <g:else>
+          <p style="border: 1px solid #ddd; padding: 10px;">Sin gastos</p>
+        </g:else>
+
+        <g:if test="${todayPayments}">
+          <table class="table table-hover table-bordered">
+            <caption>Abonos de dia</caption>
+
+            <col width="25%">
+            <col width="25%">
+            <col width="50%">
+
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>ID de venta</th>
+                <th>Monto abonado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <g:each in="${todayPayments}" var="payment">
+                <tr>
+                  <td>${payment.client}</td>
+                  <td>${payment.id}</td>
+                  <td>${payment.amount_paid}</td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </g:if>
+        <g:else>
+          <p style="border: 1px solid #ddd; padding: 10px;">Sin abonos</p>
+        </g:else>
+
+        <g:if test="${voidedSales}">
+          <table class="table table-hover table-bordered">
+            <caption>Anulados de dia</caption>
+
+            <col width="25%">
+            <col width="25%">
+            <col width="50%">
+
+            <thead>
+              <tr>
+                <th>Realizado por</th>
+                <th>Motivo</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <g:each in="${voidedSales}" var="canceled">
+                <tr>
+                  <td>${canceled.user}</td>
+                  <td>${canceled.reason}</td>
+                  <td></td>
+                </tr>
+              </g:each>
+            </tbody>
+          </table>
+        </g:if>
+        <g:else>
+          <p style="border: 1px solid #ddd; padding: 10px;">Sin ventas anuladas</p>
+        </g:else>
     </div>
     <div class="col-md-2">
-      <h4>Filtrar</h4>
-      <g:form action="sales" autocomplete="off">
-        <div class="form-group">
-          <label for="from" class="sr-only">Desde</label>
-          <g:textField name="from" value="${params?.from}" class="form-control" placeholder="Desde..."/>
-        </div>
-
-        <div class="form-group">
-          <label for="to" class="sr-only">Hasta</label>
-          <g:textField name="to" value="${params?.to}" class="form-control" placeholder="Hasta..."/>
-        </div>
-
-        <g:submitButton name="send" value="Filtrar" class="btn btn-primary btn-block"/>
-      </g:form>
+      <ul class="list-group">
+        <g:link action="sales" params="[period: 'daily']" class="list-group-item ${params.period == 'daily' ? 'active' : ''}">Ahora</g:link>
+        <g:link action="sales" params="[period: 'weekly']" class="list-group-item ${params.period == 'weekly' ? 'active' : ''}">Semana</g:link>
+        <g:link action="sales" params="[period: 'monthly']" class="list-group-item ${params.period == 'monthly' ? 'active': ''}">Mes</g:link>
+        <g:link action="sales" params="[period: 'annual']" class="list-group-item ${params.period == 'annual' ? 'active' : ''}">Año</g:link>
+      </ul>
     </div>
-  </div> --%>
+  </div>
 </body>
 </html>

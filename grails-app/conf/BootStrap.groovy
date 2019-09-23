@@ -161,6 +161,30 @@ class BootStrap {
           ).save(failOnError: true)
         }
 
+        ////////////
+        // sale ///
+        ///////////
+        // new CashSale(
+        //   client: juanPerez,
+        //   registeredBy: user0,
+        //   cashReceived: 30.0,
+        //   turned: 1.25
+        // )
+        //   .addToSalesDetail(product: thermometer, quantity: 1, salePrice: 25, total: 28.75)
+        //   .save(failOnError: true)
+
+        // new CashSale(
+        //   client: johnDoe,
+        //   registeredBy: user1,
+        //   cashReceived: 1000,
+        //   turned: 344.5
+        // )
+        //   .addToSalesDetail(product: thermometer, quantity: 1, salePrice: 25, total: 28.75)
+        //   .addToSalesDetail(product: stethoscope, quantity: 1, salePrice: 500, total: 575)
+        //   .addToSalesDetail(product: cottonBuds, quantity: 1, salePrice: 45, total: 51.75)
+        //   .save(failOnError: true)
+
+
         /////////////////////
         // notfoundproduct //
         /////////////////////

@@ -1,3 +1,5 @@
-// Place your Spring DSL code here
+import ni.sb.Period
+
 beans = {
+  period(Period)
 }

@@ -90,7 +90,7 @@
               <g:link controller="inventory">Inventario</g:link>
             </li>
             <li class="${controllerName == 'reports' ? 'active' : ''}">
-              <g:link controller="reports" action="sales">Reportes</g:link>
+              <g:link controller="reports" action="sales" params="[period: 'daily']">Reportes</g:link>
             </li>
             <li role="separator" class="divider"></li>
             <li class="${controllerName == 'notFoundProduct' ? 'active' : ''}">
