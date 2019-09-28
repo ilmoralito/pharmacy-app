@@ -1,99 +1,116 @@
-const SaleComponent = {
-  root: document.querySelector("#root"),
+const Sale = {
+    get typeOfSale() {
+        return this._typeOfSale;
+    },
 
-  form: this.root.querySelector("form"),
-
-  client: document.querySelector("#client"),
-
-  trigger: document.querySelector(".help-block a"),
-
-  confirm: document.querySelector(".modal-footer button"),
-
-  init() {
-    this.trigger.addEventListener("click", this.handleClick.bind(this));
-
-    this.form.addEventListener("submit", this.handleSubmit.bind(this));
-
-    this.confirm.addEventListener("click", this.handleConfirm.bind(this));
-  },
-
-  handleClick(event) {
-    event.preventDefault();
-
-    this.toggle();
-  },
-
-  handleCancelClick(event) {
-    event.preventDefault();
-
-    const target = event.target;
-
-    if (target.nodeName !== "A") return false;
-
-    this.root.innerHTML = "";
-  },
-
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-
-    fetch("/pharmacyApp/clients", {
-      method: "POST",
-      body: JSON.stringify(Object.fromEntries(formData))
-    })
-      .then(response => response.json())
-      .then(json => {
-        if (json.status !== "ok") {
-          alert(json.errors.errors.map(error => error.message).join("\n"));
-
-          return false;
+    set typeOfSale(value) {
+        if (!value) {
+            throw new Error("Tipo de venta es requerido");
         }
 
-        const { id, fullName } = json.client;
-        const option = new Option(fullName, id, true, true);
+        if (!["cash", "credit"].includes(value)) {
+            throw new Error("Valor de tipo de pago invalido");
+        }
 
-        this.client.appendChild(option);
-        this.form.reset();
-        this.toggle();
-      });
-  },
+        this._typeOfSale = value;
+    },
 
-  handleConfirm(event) {
-    event.preventDefault();
+    get client() {
+        return this._client;
+    },
 
-    const typeOfSale = document.querySelector("#typeOfSale");
-    const client = document.querySelector("#client");
+    set client(value) {
+        if (!value) {
+            throw new Error("Cliente es requerido");
+        }
 
-    if (!typeOfSale.value) {
-      alert("El tipo de venta es requerido");
-
-      return false;
+        this._client = value;
     }
-
-    if (!client.value) {
-      alert("El cliente requerido");
-
-      return false;
-    }
-
-    if (location.pathname.includes("create")) {
-      NewSaleComponent.setTypeOfSale(typeOfSale.value);
-      NewSaleComponent.setClientId(client.value);
-
-      $("#saleModal").modal("hide");
-
-      return false;
-    }
-
-    location.replace(
-      `/pharmacyApp/sales/create/${typeOfSale.value}/${client.value}`
-    );
-  },
-
-  toggle() {
-    this.root.classList.toggle("show");
-  }
 };
+
+const ClientComponent = {
+    root: document.querySelector("#root"),
+
+    client: document.querySelector("#client"),
+
+    handleClick(event) {
+        event.preventDefault();
+
+        this.toggle();
+    },
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const body = JSON.stringify(Object.fromEntries(formData));
+
+        fetch("/pharmacyApp/clients", { method: "POST", body: body })
+            .then(response => response.json())
+            .then(json => {
+                if (json.status !== "ok") {
+                    const message = json.errors.errors
+                        .map(error => error.message)
+                        .join("\n");
+
+                    alert(message);
+
+                    return false;
+                }
+                const { id, fullName } = json.client;
+                const option = new Option(fullName, id, true, true);
+
+                this.client.appendChild(option);
+
+                event.target.reset();
+
+                this.toggle();
+            });
+    },
+
+    toggle() {
+        this.root.classList.toggle("show");
+    },
+
+    init() {
+        document
+            .querySelector("button#toggleClientForm")
+            .addEventListener("click", this.handleClick.bind(this));
+
+        this.root
+            .querySelector("form")
+            .addEventListener("submit", this.handleSubmit.bind(this));
+    }
+};
+
+const SaleComponent = {
+    handleClick(event) {
+        event.preventDefault();
+
+        const typeOfSale = document.querySelector("#typeOfSale").value;
+        const client = document.querySelector("#client").value;
+
+        try {
+            Sale.typeOfSale = typeOfSale;
+            Sale.client = client;
+        } catch (error) {
+            alert(error.message);
+
+            return false;
+        }
+
+        location.replace(
+            `/pharmacyApp/sales/create/${Sale.typeOfSale}/${Sale.client}`
+        );
+    },
+
+    init() {
+        document
+            .querySelector(".modal-footer button")
+            .addEventListener("click", this.handleClick.bind(this));
+    }
+};
+
+ClientComponent.init();
 
 SaleComponent.init();

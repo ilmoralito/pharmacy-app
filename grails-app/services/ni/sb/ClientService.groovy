@@ -14,6 +14,6 @@ class ClientService {
   }
 
   List<Client> listEnabled() {
-    Client.where { status == true }.list(sort: 'lastName')
+    Client.where { status == true }.list(sort: 'firstName')
   }
 }

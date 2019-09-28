@@ -281,7 +281,6 @@ modules = {
   sale {
     dependsOn 'app'
     resource url: 'js/sale.js'
-    resource url: 'js/sales.js'
   }
 
   sales {
