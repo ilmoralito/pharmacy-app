@@ -1,3 +1,5 @@
+const ENTER_KEY = 13;
+
 const NewSaleComponent = {
     typeOfSale: "",
 
@@ -383,35 +385,39 @@ const SalesSummaryComponent = {
 
     renderCashSummary() {
         this.root.innerHTML = `<table class="table table-hover table-bordered">
-      <tbody>
-        <tr>
-          <td>IVA</td>
-          <td>15%</td>
-        </tr>
-        <tr>
-          <td>SUBTOTAL</td>
-          <td>${this.subtotal}</td>
-        </tr>
-        <tr>
-          <td>TOTAL A PAGAR</td>
-          <td>${this.totalToPay}</td>
-        </tr>
-        <tr>
-          <td style="vertical-align: middle;">EFECTIVO RECIBIDO</td>
-          <td>
-            <input class="form-control" />
-          </td>
-        </tr>
-        <tr>
-          <td>VUELTO</td>
-          <td id="change"></td>
-        </tr>
-      </tbody>
-    </table>`;
+            <tbody>
+                <tr>
+                    <td>IVA</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td>SUBTOTAL</td>
+                    <td>${this.subtotal}</td>
+                </tr>
+                <tr>
+                    <td>TOTAL A PAGAR</td>
+                    <td>${this.totalToPay}</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: middle;">EFECTIVO RECIBIDO</td>
+                    <td>
+                        <input class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>VUELTO</td>
+                    <td id="change"></td>
+                </tr>
+            </tbody>
+        </table>`;
     },
 
     handleKeyUp(event) {
         const target = event.target;
+
+        if (event.keyCode === ENTER_KEY) {
+            this.confirmSale();
+        }
 
         this.setChange(+target.value);
 
@@ -425,6 +431,10 @@ const SalesSummaryComponent = {
 
         if (target.nodeName !== "BUTTON") return false;
 
+        this.confirmSale();
+    },
+
+    confirmSale() {
         if (NewSaleComponent.typeOfSale === "cash") {
             const validator = this.validate();
 
