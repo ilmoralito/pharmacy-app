@@ -65,6 +65,54 @@ class BootStrap {
         ).save(failOnError: true)
 
         //////////////////
+        // Laboratories //
+        //////////////////
+        Laboratory laboratory1 = new Laboratory(name: 'Laboratory 1').save(failOnError: true)
+        Laboratory laboratory2 = new Laboratory(name: 'Laboratory 2').save(failOnError: true)
+        Laboratory laboratory3 = new Laboratory(name: 'Laboratory 3').save(failOnError: true)
+
+        ///////////////////
+        // Presentations //
+        ///////////////////
+        Presentation presentation1 = new Presentation(name: 'Presentation 1').save(failOnError: true)
+        Presentation presentation2 = new Presentation(name: 'Presentation 2').save(failOnError: true)
+        Presentation presentation3 = new Presentation(name: 'Presentation 3').save(failOnError: true)
+        Presentation presentation4 = new Presentation(name: 'Presentation 4').save(failOnError: true)
+        Presentation presentation5 = new Presentation(name: 'Presentation 5').save(failOnError: true)
+
+        //////////////
+        // Measures //
+        //////////////
+        Measure measure1 = new Measure(unit: 'Gramos', abbreviation: 'Gr').save(failOnError: true)
+        Measure measure2 = new Measure(unit: 'Kilogramos', abbreviation: 'Kg').save(failOnError: true)
+        Measure measure3 = new Measure(unit: 'Onzas', abbreviation: 'Oz').save(failOnError: true)
+        Measure measure4 = new Measure(unit: 'Mililitros', abbreviation: 'ml').save(failOnError: true)
+        Measure measure5 = new Measure(unit: 'Porciento', abbreviation: '%').save(failOnError: true)
+
+        ///////////////
+        // Medicines //
+        ///////////////
+        Medicine medicine1 = new Medicine(
+          laboratory: laboratory1,
+          name: 'Medicine 1',
+          location: 'E1-1',
+          genericName: 'Medicine 1',
+          presentation: presentation1,
+          measure: measure1,
+          quantity: 100
+        ).save(failOnError: true)
+
+        Medicine medicine2 = new Medicine(
+          laboratory: laboratory1,
+          name: 'Medicine 2',
+          location: 'E1-2',
+          genericName: 'Medicine 2',
+          presentation: presentation2,
+          measure: measure2,
+          quantity: 1
+        ).save(failOnError: true)
+
+        //////////////////
         // Merchandises //
         //////////////////
         Merchandise thermometer = new Merchandise(name: 'Termometro', location: 'E1-1').save(failOnError: true)
@@ -104,8 +152,13 @@ class BootStrap {
             )
         ).save(failOnError: true)
 
+        // Add merchandise to provider
         MerchandiseSupplier.create(thermometer, umbrella)
         MerchandiseSupplier.create(scalpel, umbrella)
+
+        // Add medicine to provider
+        ProviderMedicine.create(medicine1, umbrella)
+        ProviderMedicine.create(medicine2, umbrella)
 
         ////////////
         // Orders //
@@ -160,30 +213,6 @@ class BootStrap {
             updatedBy: user0
           ).save(failOnError: true)
         }
-
-        ////////////
-        // sale ///
-        ///////////
-        // new CashSale(
-        //   client: juanPerez,
-        //   registeredBy: user0,
-        //   cashReceived: 30.0,
-        //   turned: 1.25
-        // )
-        //   .addToSalesDetail(product: thermometer, quantity: 1, salePrice: 25, total: 28.75)
-        //   .save(failOnError: true)
-
-        // new CashSale(
-        //   client: johnDoe,
-        //   registeredBy: user1,
-        //   cashReceived: 1000,
-        //   turned: 344.5
-        // )
-        //   .addToSalesDetail(product: thermometer, quantity: 1, salePrice: 25, total: 28.75)
-        //   .addToSalesDetail(product: stethoscope, quantity: 1, salePrice: 500, total: 575)
-        //   .addToSalesDetail(product: cottonBuds, quantity: 1, salePrice: 45, total: 51.75)
-        //   .save(failOnError: true)
-
 
         /////////////////////
         // notfoundproduct //
@@ -403,6 +432,7 @@ class BootStrap {
       output['status'] = it.status
       output['dateCreated'] = it.dateCreated
       output['lastUpdated'] = it.lastUpdated
+      output['instance'] = it.class.toString().tokenize(".")[2].toLowerCase()
 
       output
     }
@@ -475,6 +505,7 @@ class BootStrap {
         abbreviation: it.measure.abbreviation
       ]
       output['quantity'] = it.quantity
+      output['instance'] = it.class.toString().tokenize(".")[2].toLowerCase()
 
       output
     }

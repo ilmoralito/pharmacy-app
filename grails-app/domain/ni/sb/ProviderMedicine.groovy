@@ -14,10 +14,10 @@ class ProviderMedicine {
     version false
   }
 
-  static ProviderMedicine create(Provider provider, Medicine medicine) {
+  static ProviderMedicine create(Medicine medicine, Provider provider) {
     new ProviderMedicine (
-      provider: provider,
-      medicine: medicine
+      medicine: medicine,
+      provider: provider
     ).save(flush: true, insert: true)
   }
 
