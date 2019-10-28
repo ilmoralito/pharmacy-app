@@ -10,7 +10,7 @@ class ProviderBrandBranded {
     brandBranded nullable: false
   }
 
-  static ProviderBrandBranded create(Provider provider, BrandBranded brandBranded) {
+  static ProviderBrandBranded create(BrandBranded brandBranded, Provider provider) {
     ProviderBrandBranded providerBrandBranded = new ProviderBrandBranded(
       provider: provider,
       brandBranded: brandBranded

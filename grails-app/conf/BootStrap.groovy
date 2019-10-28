@@ -120,8 +120,50 @@ class BootStrap {
         Merchandise cottonBuds = new Merchandise(name: 'Isopos', location: 'E1-3').save(failOnError: true)
         Merchandise scalpel = new Merchandise(name: 'Escalpelo', location: 'E1-4').save(failOnError: true)
 
+        ////////////
+        // Brands //
+        ////////////
+        Brand brand1 = new Brand(name: 'Brand 1').save(failOnError: true)
+        Brand brand2 = new Brand(name: 'Brand 2').save(failOnError: true)
+        Brand brand3 = new Brand(name: 'Brand 3').save(failOnError: true)
+        Brand brand4 = new Brand(name: 'Brand 4').save(failOnError: true)
+
         ///////////////
-        // providers //
+        // Branded ////
+        ///////////////
+        BrandProduct branded1 = new BrandProduct(name: 'Branded 1').save(failOnError: true)
+        BrandProduct branded2 = new BrandProduct(name: 'Branded 2').save(failOnError: true)
+        BrandProduct branded3 = new BrandProduct(name: 'Branded 3').save(failOnError: true)
+        BrandProduct branded4 = new BrandProduct(name: 'Branded 4').save(failOnError: true)
+        BrandProduct branded5 = new BrandProduct(name: 'Branded 5').save(failOnError: true)
+
+        ////////////////////
+        // BrandBranded ////
+        ////////////////////
+        BrandBranded brandBranded1 = new BrandBranded(
+          name: 'brandBranded1',
+          location: 'E1-1',
+          brand: brand1,
+          branded: branded1,
+          description: 'lorem ipsum dolar sit ament'
+        ).save(failOnError: true)
+        BrandBranded brandBranded2 = new BrandBranded(
+          name: 'brandBranded2',
+          location: 'E1-2',
+          brand: brand2,
+          branded: branded2,
+          description: 'lorem ipsum dolar sit ament'
+        ).save(failOnError: true)
+        BrandBranded brandBranded3 = new BrandBranded(
+          name: 'brandBranded3',
+          location: 'E1-3',
+          brand: brand3,
+          branded: branded3,
+          description: 'lorem ipsum dolar sit ament'
+        ).save(failOnError: true)
+
+        ///////////////
+        // Providers //
         ///////////////
         Provider umbrella = new Provider(
           name: 'Umbrella',
@@ -135,10 +177,20 @@ class BootStrap {
             )
         ).save(failOnError: true)
 
+        // Add merchandise to provider
         MerchandiseSupplier.create(thermometer, umbrella)
         MerchandiseSupplier.create(stethoscope, umbrella)
         MerchandiseSupplier.create(cottonBuds, umbrella)
         MerchandiseSupplier.create(scalpel, umbrella)
+
+        // Add medicine to provider
+        ProviderMedicine.create(medicine1, umbrella)
+        ProviderMedicine.create(medicine2, umbrella)
+
+        // Add brand to provider
+        ProviderBrandBranded.create(brandBranded1, umbrella)
+        ProviderBrandBranded.create(brandBranded2, umbrella)
+        ProviderBrandBranded.create(brandBranded3, umbrella)
 
         Provider ramos = new Provider(
           name: 'Ramos',
@@ -157,8 +209,12 @@ class BootStrap {
         MerchandiseSupplier.create(scalpel, umbrella)
 
         // Add medicine to provider
-        ProviderMedicine.create(medicine1, umbrella)
-        ProviderMedicine.create(medicine2, umbrella)
+        ProviderMedicine.create(medicine1, ramos)
+        ProviderMedicine.create(medicine2, ramos)
+
+        // Add brand to provider
+        ProviderBrandBranded.create(brandBranded1, umbrella)
+        ProviderBrandBranded.create(brandBranded2, umbrella)
 
         ////////////
         // Orders //
@@ -393,6 +449,7 @@ class BootStrap {
       output['location'] = it.location
       output['dateCreated'] = it.dateCreated.format('yyyy-MM-dd hh:mm')
       output['lastUpdated'] = it.lastUpdated.format('yyyy-MM-dd hh:mm')
+      output['instance'] = it.class.toString().tokenize(".")[2].toLowerCase()
 
       output
     }
