@@ -23,15 +23,25 @@ const ProductsComponent = {
         if (target.nodeName !== "A") return false;
 
         // Add item to ItemsComponent.items
-        const item = {
-            id: target.dataset.productId,
-            name: target.textContent,
-            quantity: 0,
-            purchasePrice: 0.0,
-            salePrice: 0.0,
-            totalBalance: 0.0,
-            confirmed: false
-        };
+        const product = Object.assign({}, target.dataset);
+        let item =
+            product.instance === "medicine"
+                ? {
+                      quantity: 0,
+                      purchasePrice: 0.0,
+                      salePrice: 0.0,
+                      totalBalance: 0.0,
+                      bash: "",
+                      confirmed: false
+                  }
+                : {
+                      quantity: 0,
+                      purchasePrice: 0.0,
+                      salePrice: 0.0,
+                      totalBalance: 0.0,
+                      confirmed: false
+                  };
+        item = Object.assign({ ...product }, { ...item });
 
         ItemsComponent.addItem(item);
 
@@ -111,7 +121,14 @@ const ProductsComponent = {
     productToRowView(product) {
         return `<tr>
             <td>
-                <a href="#" data-product-id="${product.id}">${product.name}</a>
+                <a
+                    href="#"
+                    data-id="${product.id}"
+                    data-name="${product.name}"
+                    data-instance="${product.instance}"
+                >
+                    ${product.name}
+                </a>
             </td>
         </tr>`;
     }
@@ -126,6 +143,8 @@ const ItemsComponent = {
         this.root.addEventListener("click", this.handleClick.bind(this));
 
         this.root.addEventListener("keyup", this.handleKeyUp.bind(this));
+
+        this.root.addEventListener("change", this.handleChange.bind(this));
     },
 
     handleClick(event) {
@@ -137,7 +156,7 @@ const ItemsComponent = {
             return false;
 
         if (target.textContent.trim() === "Confirmar") {
-            this.handleConfirm(target, target.dataset.id);
+            this.handleConfirm(target);
 
             return false;
         }
@@ -174,36 +193,22 @@ const ItemsComponent = {
 
         if (event.keyCode !== 13) return false;
 
-        this.handleConfirm(target, target.dataset.id);
+        this.handleConfirm(target);
     },
 
-    handleConfirm(target, id) {
-        const item = this.getItem(id);
-        const index = this.getItemIndex(id);
-        const [
-            ,
-            quantityNode,
-            purchasePriceNode,
-            salePriceNode,
-            totalBalanceNode
-        ] = this.getNodes(target);
-        const row = target.closest("tr");
+    handleChange(event) {
+        const target = event.target;
 
-        const quantity = quantityNode.querySelector("#quantity");
-        const purchasePrice = purchasePriceNode.querySelector("#purchasePrice");
-        const salePrice = salePriceNode.querySelector("#salePrice");
+        const item = this.getItem(target.dataset.id);
 
-        // set values to item
-        const updatedItem = Object.assign(item, {
-            quantity: quantity.value,
-            purchasePrice: purchasePrice.value,
-            salePrice: salePrice.value,
-            totalBalance: quantity.value * purchasePrice.value,
-            confirmed: true
-        });
+        item[target.id] = target.value;
+    },
+
+    handleConfirm(target) {
+        const item = this.getItem(target.dataset.id);
 
         // validate input values
-        const validator = this.validate(updatedItem);
+        const validator = this.validate(item);
 
         if (!validator.ok) {
             alert(validator.message);
@@ -211,12 +216,38 @@ const ItemsComponent = {
             return false;
         }
 
-        // update this.items
-        const items = this.items;
+        // Update row cells
+        const cells = target.closest("tr").cells;
 
-        items.splice(index, 1, updatedItem);
+        if (item.instance === "medicine") {
+            const [
+                ,
+                quantityNode,
+                purchasePriceNode,
+                salePriceNode,
+                bashNode,
+                totalBalanceNode
+            ] = cells;
 
-        this.items = items;
+            quantityNode.textContent = item.quantity;
+            purchasePriceNode.textContent = item.purchasePrice;
+            salePriceNode.textContent = item.salePrice;
+            bashNode.textContent = item.bash;
+            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
+        } else {
+            const [
+                ,
+                quantityNode,
+                purchasePriceNode,
+                salePriceNode,
+                totalBalanceNode
+            ] = cells;
+
+            quantityNode.textContent = item.quantity;
+            purchasePriceNode.textContent = item.purchasePrice;
+            salePriceNode.textContent = item.salePrice;
+            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
+        }
 
         // Sync this.items with storage
         OrderLocalStorageComponent.syncItems(this.items);
@@ -226,20 +257,13 @@ const ItemsComponent = {
 
         this.root.querySelector("td#totalBalance").textContent = balance;
 
-        // update dom
-        quantityNode.innerHTML = updatedItem.quantity;
-        purchasePriceNode.innerHTML = updatedItem.purchasePrice;
-        salePriceNode.innerHTML = updatedItem.salePrice;
-        totalBalanceNode.innerHTML = updatedItem.totalBalance;
-
-        // set target text contet to Editar
         if (target.nodeName === "A") {
             target.textContent = "Editar";
 
-            return;
+            return false;
         }
 
-        row.querySelector("a").textContent = "Editar";
+        target.closest("tr").querySelector("a").textContent = "Editar";
     },
 
     handleEdit(target, id) {
@@ -278,7 +302,8 @@ const ItemsComponent = {
         // Sync products
         const dummyProduct = {
             id: +item.id,
-            name: item.name
+            name: item.name,
+            instance: item.instance
         };
 
         ProductsComponent.restoreProduct(dummyProduct);
@@ -311,7 +336,8 @@ const ItemsComponent = {
             <col width="10%" />
             <col width="10%" />
             <col width="10%" />
-            <col width="10%" />
+            <col width="5%" />
+            <col width="5%" />
 
             <thead>
                 <tr>
@@ -319,6 +345,7 @@ const ItemsComponent = {
                     <th>Cantidad</th>
                     <th>Precio compra</th>
                     <th>Precio venta</th>
+                    <th>Vencimiento</th>
                     <th>Total</th>
                     <th></th>
                     <th></th>
@@ -327,7 +354,7 @@ const ItemsComponent = {
             <tbody>
                 ${itemList}
                 <tr>
-                    <td colspan="4">TOTAL</td>
+                    <td colspan="5">TOTAL</td>
                     <td id="totalBalance">${this.getBalance(items)}</td>
                     <td colspan="2"></td>
                 </tr>
@@ -369,6 +396,17 @@ const ItemsComponent = {
                         : `<input id="salePrice" data-id="${item.id}"" value="${item.salePrice}" class="form-control" />`
                 }
             </td>
+            <td>
+                ${
+                    item.confirmed
+                        ? item.instance === "medicine"
+                            ? item.bash
+                            : ""
+                        : item.instance === "medicine"
+                        ? `<input id="bash" data-id="${item.id}" value="${item.bash}" class="form-control">`
+                        : ""
+                }
+            </td>
             <td style="vertical-align: middle;">${item.totalBalance}</td>
             <td style="vertical-align: middle;" class="text-center">
                 <a href="#" data-id="${item.id}">
@@ -404,6 +442,23 @@ const ItemsComponent = {
             return { ok: false, message: "Precio de venta es invalida" };
         }
 
+        if (item.instance === "medicine") {
+            if (!item.bash) {
+                return { ok: false, message: "Vencimiento es requerido" };
+            }
+
+            const date = new Date(item.bash.replace(/-/g, "/")); // https://stackoverflow.com/a/31732581/615274
+            const today = new Date();
+
+            today.setHours(0, 0, 0, 0);
+
+            // TODO: It is necessary to verify that the expiration date is greater than 60 days from today
+
+            if (date <= today) {
+                return { ok: false, message: "Vencimiento invalido" };
+            }
+        }
+
         return { ok: true };
     },
 
@@ -425,6 +480,17 @@ const ItemsComponent = {
             quantityNode,
             purchasePriceNode,
             salePriceNode,
+            totalBalanceNode
+        ] = [...target.closest("tr").cells]);
+    },
+
+    getMedicineNodes(target) {
+        return ([
+            ,
+            quantityNode,
+            purchasePriceNode,
+            salePriceNode,
+            bashNode,
             totalBalanceNode
         ] = [...target.closest("tr").cells]);
     },
