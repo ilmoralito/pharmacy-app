@@ -64,13 +64,24 @@ class OrderController {
     }
 
     List<Item> items = order.items.collect { JSONObject item ->
-      new Item (
-        product: item.id,
-        quantity: item.quantity,
-        purchasePrice: item.purchasePrice,
-        salePrice: item.salePrice,
-        totalBalance: item.totalBalance
-      )
+      if (item.instance == 'medicine') {
+        new MedicineOrder (
+          product: item.id,
+          quantity: item.quantity,
+          purchasePrice: item.purchasePrice,
+          salePrice: item.salePrice,
+          totalBalance: item.totalBalance,
+          bash: item.bash
+        )
+      } else {
+        new Item (
+          product: item.id,
+          quantity: item.quantity,
+          purchasePrice: item.purchasePrice,
+          salePrice: item.salePrice,
+          totalBalance: item.totalBalance
+        )
+      }
     }
 
     items.each { item ->

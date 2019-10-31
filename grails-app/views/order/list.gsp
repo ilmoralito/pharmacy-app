@@ -9,7 +9,7 @@
 <body>
     <div class="row">
         <div class="col-md-6">
-            <input id="filter" class="form-control" placeholder="Filtrar por nombre, tipo o factura..." />
+            <input id="filter" class="form-control" placeholder="Filtrar por nombre de proveedor, tipo de compra o factura..." />
         </div>
         <div class="col-md-6">
             <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#providersModal">

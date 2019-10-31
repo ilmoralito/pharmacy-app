@@ -149,9 +149,10 @@
             <caption>Artículos</caption>
 
             <col width="25%" />
+            <col width="10%" />
+            <col width="10%" />
             <col width="15%" />
-            <col width="15%" />
-            <col width="15%" />
+            <col width="10%" />
             <col width="10%" />
             <col width="10%" />
             <col width="10%" />
@@ -162,6 +163,7 @@
                     <th>Cantidad</th>
                     <th>Precio de compra</th>
                     <th>Precio de venta</th>
+                    <th>Vencimiento</th>
                     <th>Total</th>
                     <th></th>
                     <th></th>
@@ -177,6 +179,11 @@
                         </td>
                         <td>
                             <g:formatNumber number="${item.salePrice}" type="number" maxFractionDigits="2" groupingUsed="false" />
+                        </td>
+                        <td style="vertical-align: middle;">
+                            <g:if test="${item.product instanceof ni.sb.Medicine}">
+                                <g:formatDate date="${item.bash}" format="yyyy-MM-dd" />
+                            </g:if>
                         </td>
                         <td style="vertical-align: middle;" class="balance">
                             <g:formatNumber number="${item.totalBalance}" type="number" maxFractionDigits="2" groupingUsed="false" />
@@ -209,7 +216,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">TOTAL</td>
+                    <td colspan="5">TOTAL</td>
                     <td id="totalBalance">
                         <g:formatNumber number="${order.items.totalBalance.sum()}" type="number" maxFractionDigits="2" groupingUsed="false" />
                     </td>

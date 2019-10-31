@@ -16,12 +16,6 @@ modules = {
     resource url: 'js/notifier.js'
   }
 
-  datepicker {
-    resource url: 'css/datepicker.min.css'
-    resource url: 'js/datepicker.min.js'
-    resource url: 'js/i18n/datepicker.es.js'
-  }
-
   createAndUpdatePurchaseOrder {
     dependsOn "app"
     resource url:"js/createAndUpdatePurchaseOrder.js"
@@ -262,9 +256,7 @@ modules = {
 
   createOrder {
     dependsOn 'app'
-    dependsOn 'datepicker'
     resource url: 'js/orderProducts.js'
-    resource url: 'js/orderDatepicker.js'
   }
 
   order {

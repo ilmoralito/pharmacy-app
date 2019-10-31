@@ -33,6 +33,7 @@
                         <label for="paymentDate">Fecha de pago</label>
                         <input
                             name="paymentDate"
+                            type="date"
                             id="paymentDate"
                             class="form-control"
                         />

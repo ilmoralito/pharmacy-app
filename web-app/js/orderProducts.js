@@ -162,7 +162,7 @@ const ItemsComponent = {
         }
 
         if (target.textContent.trim() === "Editar") {
-            this.handleEdit(target, target.dataset.id);
+            this.handleEdit(target);
 
             return false;
         }
@@ -216,72 +216,36 @@ const ItemsComponent = {
             return false;
         }
 
-        // Update row cells
-        const cells = target.closest("tr").cells;
+        const itemIndex = this.getItemIndex(item.id);
+        const items = this.items;
 
-        if (item.instance === "medicine") {
-            const [
-                ,
-                quantityNode,
-                purchasePriceNode,
-                salePriceNode,
-                bashNode,
-                totalBalanceNode
-            ] = cells;
+        // Set item total balance and confirmed status
+        item.totalBalance = item.quantity * item.purchasePrice;
+        item.confirmed = true;
 
-            quantityNode.textContent = item.quantity;
-            purchasePriceNode.textContent = item.purchasePrice;
-            salePriceNode.textContent = item.salePrice;
-            bashNode.textContent = item.bash;
-            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
-        } else {
-            const [
-                ,
-                quantityNode,
-                purchasePriceNode,
-                salePriceNode,
-                totalBalanceNode
-            ] = cells;
+        // Replace item in items
+        items.splice(itemIndex, 1, item);
 
-            quantityNode.textContent = item.quantity;
-            purchasePriceNode.textContent = item.purchasePrice;
-            salePriceNode.textContent = item.salePrice;
-            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
-        }
+        // Update items list
+        this.items = items;
 
         // Sync this.items with storage
         OrderLocalStorageComponent.syncItems(this.items);
 
-        // update total balance
-        const balance = this.getBalance();
-
-        this.root.querySelector("td#totalBalance").textContent = balance;
-
-        if (target.nodeName === "A") {
-            target.textContent = "Editar";
-
-            return false;
-        }
-
-        target.closest("tr").querySelector("a").textContent = "Editar";
+        // Update row cells
+        this.syncRowNode({ target, item });
     },
 
-    handleEdit(target, id) {
-        const item = this.getItem(id);
-        const [
-            ,
-            quantityNode,
-            purchasePriceNode,
-            salePriceNode,
-            totalBalanceNode
-        ] = this.getNodes(target);
+    handleEdit(target) {
+        const items = this.items;
+        const item = this.getItem(target.dataset.id);
+        const itemIndex = this.getItemIndex(target.dataset.id);
 
-        quantityNode.innerHTML = `<input id="quantity" data-id="${item.id}" class="form-control" value="${item.quantity}">`;
-        purchasePriceNode.innerHTML = `<input id="purchasePrice" data-id="${item.id}" class="form-control" value="${item.purchasePrice}">`;
-        salePriceNode.innerHTML = `<input id="salePrice" data-id="${item.id}" class="form-control" value="${item.salePrice}">`;
-        totalBalanceNode.innerHTML = item.totalBalance;
+        item.confirmed = "";
 
-        target.textContent = "Confirmar";
+        items.splice(itemIndex, 1, item);
+
+        this.render();
     },
 
     handleDelete(id) {
@@ -403,7 +367,7 @@ const ItemsComponent = {
                             ? item.bash
                             : ""
                         : item.instance === "medicine"
-                        ? `<input id="bash" data-id="${item.id}" value="${item.bash}" class="form-control">`
+                        ? `<input type="date" id="bash" data-id="${item.id}" class="form-control" />`
                         : ""
                 }
             </td>
@@ -447,15 +411,21 @@ const ItemsComponent = {
                 return { ok: false, message: "Vencimiento es requerido" };
             }
 
-            const date = new Date(item.bash.replace(/-/g, "/")); // https://stackoverflow.com/a/31732581/615274
             const today = new Date();
+            const in60Days = today.addDays(60);
 
-            today.setHours(0, 0, 0, 0);
+            if (new Date(item.bash).getTime() <= in60Days.getTime()) {
+                const minDate = in60Days.toLocaleDateString({
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                });
 
-            // TODO: It is necessary to verify that the expiration date is greater than 60 days from today
-
-            if (date <= today) {
-                return { ok: false, message: "Vencimiento invalido" };
+                return {
+                    ok: false,
+                    message: `Vencimiento invalido. ${minDate}`
+                };
             }
         }
 
@@ -472,6 +442,53 @@ const ItemsComponent = {
 
     getItem(id) {
         return this.items.find(item => item.id === id);
+    },
+
+    syncRowNode({ target, item }) {
+        const row = target.closest("tr");
+
+        if (item.instance === "medicine") {
+            const [
+                ,
+                quantityNode,
+                purchasePriceNode,
+                salePriceNode,
+                bashNode,
+                totalBalanceNode
+            ] = row.cells;
+
+            quantityNode.textContent = item.quantity;
+            purchasePriceNode.textContent = item.purchasePrice;
+            salePriceNode.textContent = item.salePrice;
+            bashNode.textContent = item.bash;
+            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
+        } else {
+            const [
+                ,
+                quantityNode,
+                purchasePriceNode,
+                salePriceNode,
+                ,
+                totalBalanceNode
+            ] = row.cells;
+
+            quantityNode.textContent = item.quantity;
+            purchasePriceNode.textContent = item.purchasePrice;
+            salePriceNode.textContent = item.salePrice;
+            totalBalanceNode.textContent = item.quantity * item.purchasePrice;
+        }
+
+        this.root.querySelector(
+            "td#totalBalance"
+        ).textContent = this.getBalance();
+
+        if (target.nodeName === "A") {
+            target.textContent = "Editar";
+
+            return false;
+        }
+
+        row.querySelector("a").textContent = "Editar";
     },
 
     getNodes(target) {
@@ -505,24 +522,19 @@ const ItemsComponent = {
 };
 
 const OrderComponent = {
-    trigger: document.querySelector(".modal-footer button"),
-
-    invoiceNumberNode: document.querySelector(".modal-body #invoiceNumber"),
-
-    paymentDateNode: document.querySelector(".modal-body #paymentDate"),
-
-    order: {},
-
-    init() {
-        this.trigger.addEventListener("click", this.handleClick.bind(this));
-
-        this.order = {
-            invoiceNumber: this.invoiceNumberNode.value
-        };
+    order: {
+        invoiceNumber: "",
+        paymentDate: ""
     },
 
     handleClick(event) {
         event.preventDefault();
+
+        const target = event.target;
+
+        if (target.nodeName !== "BUTTON") {
+            return false;
+        }
 
         const validator = this.validate();
 
@@ -535,13 +547,42 @@ const OrderComponent = {
         this.store();
     },
 
+    handleChange(event) {
+        const target = event.target;
+
+        if (target.nodeName !== "INPUT") {
+            return false;
+        }
+
+        this.order[target.name] = target.value;
+    },
+
     validate() {
-        if (!this.invoiceNumberNode.value) {
+        const { invoiceNumber, paymentDate } = this.order;
+
+        if (!invoiceNumber) {
             return { ok: false, message: "Factura es requerido" };
         }
 
-        if (this.paymentDateNode && !this.paymentDateNode.value) {
-            return { ok: false, message: "Fecha de pago es requerido" };
+        if (!Number.isInteger(parseInt(invoiceNumber, 10))) {
+            return { ok: false, message: "Factura es invalida" };
+        }
+
+        if (OrderHelper.getOrder().paymentType === "credit") {
+            if (!paymentDate) {
+                return { ok: false, message: "Fecha de pago es requerido" };
+            }
+
+            if (paymentDate.length !== 10 && isNaN(Date.parse(paymentDate))) {
+                return { ok: false, message: "Fecha de pago es invalida" };
+            }
+
+            if (new Date(paymentDate).getTime() <= new Date().getTime()) {
+                return {
+                    ok: false,
+                    message: "Fecha de pago debe ser mayor a hoy"
+                };
+            }
         }
 
         return { ok: true };
@@ -549,19 +590,20 @@ const OrderComponent = {
 
     async store() {
         let body;
+        const { providerId, paymentType } = OrderHelper.getOrder();
+        const { invoiceNumber, paymentDate } = this.order;
 
-        // Improve this logic
-        if (this.paymentDateNode) {
+        if (paymentType === "credit") {
             body = {
-                provider: ProductsComponent.providerId,
-                invoiceNumber: this.invoiceNumberNode.value,
-                paymentDate: this.paymentDateNode.value,
+                provider: providerId,
+                invoiceNumber: invoiceNumber,
+                paymentDate: paymentDate,
                 items: ItemsComponent.items
             };
         } else {
             body = {
-                provider: ProductsComponent.providerId,
-                invoiceNumber: this.invoiceNumberNode.value,
+                provider: providerId,
+                invoiceNumber: invoiceNumber,
                 items: ItemsComponent.items
             };
         }
@@ -587,6 +629,14 @@ const OrderComponent = {
         OrderLocalStorageComponent.clearLocalStorage();
 
         location.replace(`/pharmacyApp/orders/${json.purchaseOrder.id}`);
+    },
+
+    init() {
+        const orderModal = document.querySelector("div#orderModal");
+
+        orderModal.addEventListener("click", this.handleClick.bind(this));
+
+        orderModal.addEventListener("change", this.handleChange.bind(this));
     }
 };
 
@@ -702,13 +752,9 @@ const OrderDetailComponent = {
 };
 
 const OrderHelper = {
-    _order: {},
-
-    _setOrder({ providerId, paymentType }) {
-        this._order = {
-            providerId,
-            paymentType
-        };
+    _order: {
+        providerId: "",
+        paymentType: ""
     },
 
     getOrder() {
@@ -720,8 +766,17 @@ const OrderHelper = {
             .split("/")
             .filter(token => token);
 
-        this._setOrder({ providerId, paymentType });
+        this._order.providerId = providerId;
+        this._order.paymentType = paymentType;
     }
+};
+
+Date.prototype.addDays = function(days) {
+    const date = new Date(this.valueOf());
+
+    date.setDate(date.getDate() + days);
+
+    return date;
 };
 
 OrderHelper.init();
