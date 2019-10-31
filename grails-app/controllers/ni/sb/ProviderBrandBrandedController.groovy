@@ -39,7 +39,7 @@ class ProviderBrandBrandedController {
     BrandBranded brandBranded = brandBrandedService.get(params.long('brandBranded'))
 
     if (isChecked) {
-      ProviderBrandBranded providerBrandBranded = ProviderBrandBranded.create(provider, brandBranded)
+      ProviderBrandBranded providerBrandBranded = ProviderBrandBranded.create(brandBranded, provider)
 
       render(contentType: 'application/json') {
         [ok: true, providerBrandBranded: providerBrandBranded]

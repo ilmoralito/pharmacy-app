@@ -39,7 +39,7 @@ class ProviderMedicineController {
     Medicine medicine = medicineService.get(params.long('medicine'))
 
     if (isChecked) {
-      ProviderMedicine providerMedicine = ProviderMedicine.create(provider, medicine)
+      ProviderMedicine providerMedicine = ProviderMedicine.create(medicine, provider)
 
       render(contentType: 'application/json') {
         [ok: true, providerMedicine: providerMedicine]
