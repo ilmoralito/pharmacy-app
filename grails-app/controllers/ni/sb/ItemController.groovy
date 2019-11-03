@@ -21,14 +21,29 @@ class ItemController {
       }
     }
 
-    Item item = new Item(
-      product: Product.get(params.item.toLong()),
-      quantity: params.quantity,
-      purchasePrice: params.purchasePrice,
-      salePrice: params.salePrice,
-      totalBalance: params.balance,
-      purchaseOrder: orderService.get(params.id.toLong())
-    )
+    Product product = Product.get(params.long('item'))
+    def item
+
+    if (product.instanceOf(ni.sb.Medicine)) {
+      item = new MedicineOrder(
+        product: Product.get(params.item.toLong()),
+        quantity: params.quantity,
+        purchasePrice: params.purchasePrice,
+        salePrice: params.salePrice,
+        totalBalance: params.balance,
+        purchaseOrder: orderService.get(params.id.toLong()),
+        bash: params.bash
+      )
+    } else {
+      item = new Item(
+        product: Product.get(params.item.toLong()),
+        quantity: params.quantity,
+        purchasePrice: params.purchasePrice,
+        salePrice: params.salePrice,
+        totalBalance: params.balance,
+        purchaseOrder: orderService.get(params.id.toLong())
+      )
+    }
 
     if (!item.save()) {
       render(contentType: 'application/json') {

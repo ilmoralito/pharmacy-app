@@ -1,3 +1,5 @@
+// TODO: All this is too complex, we must redo this logic
+
 const Action = {
     approveButton: document.querySelector("a.approveButton"),
 
@@ -195,12 +197,27 @@ const AddItem = {
             .catch(error => console.error(error.message));
     },
 
+    handleChangeItem(event) {
+        const target = event.target;
+        const item = this.providerItems.find(item => item.id === +target.value);
+        const bashGroup = document.querySelector("div#bash-group");
+
+        if (item.instance !== "medicine") {
+            bashGroup.classList.add("hide");
+
+            return false;
+        }
+
+        bashGroup.classList.remove("hide");
+    },
+
     render(item) {
         const row = document.createElement("tr");
         const productCell = document.createElement("td");
         const quantityCell = document.createElement("td");
         const purchasePriceCell = document.createElement("td");
         const salePriceCell = document.createElement("td");
+        const bashCell = document.createElement("td");
         const balanceCell = document.createElement("td");
         const editCell = document.createElement("td");
         const deleteCell = document.createElement("td");
@@ -211,6 +228,7 @@ const AddItem = {
         quantityCell.innerHTML = item.quantity;
         purchasePriceCell.innerHTML = item.purchasePrice;
         salePriceCell.innerHTML = item.salePrice;
+        bashCell.innerHTML = item.bash ? item.bash : "";
 
         balanceCell.style = "vertical-align: middle;";
         balanceCell.innerHTML = item.totalBalance;
@@ -238,6 +256,7 @@ const AddItem = {
         row.appendChild(quantityCell);
         row.appendChild(purchasePriceCell);
         row.appendChild(salePriceCell);
+        row.appendChild(bashCell);
         row.appendChild(balanceCell);
         row.appendChild(editCell);
         row.appendChild(deleteCell);
@@ -282,7 +301,14 @@ const AddItem = {
     init() {
         if (!this.form) return false;
 
-        this.fetchProviderItems().then(items => (this.providerItems = items));
+        this.fetchProviderItems().then(items => {
+            this.providerItems = items;
+
+            this.itemNode.addEventListener(
+                "change",
+                this.handleChangeItem.bind(this)
+            );
+        });
 
         this.trigger.addEventListener("click", this.handleClick.bind(this));
 
@@ -300,7 +326,7 @@ const Item = {
 
         if (target.nodeName !== "A") return false;
 
-        const { itemId, itemBalance, orderId } = Object.assign(
+        const { itemId, itemBalance, orderId, orderInstance } = Object.assign(
             {},
             target.dataset
         );
@@ -309,12 +335,17 @@ const Item = {
             const [
                 quantityNode,
                 purchasePriceNode,
-                salePriceNode
+                salePriceNode,
+                bashNode
             ] = this.getNodes(target);
 
             quantityNode.innerHTML = `<input value="${quantityNode.textContent.trim()}" class="form-control" />`;
             purchasePriceNode.innerHTML = `<input value="${purchasePriceNode.textContent.trim()}" class="form-control" />`;
             salePriceNode.innerHTML = `<input value="${salePriceNode.textContent.trim()}" class="form-control" />`;
+
+            if (bashNode.textContent.trim()) {
+                bashNode.innerHTML = `<input type="date" value="${bashNode.textContent.trim()}" class="form-control" />`;
+            }
 
             target.textContent = "Confirmar";
 
@@ -322,26 +353,32 @@ const Item = {
         }
 
         if (target.textContent.trim() === "Confirmar") {
-            const [quantity, purchasePrice, salePrice] = this.getInputsValue(
-                target
-            );
+            const [
+                quantity,
+                purchasePrice,
+                salePrice,
+                bash
+            ] = this.getInputsValue(target);
 
             this.update({
                 id: itemId,
                 quantity,
                 purchasePrice,
-                salePrice
+                salePrice,
+                bash
             }).then(item => {
                 const [
                     quantityNode,
                     purchasePriceNode,
                     salePriceNode,
+                    bashNode,
                     balanceNode
                 ] = this.getNodes(target);
 
                 quantityNode.innerHTML = item.quantity;
                 purchasePriceNode.innerHTML = item.purchasePrice;
                 salePriceNode.innerHTML = item.salePrice;
+                bashNode.innerHTML = item.bash ? item.bash : "";
                 balanceNode.innerHTML = item.totalBalance;
 
                 BalanceComponent.updateBalance();
@@ -377,13 +414,17 @@ const Item = {
         }
     },
 
-    async update({ id, quantity, purchasePrice, salePrice }) {
+    async update({ id, quantity, purchasePrice, salePrice, bash }) {
+        const body =
+            bash === undefined
+                ? { quantity, purchasePrice, salePrice }
+                : { quantity, purchasePrice, salePrice, bash };
         const response = await fetch(`/pharmacyApp/items/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
             },
-            body: JSON.stringify({ quantity, purchasePrice, salePrice })
+            body: JSON.stringify(body)
         });
 
         const json = await response.json();
@@ -422,10 +463,17 @@ const Item = {
             quantityNode,
             purchasePriceNode,
             salePriceNode,
+            bashNode,
             balanceNode
         ] = Array.from(row.cells);
 
-        return [quantityNode, purchasePriceNode, salePriceNode, balanceNode];
+        return [
+            quantityNode,
+            purchasePriceNode,
+            salePriceNode,
+            bashNode,
+            balanceNode
+        ];
     },
 
     getInputsValue(target) {

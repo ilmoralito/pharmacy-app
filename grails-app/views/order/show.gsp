@@ -190,7 +190,13 @@
                         </td>
                         <td style="vertical-align: middle;" class="text-center">
                             <g:if test="${!order.approvalDate}">
-                                <a href="#" data-item-id="${item.id}" data-order-id="${order.id}">Editar</a>
+                                <a
+                                    href="#"
+                                    data-item-id="${item.id}"
+                                    data-order-id="${order.id}"
+                                >
+                                    Editar
+                                </a>
                             </g:if>
                             <g:else>
                                 <span style="text-decoration-line: line-through;">Editar</span>

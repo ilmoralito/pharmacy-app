@@ -20,8 +20,8 @@
       </div>
       <div class="modal-body">
         <form name="addItemForm" autocomplete="off">
-          <input type="hidden" name="id" value="${order.id}" />
-          <input type="hidden" name="providerId" value="${order.provider.id}" />
+          <input type="hidden" name="id" value="${order?.id}" />
+          <input type="hidden" name="providerId" value="${order?.provider?.id}" />
 
           <div class="form-group">
             <label for="item">Articulo</label>
@@ -41,6 +41,11 @@
           <div class="form-group">
             <label for="salePrice">Precio de venta</label>
             <input name="salePrice" class="form-control" />
+          </div>
+
+          <div id="bash-group" class="form-group hide">
+            <label for="bash">Vencimiento</label>
+            <input type="date" name="bash" class="form-control" />
           </div>
 
           <div class="form-group">
